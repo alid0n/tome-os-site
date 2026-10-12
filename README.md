@@ -15,14 +15,20 @@ Releases page is where public downloads go.
 | `os/` | Forwards old `/os/` links to the home page |
 | `t.html` | Telemancer invite links (`tome-os.com/t#...`). The invite rides after the `#`, which browsers never send to the server |
 | `downloads/Telemancer.apk` | The Telemancer app |
+| `telemancer/version.json` | The newest Telemancer version; the app reads it to offer updates |
+| `.well-known/assetlinks.json` | Lets `tome-os.com/t` invite links open Telemancer directly. Holds the signing certificate's SHA-256, so it must change if the signing key ever does |
 | `assets/site.css` | The theme and the parts every page shares |
 
 ## Publishing a new Telemancer build
 
-1. Replace `downloads/Telemancer.apk`.
+1. Replace `downloads/Telemancer.apk`. Sign it with the same key as every
+   earlier build, or installed copies can't update and invite links stop
+   opening the app.
 2. Put its new SHA-256 (`sha256sum downloads/Telemancer.apk`) in
    `telemancer/index.html`, in the `.sum` code block.
-3. Commit and push to `main`. Pages redeploys in about a minute.
+3. Bump `versionCode` and `versionName` in `telemancer/version.json` to match
+   the build.
+4. Commit and push to `main`. Pages redeploys in about a minute.
 
 ## Publishing a Tome OS build
 
