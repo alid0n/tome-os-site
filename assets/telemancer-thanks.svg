@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="30 40 48 50" width="288" height="300" role="img" aria-label="Thank you: a check mark draws itself inside the crystal ball while light circles inside it and sparkles twinkle">
+<title>Telemancer thank you</title>
+<style>
+.halo{transform-box:fill-box;transform-origin:center;animation:glow 2.4s ease-in-out infinite}
+@keyframes glow{0%,100%{opacity:.75;transform:scale(.96)}50%{opacity:1;transform:scale(1.04)}}
+.ring{transform-box:view-box;transform-origin:54px 64px;animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.check{stroke-dasharray:22;animation:draw .9s .3s ease-out both}
+@keyframes draw{from{stroke-dashoffset:22}to{stroke-dashoffset:0}}
+.s1,.s2,.s3{transform-box:fill-box;transform-origin:center;animation:twinkle 2.2s ease-in-out infinite;opacity:0}
+.s2{animation-delay:.7s}.s3{animation-delay:1.4s}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}.s1,.s2,.s3{opacity:.8}}
+</style>
+<circle class="halo" cx="54" cy="64" r="20" fill="#3a2d78"/>
+<circle cx="54" cy="64" r="14" fill="#43357f" stroke="#9d7bff" stroke-width="4"/>
+<circle class="ring" cx="54" cy="64" r="9.5" fill="none" stroke="#efeaff" stroke-opacity=".35" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="7 53"/>
+<path class="check" d="M48 64.5l4 4 8.5-9" fill="none" stroke="#5cc8ff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+<path class="s1" d="M47.5 57.2l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7z" fill="#efeaff"/>
+<path class="s2" d="M60.2 69.6l.6 1.3 1.3.6-1.3.6-.6 1.3-.6-1.3-1.3-.6 1.3-.6z" fill="#c8b4ff"/>
+<path class="s3" d="M58.8 55.4l.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5z" fill="#5cc8ff"/>
+<path d="M47 79h14l2.5 4h-19z" fill="#9d7bff"/>
+<rect x="40" y="83" width="28" height="3.6" rx="1.8" fill="#c8b4ff"/>
+</svg>
