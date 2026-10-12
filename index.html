@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tome OS and Telemancer</title>
-<meta name="description" content="Talk live with the people you trust. Telemancer brings hold-to-talk voice, Scrolls, calls and channels to any Android phone, encrypted end to end. Tome OS builds it into the whole phone.">
+<title>Tome OS</title>
+<meta name="description" content="Tome OS is a private, Google-free operating system for Android phones, with live talk built in, a command bar and themes.">
 <link rel="canonical" href="https://tome-os.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Tome OS">
-<meta property="og:title" content="Tome OS and Telemancer">
-<meta property="og:description" content="Talk live with the people you trust, like a walkie-talkie, encrypted end to end.">
+<meta property="og:title" content="Tome OS: privacy, with a little magic">
+<meta property="og:description" content="A private operating system for Android phones, built around talking to the people you trust.">
 <meta property="og:url" content="https://tome-os.com/">
 <meta property="og:image" content="https://tome-os.com/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -20,31 +20,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <style>
-.products { display: grid; gap: 16px; }
-@media (min-width: 860px) { .products { grid-template-columns: 1fr 1fr; } }
-.product { display: flex; flex-direction: column; gap: 16px; padding: 28px; }
-.product.telemancer { border-color: #2c5a7a; background: linear-gradient(160deg, #18324a, var(--page) 55%); }
-.product .top { display: flex; align-items: center; gap: 16px; }
-.product .top img { width: 64px; height: 64px; border-radius: 16px; }
-.product .top svg { width: 64px; height: 58px; }
-.product h3 { margin: 0; font-family: var(--display); font-size: 26px; letter-spacing: 1px; }
-.product ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; color: var(--muted); font-size: 16px; }
-.product li { display: grid; grid-template-columns: 20px 1fr; gap: 10px; }
-.product li svg { margin-top: 4px; color: var(--accent); }
-.product .actions { margin-top: auto; padding-top: 8px; }
-
-.flow { display: grid; gap: 32px; }
-@media (min-width: 860px) { .flow { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
-.flow figure { margin: 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 20px; }
-.flow .phone { width: 220px; }
-.flow figcaption h3 { margin: 0 0 6px; font-size: 19px; }
-.flow figcaption p { margin: 0; color: var(--muted); font-size: 16px; max-width: 22em; }
-.flow .num { display: inline-flex; width: 32px; height: 32px; border-radius: 50%; background: var(--raised); color: var(--talk); font-weight: 700; align-items: center; justify-content: center; margin-bottom: 10px; font-size: 15px; }
-
-.band { background: var(--page); border: 1px solid var(--line); border-radius: 18px; padding: 28px; display: grid; gap: 20px; align-items: center; }
-@media (min-width: 860px) { .band { grid-template-columns: 1fr auto; padding: 36px 40px; } }
-.band h2 { margin-bottom: 8px; }
-.band p { margin: 0; color: var(--muted); }
+.hero-art svg { width: min(100%, 380px); height: auto; }
+.devices { width: 100%; border-collapse: collapse; }
+.table-box { overflow-x: auto; border: 1px solid var(--line); border-radius: 18px; background: var(--page); }
+.devices th, .devices td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.devices tr:last-child td { border-bottom: 0; }
+.devices th { font-size: 13px; letter-spacing: 2px; color: var(--faint); font-weight: 600; }
+.dl a { margin-right: 14px; }
+.dl-note { color: var(--muted); font-size: 15px; margin: 16px 0 0; }
+.tm-band { display: grid; gap: 20px; align-items: center; background: linear-gradient(160deg, #18324a, var(--page) 55%); border: 1px solid #2c5a7a; border-radius: 18px; padding: 28px; }
+@media (min-width: 860px) { .tm-band { grid-template-columns: auto 1fr auto; padding: 32px 36px; } }
+.tm-band img { width: 64px; height: 64px; border-radius: 16px; }
+.tm-band h2 { font-size: clamp(24px, 3vw, 30px); margin-bottom: 6px; }
+.tm-band p { margin: 0; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -55,9 +43,9 @@
     <nav aria-label="Main">
       <ul>
         <li><a href="/telemancer/">Telemancer</a></li>
-        <li><a href="/os/">Tome OS</a></li>
-        <li><a href="/telemancer/#plans">Plans</a></li>
-        <li class="telemancer"><a class="btn primary" href="/telemancer/#get">Get Telemancer</a></li>
+        <li><a href="/" aria-current="page">Tome OS</a></li>
+        <li><a href="#download">Download</a></li>
+        <li><a href="#install">Install</a></li>
       </ul>
     </nav>
   </div>
@@ -66,140 +54,182 @@
 <main id="top" class="wrap">
   <div class="hero">
     <div>
-      <p class="eyebrow">Live voice for the people you trust</p>
-      <h1>Talk like magic.</h1>
-      <p class="lede">Hold a button and your friend hears you, live, like a walkie-talkie. If they can't listen right now, your voice waits for them as a Scroll. Only people who know each other can connect, and everything is encrypted end to end.</p>
-      <div class="actions telemancer">
-        <a class="btn primary" href="/telemancer/#get">Get Telemancer for Android</a>
-        <a class="btn" href="#two-ways">See how it works</a>
+      <p class="eyebrow">The operating system</p>
+      <h1>Privacy, with a little magic.</h1>
+      <p class="lede">Tome OS is a private operating system for Android phones. No Google tracking, live talk with the people you trust, and a command bar that reaches every setting.</p>
+      <div class="actions">
+        <a class="btn primary" href="#download">Download</a>
+        <a class="btn" href="#install">How to install</a>
       </div>
-      <p class="fine">Free to use. Android 10 and newer.</p>
     </div>
     <div class="hero-art">
-      <div class="aura" aria-hidden="true"></div>
-      <div class="phone"><img src="/assets/shots/walkie-talkie.webp" width="540" height="1123" alt="Telemancer's welcome screen: Talk like a walkie-talkie. Hold the button and your Tome contacts hear you live, the moment you speak."></div>
+      <svg viewBox="0 0 220 200" role="img" aria-label="The Tome OS logo: a glowing crystal ball resting on an open book">
+        <circle class="halo" cx="110" cy="70" r="58" fill="#9d7bff"/>
+        <circle cx="110" cy="70" r="44" fill="none" stroke="#9d7bff" stroke-width="5"/>
+        <path d="M88 56 a26 26 0 0 1 22 -12" fill="none" stroke="#efeaff" stroke-width="4" stroke-linecap="round"/>
+        <circle class="spark" cx="126" cy="84" r="4" fill="#efeaff"/>
+        <path d="M6 122 L106 122 L110 125 L114 122 L214 122 L214 188 L114 188 L110 192 L106 188 L6 188 Z" fill="#2b2163" stroke="#efeaff" stroke-width="4"/>
+        <g fill="none" stroke="#efeaff" stroke-linecap="round">
+          <path d="M20 172 Q65 152 110 172 Q155 152 200 172" stroke-width="2.5" opacity="0.6"/>
+          <path d="M20 176 Q65 156 110 176 Q155 156 200 176" stroke-width="2.5" opacity="0.35"/>
+        </g>
+        <path d="M20 126 Q65 106 110 126 Q155 106 200 126 L200 168 Q155 148 110 168 Q65 148 20 168 Z" fill="#1f1842" stroke="#efeaff" stroke-width="5" stroke-linejoin="round"/>
+        <g fill="none" stroke="#efeaff" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.35">
+          <path d="M34 134 Q60 124 96 136"/><path d="M34 146 Q60 136 96 148"/><path d="M34 158 Q56 150 84 158"/>
+          <path d="M124 136 Q160 124 186 134"/><path d="M124 148 Q160 136 186 146"/><path d="M136 158 Q164 150 186 158"/>
+        </g>
+        <path d="M110 126 L110 192" stroke="#efeaff" stroke-width="5" stroke-linecap="round"/>
+        <circle class="mote" cx="70" cy="124" r="2.5" fill="#9d7bff"/>
+        <circle class="mote m2" cx="150" cy="122" r="2" fill="#efeaff"/>
+        <circle class="mote m3" cx="88" cy="120" r="2" fill="#efeaff"/>
+        <path d="M92 118 L128 118" stroke="#9d7bff" stroke-width="5" stroke-linecap="round"/>
+      </svg>
     </div>
   </div>
 
-  <section id="two-ways" aria-labelledby="two-ways-h">
-    <h2 id="two-ways-h">Two ways to telemance</h2>
-    <p class="sub">Start with the app on the phone you already have. Tome OS, the full phone system, is on its way.</p>
-    <div class="products">
-      <article class="card product telemancer">
-        <div class="top">
-          <img src="/assets/telemancer-mark.svg" alt="">
-          <div>
-            <h3>Telemancer</h3>
-            <span class="pill ready">Available now · in testing</span>
-          </div>
-        </div>
-        <p>An app for any Android phone. Live talk, voice messages, texts, calls and group channels, all in one place and all encrypted.</p>
-        <ul>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Hold to talk live with your friends</span></li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Voice calls for two or a group, and video with Plus</span></li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Channels for your crew, club or team</span></li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Free every day, with Plus for unlimited talk</span></li>
-        </ul>
-        <div class="actions">
-          <a class="btn primary" href="/telemancer/#get">Download</a>
-          <a class="btn" href="/telemancer/">Learn more</a>
-        </div>
-      </article>
+  <div class="notice" role="note">
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7 V13 M12 16.5 V17"/></svg>
+    <span>Tome OS is in early development. Want live talk today? <a href="/telemancer/">Telemancer</a> works on any Android phone.</span>
+  </div>
 
-      <article class="card product">
-        <div class="top">
-          <svg viewBox="0 0 220 200" aria-hidden="true">
-            <circle cx="110" cy="70" r="44" fill="none" stroke="#9d7bff" stroke-width="7"/>
-            <path d="M88 56 a26 26 0 0 1 22 -12" fill="none" stroke="#efeaff" stroke-width="6" stroke-linecap="round"/>
-            <circle cx="126" cy="84" r="6" fill="#efeaff"/>
-            <path d="M6 122 L106 122 L110 125 L114 122 L214 122 L214 188 L114 188 L110 192 L106 188 L6 188 Z" fill="#2b2163" stroke="#efeaff" stroke-width="6"/>
-            <path d="M20 126 Q65 106 110 126 Q155 106 200 126 L200 168 Q155 148 110 168 Q65 148 20 168 Z" fill="#1f1842" stroke="#efeaff" stroke-width="7" stroke-linejoin="round"/>
-            <path d="M110 126 L110 192" stroke="#efeaff" stroke-width="7" stroke-linecap="round"/>
-          </svg>
-          <div>
-            <h3>Tome OS</h3>
-            <span class="pill soon">In development</span>
-          </div>
-        </div>
-        <p>A private operating system for Android phones, built around talking to people. Telemancer is part of the phone itself, with no Google tracking.</p>
-        <ul>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>No Google apps or background tracking</span></li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Live talk built into the phone</span></li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>A command bar that reaches every setting</span></li>
-          <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>For Google Pixel 6 and newer first</span></li>
-        </ul>
-        <div class="actions">
-          <a class="btn" href="/os/">Explore Tome OS</a>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <section id="how" aria-labelledby="how-h">
-    <h2 id="how-h">Hold. Talk. Heard.</h2>
-    <p class="sub">Telemancer feels like the phone app you already know, with a talk button that reaches your friends instantly.</p>
-    <div class="flow">
-      <figure>
-        <div class="phone"><img src="/assets/shots/contacts.webp" width="540" height="1123" loading="lazy" alt="Telemancer's contacts list, showing which friends are on Telemancer and which have been invited."></div>
-        <figcaption><span class="num">1</span><h3>Find your people</h3><p>Telemancer checks which of your contacts already use it. Anyone else gets an invite from you.</p></figcaption>
-      </figure>
-      <figure>
-        <div class="phone"><img src="/assets/shots/hold-to-talk.webp" width="540" height="1123" loading="lazy" alt="A contact's page in Telemancer with a large Hold to talk live button."></div>
-        <figcaption><span class="num">2</span><h3>Hold to talk</h3><p>Press and hold. Your friend hears you the moment you speak, and can answer straight back.</p></figcaption>
-      </figure>
-      <figure>
-        <div class="phone"><img src="/assets/shots/scroll.webp" width="540" height="1123" loading="lazy" alt="A Scroll, a twelve-second voice message, with its words written out below it."></div>
-        <figcaption><span class="num">3</span><h3>Busy? It waits as a Scroll</h3><p>If they're busy or offline, your voice arrives as a Scroll they can play when they're ready.</p></figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section id="private" aria-labelledby="private-h">
-    <h2 id="private-h">Private by design</h2>
-    <p class="sub">Your voice is for the people you choose, and nobody else.</p>
+  <section id="features" aria-labelledby="features-h">
+    <h2 id="features-h">What's inside</h2>
+    <p class="sub">Built on Android without Google's apps or tracking, and shaped around talking to people.</p>
     <div class="grid">
       <div class="card">
-        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="4"/><path d="M2 20 c0-4 3-6 7-6 s7 2 7 6"/><path d="M16 4.5 a4 4 0 0 1 0 7 M19 20 c0-2.5-1-4.3-2.8-5.3"/></svg></div>
-        <h3>Only people you know</h3>
-        <p>Two phones connect only when each has the other's number saved, or when you share an invite yourself.</p>
+        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11 a7 7 0 0 0 14 0 M12 18 V21"/></svg></div>
+        <h3>Telemancer, built in</h3>
+        <p>Hold a contact to talk and they hear you live, like a radio. If they've turned live audio off, your words arrive as a Scroll instead.</p>
       </div>
       <div class="card">
-        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11 V8 a4 4 0 0 1 8 0 V11"/></svg></div>
-        <h3>Encrypted end to end</h3>
-        <p>Your voice, texts and calls are locked on your phone and unlocked only on theirs. Nobody in between can listen, including us.</p>
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 L20 6 V12 C20 16.5 16.5 20 12 21 C7.5 20 4 16.5 4 12 V6 Z"/></svg></div>
+        <h3>Private by default</h3>
+        <p>No Google apps, no Google tracking, and none of the hidden background check-ins that phones make out of the box.</p>
       </div>
       <div class="card">
-        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18 H13"/></svg></div>
-        <h3>Kept on your phone</h3>
-        <p>Your contacts and conversations stay on your phone. Back them up with 12 recovery words that only you hold.</p>
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="currentColor"/></svg></div>
+        <h3>Command bar</h3>
+        <p>Type to do almost anything, from messaging a friend to changing a setting.</p>
+        <span class="cmd">@tim on my way</span>
       </div>
       <div class="card">
-        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="8" r="4"/><path d="M3 20 c0-4 3-6 7-6 c1.5 0 2.8 .3 3.8 .8"/><path d="M15 18 L17 20 L21 15"/></svg></div>
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="8" r="4"/><path d="M3 20 c0-4 3-6 7-6 c1.5 0 2.8 .3 3.8 .8"/><path d="M15 18 L17 20 L21 15"/></svg></div>
         <h3>You decide who reaches you</h3>
-        <p>Choose who can talk to you live, set quiet hours, and let everyone else's words wait as Scrolls.</p>
+        <p>Only contacts you approve can talk to you live. Turn live audio off whenever you like, and their words wait for you as a Scroll.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11 V8 a4 4 0 0 1 8 0 V11"/></svg></div>
+        <h3>Encrypted end to end</h3>
+        <p>Live talk and Scrolls are locked on your phone and unlocked only on theirs. Nobody in between can listen, including us.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5 H20 V16 H9 L5 20 V16 H4 Z"/></svg></div>
+        <h3>Calls, texts and voice together</h3>
+        <p>Regular calls, text messages and Scrolls from each person sit in one conversation, so nothing gets lost between apps.</p>
       </div>
     </div>
   </section>
 
-  <section aria-labelledby="free-h">
-    <div class="band telemancer">
+  <section aria-labelledby="tm-h">
+    <div class="tm-band telemancer">
+      <img src="/assets/telemancer-mark.svg" alt="">
       <div>
-        <h2 id="free-h">Free, every day</h2>
-        <p>Texts, Scrolls and status are always free. Live talk and voice calls are free for 30 minutes a day, and new phones start with two weeks unlimited.</p>
+        <h2 id="tm-h">Talk with friends on any phone</h2>
+        <p>Your friends don't need Tome OS. With the Telemancer app, they can talk live with you from any Android phone.</p>
       </div>
-      <div class="actions">
-        <a class="btn primary" href="/telemancer/#get">Get Telemancer</a>
-        <a class="btn" href="/telemancer/#plans">See plans</a>
-      </div>
+      <div class="actions"><a class="btn primary" href="/telemancer/">Meet Telemancer</a></div>
     </div>
+  </section>
+
+  <section id="download" aria-labelledby="download-h">
+    <h2 id="download-h">Download</h2>
+    <p class="sub">Each phone gets its own build. Find yours below. Downloads appear here as each one is ready.</p>
+    <div class="table-box">
+      <table class="devices">
+        <thead><tr><th scope="col">PHONE</th><th scope="col">STATUS</th><th scope="col">DOWNLOAD</th></tr></thead>
+        <tbody>
+          <tr data-codename="oriole"><td>Google Pixel 6</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="raven"><td>Google Pixel 6 Pro</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="bluejay"><td>Google Pixel 6a</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="panther"><td>Google Pixel 7</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="cheetah"><td>Google Pixel 7 Pro</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="lynx"><td>Google Pixel 7a</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="felix"><td>Google Pixel Fold</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="shiba"><td>Google Pixel 8</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="husky"><td>Google Pixel 8 Pro</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="akita"><td>Google Pixel 8a</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="tokay"><td>Google Pixel 9</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="caiman"><td>Google Pixel 9 Pro</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="komodo"><td>Google Pixel 9 Pro XL</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="comet"><td>Google Pixel 9 Pro Fold</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="tegu"><td>Google Pixel 9a</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="frankel"><td>Google Pixel 10</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="blazer"><td>Google Pixel 10 Pro</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="mustang"><td>Google Pixel 10 Pro XL</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr data-codename="rango"><td>Google Pixel 10 Pro Fold</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
+          <tr><td>Unihertz Titan 2 Elite</td><td><span class="pill planned">Planned</span></td><td>Not yet</td></tr>
+          <tr><td>Clicks Communicator</td><td><span class="pill planned">Planned</span></td><td>Not yet</td></tr>
+          <tr><td>OnePlus Open</td><td><span class="pill planned">Planned</span></td><td>Not yet</td></tr>
+          <tr><td>Other Android phones</td><td><span class="pill planned">Later</span></td><td>Not yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="dl-note">Each phone has two files: the system and its boot images. Download both. The checksum links let you check a file wasn't changed on the way to you.</p>
+  </section>
+
+  <section id="install" aria-labelledby="install-h">
+    <h2 id="install-h">How to install</h2>
+    <p class="sub">Installing Tome OS erases the phone, so back up anything you want to keep first.</p>
+    <ol class="steps">
+      <li><div><h3>Update, then unlock</h3><p>Update the phone to Android 17, then turn on OEM unlocking in Developer options. Phones locked to a carrier, like Verizon Pixels, can't be unlocked.</p></div></li>
+      <li><div><h3>Get the tools</h3><p>Install Google's free Android Platform Tools on your Windows, Mac or Linux computer and connect the phone by USB.</p></div></li>
+      <li><div><h3>Flash Tome OS</h3><p>Download the build for your phone and run the flash script. It checks the phone model first and asks before erasing anything.</p></div></li>
+      <li><div><h3>Changed your mind?</h3><p>You can always go back to stock Android with Google's Android Flash Tool at flash.android.com.</p></div></li>
+    </ol>
   </section>
 </main>
 
 <footer class="site">
   <div class="wrap">
-    <span>Tome OS · <a href="/telemancer/">Telemancer</a> · <a href="/os/">Tome OS</a></span>
+    <span>Tome OS · <a href="/telemancer/">Telemancer</a></span>
     <span>Not affiliated with Google. Android is a trademark of Google LLC.</span>
   </div>
 </footer>
+<script>
+// Fill the download table from the newest release on the public site repo.
+// Files are named tome-os-<version>-<codename>.zip and tome-os-<version>-<codename>-boot.zip.
+(function () {
+  fetch("https://api.github.com/repos/alid0n/tome-os-site/releases?per_page=10")
+    .then(function (r) { return r.ok ? r.json() : []; })
+    .then(function (releases) {
+      document.querySelectorAll("tr[data-codename]").forEach(function (row) {
+        var code = row.getAttribute("data-codename");
+        for (var i = 0; i < releases.length; i++) {
+          var assets = releases[i].assets || [];
+          var find = function (suffix) {
+            return assets.find(function (a) { return a.name.endsWith("-" + code + suffix); });
+          };
+          var sys = find(".zip"), boot = find("-boot.zip");
+          if (!sys || !boot) continue;
+          var sum = find(".zip.sha256"), bootSum = find("-boot.zip.sha256");
+          var cell = row.querySelector(".dl");
+          cell.textContent = "";
+          [[sys, "System"], [boot, "Boot images"], [sum, "Checksum"], [bootSum, "Boot checksum"]].forEach(function (pair) {
+            if (!pair[0]) return;
+            var a = document.createElement("a");
+            a.href = pair[0].browser_download_url;
+            a.textContent = pair[1];
+            cell.appendChild(a);
+          });
+          var pill = row.querySelector(".pill");
+          pill.className = "pill ready";
+          pill.textContent = "Ready · " + releases[i].tag_name;
+          break;
+        }
+      });
+    })
+    .catch(function () {});
+})();
+</script>
 </body>
 </html>

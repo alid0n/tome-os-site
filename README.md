@@ -10,9 +10,9 @@ Releases page is where public downloads go.
 
 | Path | What |
 | --- | --- |
-| `index.html` | Landing page for both products |
+| `index.html` | Home page: Tome OS (features, the per-phone download table, install steps) |
 | `telemancer/` | Telemancer: features, plans, download, install, questions |
-| `os/` | Tome OS: features, the per-phone download table, install steps |
+| `os/` | Forwards old `/os/` links to the home page |
 | `t.html` | Telemancer invite links (`tome-os.com/t#...`). The invite rides after the `#`, which browsers never send to the server |
 | `downloads/Telemancer.apk` | The Telemancer app |
 | `assets/site.css` | The theme and the parts every page shares |
@@ -28,7 +28,7 @@ Releases page is where public downloads go.
 
 Make a release on this repo with `tome-os-<version>-<codename>.zip`,
 `tome-os-<version>-<codename>-boot.zip` and a `.sha256` beside each. The
-download table on `/os/` fills itself in from the newest releases.
+download table on the home page fills itself in from the newest releases.
 
 ## Hosting
 
