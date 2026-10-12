@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.tomeos.telemancer",
+      "sha256_cert_fingerprints": ["31:BD:57:EB:9B:13:94:17:8A:5A:95:BE:A4:53:65:92:8C:0B:50:D9:72:2C:E1:B9:4C:94:94:29:4C:53:2D:66"]
+    }
+  }
+]
