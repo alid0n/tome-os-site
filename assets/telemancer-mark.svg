@@ -1,14 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="18 18 72 72" width="288" height="288" role="img" aria-label="Telemancer: a book with an orb on its cover, and voice spreading out from it">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="26 25 56 64" width="336" height="384" role="img" aria-label="Telemancer: a crystal ball on a pedestal sending signal waves">
 <title>Telemancer</title>
-<rect x="18" y="18" width="72" height="72" rx="16" fill="#0f1a2e"/>
-<g fill="none" stroke-linecap="round">
-  <path d="M34 30h24a4 4 0 0 1 4 4v40a4 4 0 0 1-4 4H34a4 4 0 0 1-4-4V34a4 4 0 0 1 4-4z" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M37 31.5v45" stroke="#fff" stroke-width="2.5"/>
-  <path d="M49.5 48a6 6 0 1 1 0 12a6 6 0 1 1 0-12z" stroke="#4da8ec" stroke-width="2.5"/>
-  <path d="M46.5 52.9a3.2 3.2 0 0 1 1.9-1.9" stroke="#4da8ec" stroke-width="1.5"/>
-  <path d="M67.4 48.8a9 9 0 0 1 0 10.4" stroke="#4da8ec" stroke-width="3"/>
-  <path d="M71.5 46a14 14 0 0 1 0 16" stroke="#4da8ec" stroke-width="3" stroke-opacity=".75"/>
-  <path d="M75.6 43.1a19 19 0 0 1 0 21.8" stroke="#4da8ec" stroke-width="3" stroke-opacity=".5"/>
+<circle cx="54" cy="64" r="20" fill="#3a2d78"/>
+<circle cx="54" cy="64" r="14" fill="#43357f" stroke="#9d7bff" stroke-width="4"/>
+<path d="M45.8 60.4a9 9 0 0 1 7-5.4" fill="none" stroke="#efeaff" stroke-width="2.6" stroke-linecap="round"/>
+<circle cx="59.5" cy="68" r="2.2" fill="#efeaff"/>
+<circle cx="39.5" cy="66" r="1" fill="#9d7bff" opacity="0.7"/>
+<path d="M47 79h14l2.5 4h-19z" fill="#9d7bff"/>
+<rect x="40" y="83" width="28" height="3.6" rx="1.8" fill="#c8b4ff"/>
+<g fill="none" stroke="#5cc8ff" stroke-width="3.4" stroke-linecap="round">
+  <path d="M38.4 50.4a22 22 0 0 1 31.2 0"/>
+  <path d="M34.2 46.2a28 28 0 0 1 39.6 0" opacity="0.75"/>
+  <path d="M30 42a34 34 0 0 1 48 0" opacity="0.5"/>
 </g>
-<path d="M46 76h6v8l-3-3-3 3z" fill="#4da8ec"/>
 </svg>
