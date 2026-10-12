@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Telemancer invite</title>
+<meta name="description" content="Open a Telemancer invite to talk live with a friend.">
+<!-- Invite links carry a one-time secret after the #. Browsers never send that part to this server. -->
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="/assets/telemancer-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 32px 16px; background: radial-gradient(ellipse at 90% 0%, rgba(43, 33, 99, 0.6), transparent 60%) no-repeat, var(--abyss); }
+main { width: 100%; max-width: 460px; text-align: center; }
+.mark { width: 96px; height: 96px; border-radius: 24px; margin: 0 auto 20px; display: block; box-shadow: 0 0 60px rgba(92, 200, 255, 0.35); }
+.brand-name { font-family: var(--display); font-weight: 700; letter-spacing: 4px; font-size: 22px; margin: 0 0 8px; }
+h1 { font-family: var(--body); font-size: 26px; line-height: 1.25; margin: 0 0 10px; font-weight: 600; letter-spacing: 0; }
+main .lede { font-size: 17px; margin: 0 0 28px; }
+main .btn { display: flex; min-height: 52px; border-radius: 26px; margin: 0 0 12px; font-size: 17px; }
+ol { text-align: left; margin: 28px 0 0; padding: 20px 20px 20px 44px; background: var(--page); border: 1px solid var(--line); border-radius: 18px; color: var(--muted); }
+ol li + li { margin-top: 8px; }
+ol strong { color: var(--text); }
+.email { color: var(--talk); word-break: break-all; }
+.small { color: var(--faint); font-size: 14px; margin-top: 24px; }
+.home { color: var(--faint); font-size: 14px; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body class="telemancer">
+<main>
+  <img class="mark" src="/assets/telemancer-mark.svg" alt="">
+  <p class="brand-name">TELEMANCER</p>
+
+  <div id="invite" hidden>
+    <h1><span id="from" class="email"></span> invited you to talk</h1>
+    <p class="lede">Telemancer lets you talk live by voice, like a walkie-talkie, with the people you trust. Everything you say is encrypted end to end.</p>
+    <a id="open" class="btn primary" href="#">Open in Telemancer</a>
+    <a class="btn" href="/telemancer/">Get Telemancer</a>
+    <ol>
+      <li><strong>Get Telemancer</strong> on your Android phone, if you don't have it yet.</li>
+      <li><strong>Save <span id="from2" class="email"></span></strong> in your contacts, so Telemancer knows the invite is from someone you know.</li>
+      <li><strong>Come back here</strong> and tap Open in Telemancer.</li>
+    </ol>
+  </div>
+
+  <div id="channel" hidden>
+    <h1>Join <span id="channelName">a channel</span> on Telemancer</h1>
+    <p class="lede">A Telemancer channel is like a radio channel for your group: hold to talk, and everyone in it hears you live. Everything is encrypted end to end.</p>
+    <a id="openChannel" class="btn primary" href="#">Open in Telemancer</a>
+    <a class="btn" href="/telemancer/">Get Telemancer</a>
+    <ol>
+      <li><strong>Get Telemancer</strong> on your Android phone, if you don't have it yet.</li>
+      <li><strong>Come back to this link</strong> and tap Open in Telemancer.</li>
+      <li><strong>Choose the name the others will see.</strong> You're in as soon as the channel's admin lets you in.</li>
+    </ol>
+  </div>
+
+  <div id="texted" hidden>
+    <h1>You're invited to talk on Telemancer</h1>
+    <p class="lede">Telemancer lets you talk live by voice, like a walkie-talkie, with the people you trust. Everything you say is encrypted end to end.</p>
+    <a class="btn primary" href="/telemancer/">Get Telemancer</a>
+    <ol>
+      <li><strong>Get Telemancer</strong> on your Android phone.</li>
+      <li><strong>Save the number this text came from</strong> in your contacts.</li>
+      <li><strong>Ask your friend to invite you again.</strong> You'll be connected as soon as it arrives.</li>
+    </ol>
+  </div>
+
+  <div id="broken" hidden>
+    <h1>This invite link is incomplete</h1>
+    <p class="lede">Open the link straight from the invite email, or ask your friend to send a new one.</p>
+    <a class="btn" href="/telemancer/">About Telemancer</a>
+  </div>
+
+  <p class="small">Your invite stays on your phone. This page never sends it anywhere.</p>
+  <p class="home"><a href="/">tome-os.com</a></p>
+</main>
+<script>
+(function () {
+  var hash = window.location.hash.slice(1);
+  var params = {};
+  hash.split("&").forEach(function (part) {
+    var i = part.indexOf("=");
+    if (i > 0) params[part.slice(0, i)] = part.slice(i + 1);
+  });
+  // A channel invite link: the app asks the channel's admin to let this person in.
+  if (params.c && params.a && params.t) {
+    var name = "";
+    try { name = decodeURIComponent((params.n || "").replace(/\+/g, " ")); } catch (e) { name = ""; }
+    if (name) document.getElementById("channelName").textContent = name;
+    document.getElementById("openChannel").href = "telemancer://t#" + hash;
+    document.getElementById("channel").hidden = false;
+    return;
+  }
+  var from = "";
+  try { from = decodeURIComponent((params.f || "").replace(/\+/g, " ")); } catch (e) { from = ""; }
+  if (!params.k || !params.s) {
+    document.getElementById("broken").hidden = false;
+    return;
+  }
+  // Invites sent by text don't name the sender: the phone that receives the text already knows who it's from.
+  if (!from) {
+    document.getElementById("texted").hidden = false;
+    return;
+  }
+  document.getElementById("from").textContent = from;
+  document.getElementById("from2").textContent = from;
+  // The app takes the same invite through its own link, which every browser can hand over.
+  document.getElementById("open").href = "telemancer://t#" + hash;
+  document.getElementById("invite").hidden = false;
+})();
+</script>
+</body>
+</html>

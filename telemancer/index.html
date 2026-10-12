@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Telemancer</title>
+<meta name="description" content="Telemancer for Android: hold to talk live with friends, send voice Scrolls and texts, make voice and video calls, and run group channels, all encrypted end to end.">
+<link rel="canonical" href="https://tome-os.com/telemancer/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tome OS">
+<meta property="og:title" content="Telemancer: talk like a walkie-talkie">
+<meta property="og:description" content="Hold to talk live with the people you trust. Free every day, encrypted end to end.">
+<meta property="og:url" content="https://tome-os.com/telemancer/">
+<meta property="og:image" content="https://tome-os.com/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#14102b">
+<link rel="icon" href="/assets/telemancer-mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+.app-title { display: flex; align-items: center; gap: 16px; margin: 0 0 20px; }
+.app-title img { width: 72px; height: 72px; border-radius: 18px; }
+.app-title h1 { margin: 0; font-size: clamp(34px, 9vw, 68px); }
+@media (max-width: 480px) { .app-title { gap: 12px; } .app-title img { width: 56px; height: 56px; border-radius: 14px; } .app-title h1 { font-size: 30px; letter-spacing: 1px; } }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 16px; color: var(--faint); font-size: 14px; margin: 14px 0 0; padding: 0; list-style: none; }
+
+.gallery { display: flex; gap: 20px; overflow-x: auto; padding: 4px 4px 24px; scroll-snap-type: x mandatory; }
+.gallery figure { margin: 0; scroll-snap-align: start; display: flex; flex-direction: column; gap: 12px; }
+.gallery .phone { width: 220px; }
+.gallery figcaption { color: var(--muted); font-size: 15px; max-width: 220px; text-align: center; }
+
+.plans { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); align-items: stretch; }
+.plan { display: flex; flex-direction: column; gap: 12px; }
+.plan.featured { border-color: var(--talk); box-shadow: 0 0 0 1px var(--talk) inset; }
+.plan h3 { margin: 0; font-size: 21px; }
+.plan .price { font-size: 30px; font-weight: 600; line-height: 1.1; }
+.plan .price small { font-size: 15px; color: var(--muted); font-weight: 500; }
+.plan .alt { color: var(--faint); font-size: 14px; margin: -6px 0 0; }
+.plan ul { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; color: var(--muted); font-size: 15px; }
+.plan li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; }
+.plan li svg { margin-top: 4px; color: var(--talk); }
+.plan .tag { align-self: flex-start; }
+.plans-note { color: var(--muted); font-size: 15px; margin: 20px 0 0; max-width: 46em; }
+
+.get { display: grid; gap: 32px; align-items: start; }
+@media (min-width: 860px) { .get { grid-template-columns: 0.9fr 1.1fr; } }
+.get .card h3 { margin-top: 0; }
+.sum { word-break: break-all; color: var(--muted); }
+</style>
+</head>
+<body class="telemancer">
+<a class="skip" href="#top">Skip to content</a>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="/"><img src="/assets/mark.svg" alt="">TOME OS</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/telemancer/" aria-current="page">Telemancer</a></li>
+        <li><a href="/os/">Tome OS</a></li>
+        <li><a href="#plans">Plans</a></li>
+        <li><a class="btn primary" href="#get">Get Telemancer</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top" class="wrap">
+  <div class="hero">
+    <div>
+      <div class="app-title">
+        <img src="/assets/telemancer-mark.svg" alt="">
+        <h1>Telemancer</h1>
+      </div>
+      <p class="lede">Talk like a walkie-talkie with the people you trust. Hold the button and they hear you live. Let go, and they can answer straight back. When they can't listen, your voice waits for them as a Scroll.</p>
+      <div class="actions">
+        <a class="btn primary" href="/downloads/Telemancer.apk" download>
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 V15 M7 10.5 L12 15.5 L17 10.5 M5 20 H19"/></svg>
+          Download for Android
+        </a>
+        <a class="btn" href="#install">How to install</a>
+      </div>
+      <ul class="meta">
+        <li>Android 10 and newer</li>
+        <li>Free to use</li>
+        <li><span class="pill ready">In testing</span></li>
+      </ul>
+    </div>
+    <div class="hero-art">
+      <div class="aura" aria-hidden="true"></div>
+      <div class="phone"><img src="/assets/shots/hold-to-talk.webp" width="540" height="1123" alt="A contact's page in Telemancer, with a glowing Hold to talk live button."></div>
+    </div>
+  </div>
+
+  <section id="features" aria-labelledby="features-h">
+    <h2 id="features-h">Everything in one place</h2>
+    <p class="sub">Telemancer is a full phone and messaging app with live talk at its heart, so your calls, texts and voice from each person sit together.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11 a7 7 0 0 0 14 0 M12 18 V21"/></svg></div>
+        <h3>Live talk</h3>
+        <p>Hold to talk and your friend hears you as you speak. A voice meter and a gentle buzz tell you when you're on air.</p>
+      </div>
+      <div class="card">
+        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4 H16 a2 2 0 0 1 2 2 V20 L14 17 H6 a2 2 0 0 1 -2 -2 V6 a2 2 0 0 1 2 -2 Z"/><path d="M8 9 H14 M8 12.5 H12"/></svg></div>
+        <h3>Scrolls</h3>
+        <p>Voice messages for when someone is busy or offline. Each Scroll can show its words, written out on your phone, and waits up to a week.</p>
+      </div>
+      <div class="card">
+        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5 H20 V16 H9 L5 20 V16 H4 Z"/></svg></div>
+        <h3>Texts</h3>
+        <p>Chat, reply to a message, and edit or unsend one you didn't mean to send.</p>
+      </div>
+      <div class="card">
+        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10.5 L21 7.5 V16.5 L16 13.5"/></svg></div>
+        <h3>Voice and video calls</h3>
+        <p>Call one friend or a whole group. Calls ring like a normal phone call, even on the lock screen.</p>
+      </div>
+      <div class="card">
+        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9 H20 M4 15 H20 M10 3 L8 21 M16 3 L14 21"/></svg></div>
+        <h3>Channels</h3>
+        <p>A radio channel for your group: hold to talk and everyone in it hears you. Admins can post announcements and share invite links.</p>
+      </div>
+      <div class="card">
+        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5 A8 8 0 1 1 9.5 4 A6.5 6.5 0 0 0 20 14.5 Z"/></svg></div>
+        <h3>Status and quiet hours</h3>
+        <p>Show if you're available, busy or away, choose who may talk to you live, and set hours when everything waits quietly.</p>
+      </div>
+      <div class="card">
+        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17 H19 M6 17 L7.5 11 H16.5 L18 17 V20 H6 Z M8.5 20 V21.5 M15.5 20 V21.5 M9 11 L10 7 H14 L15 11"/></svg></div>
+        <h3>Car mode</h3>
+        <p>Big, simple controls for the road, and talk from your headset button without looking at the phone.</p>
+      </div>
+      <div class="card">
+        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L20 6 V12 C20 16.5 16.5 20 12 21 C7.5 20 4 16.5 4 12 V6 Z"/><path d="M9 12 L11 14 L15 10"/></svg></div>
+        <h3>Backup with 12 words</h3>
+        <p>Move to a new phone and bring your contacts, messages and settings with you, locked with recovery words only you have.</p>
+      </div>
+      <div class="card">
+        <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5 V20.5 M12 3.5 A8.5 8.5 0 0 1 12 20.5" fill="currentColor" fill-opacity=".35"/></svg></div>
+        <h3>Themes</h3>
+        <p>Pick a look that suits you, from the glowing Sorcerer's Orb to a warm analog field radio.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="screens" aria-labelledby="screens-h">
+    <h2 id="screens-h">A look inside</h2>
+    <p class="sub">Familiar tabs for favorites, contacts, messages, the keypad and your status.</p>
+    <div class="gallery" tabindex="0" aria-label="Telemancer screenshots">
+      <figure><div class="phone"><img src="/assets/shots/walkie-talkie.webp" width="540" height="1123" loading="lazy" alt="The welcome screen: Talk like a walkie-talkie."></div><figcaption>A quick tour when you first open the app</figcaption></figure>
+      <figure><div class="phone"><img src="/assets/shots/contacts.webp" width="540" height="1123" loading="lazy" alt="The contacts tab, with friends on Telemancer and friends who have been invited."></div><figcaption>See who's on Telemancer at a glance</figcaption></figure>
+      <figure><div class="phone"><img src="/assets/shots/hold-to-talk.webp" width="540" height="1123" loading="lazy" alt="A contact's page with the Hold to talk live button and a safety code."></div><figcaption>Hold to talk, with a safety code to compare</figcaption></figure>
+      <figure><div class="phone"><img src="/assets/shots/conversation.webp" width="540" height="1123" loading="lazy" alt="An empty conversation with a Hold to record a Scroll button."></div><figcaption>Record a Scroll when they're away</figcaption></figure>
+      <figure><div class="phone"><img src="/assets/shots/scroll.webp" width="540" height="1123" loading="lazy" alt="A Scroll with its words written out: Running ten minutes late!"></div><figcaption>Scrolls can show their words, too</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="connect" aria-labelledby="connect-h">
+    <h2 id="connect-h">How friends connect</h2>
+    <p class="sub">Telemancer only connects people who know each other, so nobody can reach you out of the blue.</p>
+    <ol class="steps">
+      <li><div><h3>Find Tome friends</h3><p>Telemancer sends each contact a hidden text carrying your public key. A phone running Telemancer keeps it only if it already has your number saved, then answers with its own.</p></div></li>
+      <li><div><h3>Or send an invite</h3><p>Friends who don't have Telemancer yet get an invite link by text or email. Once they install it and open the link, you're connected.</p></div></li>
+      <li><div><h3>Check your safety code</h3><p>Each pair of friends shares a safety code. If it matches on both phones, nobody is in the middle.</p></div></li>
+    </ol>
+  </section>
+
+  <section id="plans" aria-labelledby="plans-h">
+    <h2 id="plans-h">Plans</h2>
+    <p class="sub">Telemancer is free every day. Plus makes live talk and calls unlimited. Listening never counts, on any plan.</p>
+    <div class="plans">
+      <div class="card plan">
+        <h3>Free</h3>
+        <div class="price">$0</div>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Unlimited texts, Scrolls and status</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>30 minutes a day of live talk and voice calls</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Unused minutes add up to a week's worth</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Two weeks unlimited on a new phone, no card needed</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Own a channel of up to 4 people</span></li>
+        </ul>
+      </div>
+      <div class="card plan featured">
+        <span class="pill ready tag">Best value</span>
+        <h3>Plus</h3>
+        <div class="price">$19.99 <small>a year</small></div>
+        <p class="alt">or $2.99 a month, or $44.99 once for life</p>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Unlimited live talk and voice calls</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Video calls, 2 hours a day, and unused time adds up</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Talk live with anyone, including friends on Free</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Unlimited channels of up to 8 people</span></li>
+        </ul>
+      </div>
+      <div class="card plan">
+        <h3>Family</h3>
+        <div class="price">$59.99 <small>a year</small></div>
+        <p class="alt">or $6.99 a month, or $124.99 once for life</p>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Everything in Plus</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>For up to 5 people, about $1 each a month</span></li>
+        </ul>
+      </div>
+      <div class="card plan">
+        <h3>Teams</h3>
+        <div class="price">$149.99 <small>a year</small></div>
+        <p class="alt">or $14.99 a month</p>
+        <ul>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Up to 5 channels of 25 people</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Unlimited live talk inside your team's channels for everyone in them</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Invite links and announcements with read counts</span></li>
+          <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Team Large: 15 channels of 75 people, $399.99 a year or $39.99 a month</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="plans-note"><strong>Earn free weeks:</strong> every friend who joins Telemancer from your invite gives you both two weeks of unlimited live talk, up to six times a year. Plus opens in the app very soon.</p>
+  </section>
+
+  <section id="get" aria-labelledby="get-h">
+    <h2 id="get-h">Get Telemancer</h2>
+    <p class="sub">Telemancer is installed straight from this site. Google Play only allows apps that read texts if they're your main texting app, and Telemancer uses hidden texts to find your friends.</p>
+    <div class="get">
+      <div class="card">
+        <h3>Download</h3>
+        <p>For Android 10 and newer.</p>
+        <div class="actions" style="margin-top: 16px">
+          <a class="btn primary" href="/downloads/Telemancer.apk" download>
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 V15 M7 10.5 L12 15.5 L17 10.5 M5 20 H19"/></svg>
+            Download Telemancer
+          </a>
+        </div>
+        <p class="fine">SHA-256 checksum, to check the file arrived unchanged:<br><code class="sum">2952c37867fa9201bf59c68137249bc5b49283c0a03e3f0faecec9c3d457bd81</code></p>
+      </div>
+      <ol class="steps" id="install">
+        <li><div><h3>Download on your phone</h3><p>Open this page on your Android phone and tap Download.</p></div></li>
+        <li><div><h3>Open the file</h3><p>Tap the download when it finishes. If Android asks, allow installs from your browser, then tap Install.</p></div></li>
+        <li><div><h3>Allow texts and the microphone</h3><p>Telemancer asks for permission to use texts, contacts and the microphone. If Android says the setting is restricted, the app shows you how to allow it.</p></div></li>
+        <li><div><h3>Find your friends</h3><p>Tap Find Tome friends, or send an invite to anyone who doesn't have Telemancer yet.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="faq" aria-labelledby="faq-h">
+    <h2 id="faq-h">Questions</h2>
+    <div class="faq">
+      <details>
+        <summary>Who can hear me?</summary>
+        <p>Only the friend or channel you're talking to. Your voice is encrypted on your phone and can only be unlocked on theirs. You also choose who may talk to you live: everyone you've connected with, your favorites, people you pick, or nobody.</p>
+      </details>
+      <details>
+        <summary>Do my friends need Telemancer?</summary>
+        <p>For live talk, Scrolls and calls, yes. Telemancer offers to send them an invite, and you both get two extra weeks of unlimited live talk when they join. Friends using Tome OS have Telemancer built in.</p>
+      </details>
+      <details>
+        <summary>Does it use my texting plan?</summary>
+        <p>Finding friends sends a few hidden texts, which your carrier treats as normal texts, so your plan's usual rates apply. Telemancer asks before sending any. Talk, Scrolls and calls use the internet.</p>
+      </details>
+      <details>
+        <summary>What does the Telemancer server see?</summary>
+        <p>The server passes sealed, encrypted pieces between phones and holds them for up to a week if a phone is off. It never sees what you say or who you are talking to. On the same Wi-Fi, phones can talk to each other directly.</p>
+      </details>
+      <details>
+        <summary>What happens when my free minutes run out?</summary>
+        <p>Nothing stops. Your live talk goes as Scrolls until your minutes come back at midnight, and texts and Scrolls are always free.</p>
+      </details>
+      <details>
+        <summary>Why isn't it on Google Play?</summary>
+        <p>Google Play only lets texting apps use text messages, and Telemancer uses hidden texts to find which of your contacts have it. Installing from this site gives you the full app.</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>Telemancer by <a href="/">Tome OS</a> · <a href="/os/">About Tome OS</a></span>
+    <span>Not affiliated with Google. Android is a trademark of Google LLC.</span>
+  </div>
+</footer>
+</body>
+</html>

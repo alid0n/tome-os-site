@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 200" width="440" height="400" role="img" aria-label="Tome OS: a crystal ball resting on an open hardcover book">
+<title>Tome OS</title>
+<circle cx="110" cy="70" r="58" fill="#9d7bff" opacity="0.14"/>
+<g>
+  <circle cx="110" cy="70" r="44" fill="none" stroke="#9d7bff" stroke-width="5"/>
+  <path d="M88 56 a26 26 0 0 1 22 -12" fill="none" stroke="#efeaff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="126" cy="84" r="4" fill="#efeaff"/>
+  <path d="M92 118 L128 118" stroke="#9d7bff" stroke-width="5" stroke-linecap="round"/>
+</g>
+<path d="M6 122 L106 122 L110 125 L114 122 L214 122 L214 188 L114 188 L110 192 L106 188 L6 188 Z" fill="#2b2163" stroke="#efeaff" stroke-width="4" stroke-linejoin="miter"/>
+<g fill="none" stroke="#efeaff" stroke-linecap="round">
+  <path d="M20 172 Q65 152 110 172 Q155 152 200 172" stroke-width="2.5" opacity="0.6"/>
+  <path d="M20 176 Q65 156 110 176 Q155 156 200 176" stroke-width="2.5" opacity="0.35"/>
+</g>
+<path d="M20 126 Q65 106 110 126 Q155 106 200 126 L200 168 Q155 148 110 168 Q65 148 20 168 Z" fill="#1f1842" stroke="#efeaff" stroke-width="5" stroke-linejoin="round"/>
+<g fill="none" stroke="#efeaff" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.35">
+  <path d="M34 134 Q60 124 96 136"/><path d="M34 146 Q60 136 96 148"/><path d="M34 158 Q56 150 84 158"/>
+  <path d="M124 136 Q160 124 186 134"/><path d="M124 148 Q160 136 186 146"/><path d="M136 158 Q164 150 186 158"/>
+</g>
+<path d="M110 126 L110 192" stroke="#efeaff" stroke-width="5" stroke-linecap="round"/>
+</svg>
