@@ -171,10 +171,10 @@ footer .wrap { display: flex; gap: 16px; justify-content: space-between; flex-wr
 
   <section aria-labelledby="file-h">
     <h2 id="file-h">1. Get Tome OS for your phone</h2>
-    <p class="sub">Download the <strong>Factory image</strong> for your phone from the <a href="../#download">download table</a> or the <a href="https://github.com/alid0n/tome-os-site/releases">releases page</a>. It's called <code>tome-os-&lt;version&gt;-&lt;phone&gt;-factory.zip</code>. Don't unzip it. Then choose it here.</p>
+    <p class="sub">Download the <strong>Factory image</strong> for your phone from the <a href="../#download">download table</a> or the <a href="https://github.com/alid0n/tome-os-site/releases">releases page</a>. It's called <code>tome-os-&lt;version&gt;-&lt;phone&gt;-factory.zip</code>. Don't unzip it. Then choose it here. If it came in parts (ending in <code>.part1</code>, <code>.part2</code>), choose all the parts together.</p>
     <div class="card">
       <div class="file-row">
-        <input type="file" id="file" class="visually-hidden" accept=".zip,application/zip">
+        <input type="file" id="file" class="visually-hidden" multiple>
         <label for="file" class="btn" id="file-label" tabindex="0" role="button">Choose the downloaded file</label>
         <span class="file-name" id="file-name">No file chosen yet.</span>
       </div>
@@ -316,11 +316,38 @@ $("file-label").addEventListener("keydown", (e) => {
   if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("file").click(); }
 });
 
+// A factory zip over GitHub's 2 GB limit is published in parts
+// (name.part1, name.part2, ...). Chosen together, they're joined in order
+// into one file without copying them.
+function joinParts(files) {
+  if (files.length === 1 && !/\.part\d+$/.test(files[0].name)) return files[0];
+  const parts = files.map((f) => {
+    const m = f.name.match(/^(.*)\.part(\d+)$/);
+    if (!m) throw new Error(`${f.name} isn't part of a factory image. Choose only the files ending in .part1, .part2 and so on.`);
+    return { file: f, base: m[1], n: Number(m[2]) };
+  }).sort((a, b) => a.n - b.n);
+  if (parts.some((p) => p.base !== parts[0].base)) throw new Error("Those parts belong to different files. Choose the parts of one factory image.");
+  const gap = parts.findIndex((p, i) => p.n !== i + 1);
+  if (gap !== -1) throw new Error(`Part ${gap + 1} is missing. Choose every part together.`);
+  const joined = new Blob(parts.map((p) => p.file), { type: "application/zip" });
+  joined.name = parts[0].base;
+  return joined;
+}
+
 $("file").addEventListener("change", async () => {
-  const file = $("file").files[0];
+  const chosen = Array.from($("file").files);
   $("file-error").hidden = true;
-  if (!file) return;
+  if (!chosen.length) return;
   pack = null;
+  let file;
+  try {
+    file = joinParts(chosen);
+  } catch (e) {
+    $("file-name").textContent = chosen.map((f) => f.name).join(", ");
+    $("file-error").textContent = e.message;
+    $("file-error").hidden = false;
+    return;
+  }
   $("file-name").textContent = `Checking ${file.name}…`;
   try {
     pack = await readPack(file);

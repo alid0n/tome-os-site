@@ -296,9 +296,13 @@ footer .wrap { display: flex; gap: 16px; justify-content: space-between; flex-wr
           if (!sys || !boot) continue;
           var sum = find(".zip.sha256"), bootSum = find("-boot.zip.sha256");
           var factory = find("-factory.zip"), factorySum = find("-factory.zip.sha256");
+          // A factory image over GitHub's 2 GB limit comes in parts.
+          var parts = assets.filter(function (a) { return /-factory\.zip\.part\d+$/.test(a.name) && a.name.indexOf("-" + code + "-factory") !== -1; })
+            .sort(function (a, b) { return Number(a.name.split(".part")[1]) - Number(b.name.split(".part")[1]); });
           var cell = row.querySelector(".dl");
           cell.textContent = "";
-          [[factory, "Factory image"], [factorySum, "Factory checksum"], [sys, "System"], [boot, "Boot images"], [sum, "Checksum"], [bootSum, "Boot checksum"]].forEach(function (pair) {
+          var links = factory ? [[factory, "Factory image"]] : parts.map(function (p, n) { return [p, "Factory image, part " + (n + 1) + " of " + parts.length]; });
+          links.concat([[factorySum, "Factory checksum"], [sys, "System"], [boot, "Boot images"], [sum, "Checksum"], [bootSum, "Boot checksum"]]).forEach(function (pair) {
             if (!pair[0]) return;
             var a = document.createElement("a");
             a.href = pair[0].browser_download_url;
