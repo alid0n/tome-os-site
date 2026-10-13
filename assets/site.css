@@ -121,3 +121,15 @@ footer.site a { color: var(--muted); }
 .m2 { animation-delay: 1.6s; } .m3 { animation-delay: 3.2s; }
 @keyframes mote { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: .9; } 100% { opacity: 0; transform: translateY(-70px); } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; } html { scroll-behavior: auto; } }
+
+/* Policy pages (privacy, terms, refunds, contact) */
+main.legal { max-width: 46em; padding-top: 48px; padding-bottom: 64px; }
+main.legal h1 { font-size: clamp(32px, 6vw, 48px); }
+main.legal h2 { font-size: 22px; margin: 32px 0 8px; }
+main.legal p, main.legal li { color: var(--muted); line-height: 1.6; }
+main.legal ul { padding-left: 1.2em; }
+main.legal li { margin: 6px 0; }
+main.legal strong { color: var(--text); }
+main.legal .updated { color: var(--faint); font-size: 14px; margin-top: -8px; }
+mark.todo { background: var(--hush); color: var(--abyss); padding: 0 4px; border-radius: 4px; }
+.draft-note { background: var(--raised); border: 1px solid var(--hush); border-radius: 12px; padding: 10px 14px; color: var(--text) !important; }
