@@ -1,0 +1,23 @@
+{
+  "tomeRune": 1,
+  "id": "forest",
+  "name": "Forest",
+  "author": "Tome OS",
+  "version": "1.0",
+  "about": "Mossy greens and soft round letters, like a walk under the trees.",
+  "theme": {
+    "base": "orb_midnight",
+    "abyss": "#07130D",
+    "night": "#0D1F16",
+    "page": "#14301F",
+    "cover": "#1C4029",
+    "starlight": "#E9F5E4",
+    "blue": "#7FD49A",
+    "purple": "#C6E07A",
+    "onAccent": "#07130D",
+    "muted": "#9CBFA3",
+    "font": "rounded",
+    "corner": 24,
+    "backdrop": "dust"
+  }
+}

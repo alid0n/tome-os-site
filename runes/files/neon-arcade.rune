@@ -1,0 +1,33 @@
+{
+  "tomeRune": 1,
+  "id": "neon-arcade",
+  "name": "Neon arcade",
+  "author": "Tome OS",
+  "version": "1.0",
+  "about": "Bright cyan and pink on deep purple, square corners and a quick zoom.",
+  "theme": {
+    "base": "orb_midnight",
+    "abyss": "#07040F",
+    "night": "#0E0820",
+    "page": "#1A0F38",
+    "cover": "#251552",
+    "starlight": "#F5F0FF",
+    "blue": "#00E5F5",
+    "purple": "#FF4FCF",
+    "onAccent": "#07040F",
+    "muted": "#B3A6DE",
+    "font": "mono",
+    "corner": 4,
+    "backdrop": "scanlines"
+  },
+  "transition": {
+    "style": "zoom",
+    "ms": 200,
+    "easing": [
+      0.3,
+      0,
+      0,
+      1
+    ]
+  }
+}

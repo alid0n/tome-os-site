@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Runes · Tome OS</title>
+<meta name="description" content="Runes are small files that give Tome Home new colors, new tab motion or little blocks of text. They can't go online or see your data.">
+<link rel="canonical" href="https://tome-os.com/runes/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tome OS">
+<meta property="og:title" content="Runes for Tome Home">
+<meta property="og:description" content="New colors, tab motion and little blocks for your Tome phone. They can't go online or see your data.">
+<meta property="og:url" content="https://tome-os.com/runes/">
+<meta property="og:image" content="https://tome-os.com/assets/og-os.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#14102b">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+[hidden] { display: none !important; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hero { padding-bottom: 40px; }
+.hero-art svg { width: min(60%, 200px); height: auto; }
+@media (min-width: 860px) { .hero-art svg { width: min(100%, 300px); } }
+.facts { padding: 0; margin: 0 0 64px; }
+.facts .card h3 { font-size: 18px; }
+
+/* Filter row */
+.controls { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: center; justify-content: space-between; margin: 0 0 12px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.filters .btn { min-height: 40px; padding: 0 18px; font-size: 15px; }
+.filters .btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--night); }
+.search { position: relative; flex: 1 1 220px; max-width: 340px; }
+.search svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--faint); pointer-events: none; }
+.search input { width: 100%; min-height: 44px; padding: 0 16px 0 44px; border-radius: 22px; border: 1px solid var(--line); background: var(--page); color: var(--text); font: inherit; font-size: 16px; }
+.search input::placeholder { color: var(--faint); opacity: 1; }
+.search input:hover { border-color: var(--accent); }
+.search input:focus-visible { outline: 3px solid var(--glow); outline-offset: 3px; }
+#count { color: var(--faint); font-size: 14px; margin: 0 0 16px; }
+.empty { text-align: center; color: var(--muted); padding: 40px 16px; border: 1px dashed var(--line); border-radius: 18px; }
+.empty p { margin: 0 0 16px; }
+
+/* Cards */
+.runes { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); align-items: stretch; }
+.rune { min-width: 0; display: flex; flex-direction: column; padding: 14px 14px 18px; scroll-margin-top: 16px; }
+.rune h3 { margin: 16px 8px 0; font-size: 20px; }
+.rune .by { margin: 2px 8px 0; color: var(--faint); font-size: 14px; }
+.rune .about { margin: 10px 8px 0; }
+.chips { list-style: none; margin: 14px 8px 18px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.rune-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: auto 8px 0; }
+.rune-actions .btn { min-height: 44px; padding: 0 20px; }
+.report { color: var(--faint); font-size: 14px; }
+.report:hover { color: var(--accent); }
+.code { margin: 14px 8px 0; border-top: 1px solid var(--line); padding-top: 10px; }
+.code summary { cursor: pointer; color: var(--muted); font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 8px; padding: 4px 0; list-style: none; }
+.code summary::-webkit-details-marker { display: none; }
+.code summary::before { content: ""; width: 7px; height: 7px; border-right: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(-45deg); transition: transform .15s; }
+.code[open] summary::before { transform: rotate(45deg); }
+.code summary:hover { color: var(--text); }
+.code pre { margin: 10px 0 0; padding: 14px; max-height: 340px; overflow: auto; background: var(--night); border: 1px solid var(--line); border-radius: 12px; font-size: 13px; line-height: 1.5; }
+.code pre:focus-visible { outline: 3px solid var(--glow); outline-offset: 2px; }
+.code code { font-size: 13px; color: var(--muted); }
+
+/* The little Home screen drawn from each rune's colors.
+   Runes without colors use the site's own colors on a dotted pattern. */
+.preview { --ink: var(--r-starlight, var(--text)); aspect-ratio: 16 / 10; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: var(--r-abyss, var(--abyss)); padding: 10px; }
+.pv-screen { display: grid; grid-template-columns: 1fr 26px; gap: 10px; height: 100%; padding: 12px; border-radius: 10px; background-color: var(--r-night, var(--night)); overflow: hidden; }
+.neutral .pv-screen { background-image: radial-gradient(var(--line) 1.2px, transparent 1.6px); background-size: 14px 14px; }
+.bd-dust .pv-screen { background-image: radial-gradient(color-mix(in srgb, var(--ink) 28%, transparent) 1px, transparent 1.6px), radial-gradient(color-mix(in srgb, var(--ink) 16%, transparent) 1px, transparent 1.6px); background-size: 23px 19px, 31px 29px; background-position: 0 0, 11px 7px; }
+.bd-scanlines .pv-screen { background-image: repeating-linear-gradient(0deg, color-mix(in srgb, var(--ink) 7%, transparent) 0 1px, transparent 1px 4px); }
+.pv-main { display: flex; flex-direction: column; justify-content: center; gap: 10px; min-width: 0; }
+.pv-clock { color: var(--ink); font-size: 34px; line-height: 1; font-weight: 600; }
+.font-serif .pv-clock, .font-serif .pv-block b { font-family: Georgia, 'Times New Roman', serif; }
+.font-sans .pv-clock, .font-sans .pv-block b { font-family: system-ui, sans-serif; }
+.font-mono .pv-clock, .font-mono .pv-block b { font-family: var(--mono); }
+.font-rounded .pv-clock, .font-rounded .pv-block b { font-family: ui-rounded, 'SF Pro Rounded', 'Nunito', 'Varela Round', system-ui, sans-serif; }
+.pv-block, .pv-page { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; background: var(--r-cover, var(--page)); border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); border-radius: var(--r-corner, 12px); }
+.pv-block i, .pv-page i { display: block; height: 6px; border-radius: 3px; background: var(--r-muted, var(--line)); opacity: .75; }
+.pv-block i.short, .pv-page i.short { width: 55%; }
+.pv-block b { color: var(--ink); font-size: 15px; line-height: 1.2; }
+.pv-block.big i { background: var(--r-muted, var(--faint)); opacity: .5; }
+.pv-dots { display: flex; gap: 6px; }
+.pv-dots i { width: 22px; height: 22px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--ink) 18%, transparent); }
+.pv-dots .d1 { background: var(--r-blue, var(--talk)); }
+.pv-dots .d2 { background: var(--r-purple, var(--glow)); }
+.pv-dots .d3 { background: var(--r-page, var(--raised)); }
+.pv-rail { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 10px; border-radius: calc(var(--r-corner, 12px) + 2px); background: var(--r-page, var(--raised)); }
+.pv-rail i { width: 8px; height: 8px; border-radius: 50%; background: var(--r-muted, var(--faint)); opacity: .6; }
+.pv-rail i.on { background: var(--r-blue, var(--glow)); opacity: 1; box-shadow: 0 0 0 4px color-mix(in srgb, var(--r-blue, var(--glow)) 25%, transparent); }
+.pv-stack { position: relative; }
+.pv-stack .pv-page { position: absolute; left: 0; right: 0; top: 50%; height: 60%; margin-top: -18%; }
+.pv-stack .back { opacity: .4; transform: translateY(-22%) scale(.9); }
+.pv-stack .front { box-shadow: 0 10px 24px rgba(0, 0, 0, .35); }
+
+/* On hover or focus, a rune with motion plays its own tab change, at its own speed. */
+@media (prefers-reduced-motion: no-preference) {
+  .rune:is(:hover, :focus-within) .preview[class*="mv-"] .pv-anim { animation-duration: calc(var(--r-ms, 300ms) + 1100ms); animation-iteration-count: infinite; animation-timing-function: var(--r-ease, ease); }
+  .rune:is(:hover, :focus-within) .mv-fade .pv-anim { animation-name: pv-fade; }
+  .rune:is(:hover, :focus-within) .mv-slide .pv-anim { animation-name: pv-slide; }
+  .rune:is(:hover, :focus-within) .mv-rise .pv-anim { animation-name: pv-rise; }
+  .rune:is(:hover, :focus-within) .mv-scale .pv-anim { animation-name: pv-scale; }
+  .rune:is(:hover, :focus-within) .mv-zoom .pv-anim { animation-name: pv-zoom; }
+}
+@keyframes pv-fade { 0% { opacity: 0; } 30%, 100% { opacity: 1; } }
+@keyframes pv-slide { 0% { opacity: 0; transform: translateY(70%); } 30%, 100% { opacity: 1; transform: none; } }
+@keyframes pv-rise { 0% { opacity: 0; transform: translateY(14%); } 30%, 100% { opacity: 1; transform: none; } }
+@keyframes pv-scale { 0% { opacity: 0; transform: scale(.88); } 30%, 100% { opacity: 1; transform: none; } }
+@keyframes pv-zoom { 0% { opacity: 0; transform: scale(1.18); } 30%, 100% { opacity: 1; transform: none; } }
+
+/* Make it yours */
+.yours { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.yours .card { display: flex; flex-direction: column; gap: 10px; }
+.yours .card h3 { margin: 4px 0 0; }
+.yours .cmd { align-self: flex-start; color: var(--text); background: var(--raised); white-space: normal; }
+.yours .actions { margin-top: auto; padding-top: 8px; }
+.no-count { color: var(--faint); font-size: 14px; margin: 20px 0 0; }
+</style>
+</head>
+<body>
+<a class="skip" href="#top">Skip to content</a>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="/"><img src="/assets/mark.svg" alt="">TOME OS</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/telemancer/">Telemancer</a></li>
+        <li><a href="/">Tome OS</a></li>
+        <li><a href="/install/">Install</a></li>
+        <li><a href="/runes/" aria-current="page">Runes</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top" class="wrap">
+  <div class="hero">
+    <div>
+      <p class="eyebrow">For Tome Home</p>
+      <h1>Runes</h1>
+      <p class="lede">Runes are small files that change how your Home screen looks and moves. Give it new colors, a new way for tabs to move, or a little block of text that updates itself.</p>
+      <div class="actions">
+        <a class="btn primary" href="#gallery">See the runes</a>
+        <a class="btn" href="/runes/submit">Share your own</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <svg viewBox="0 0 220 200" role="img" aria-label="A glowing rune carved into a stone">
+        <circle class="halo" cx="110" cy="98" r="78" fill="#9d7bff"/>
+        <path d="M66 34 Q110 20 154 34 Q166 98 156 162 Q110 180 64 162 Q54 98 66 34 Z" fill="#2b2163" stroke="#efeaff" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M76 46 Q110 36 144 46" fill="none" stroke="#efeaff" stroke-width="2.5" stroke-linecap="round" opacity=".35"/>
+        <path d="M100 62 V142 M100 64 L128 84 L100 104 L130 142" fill="none" stroke="#9d7bff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M100 62 V142 M100 64 L128 84 L100 104 L130 142" fill="none" stroke="#efeaff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/>
+        <circle class="spark" cx="140" cy="60" r="4" fill="#efeaff"/>
+        <circle class="mote" cx="76" cy="176" r="2.5" fill="#9d7bff"/>
+        <circle class="mote m2" cx="146" cy="174" r="2" fill="#efeaff"/>
+        <circle class="mote m3" cx="112" cy="178" r="2" fill="#efeaff"/>
+      </svg>
+    </div>
+  </div>
+
+  <section class="facts" aria-label="What a rune can and can't do">
+    <div class="grid">
+      <div class="card">
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18 H17 a4 4 0 0 0 .6 -7.95 A6 6 0 0 0 6.2 9.1 A4.5 4.5 0 0 0 7 18 Z"/><path d="M4 4 L20 20"/></svg></div>
+        <h3>Can't go online</h3>
+        <p>A rune has no way to reach the internet. It can't send anything or fetch anything.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 L20 6 V12 C20 16.5 16.5 20 12 21 C7.5 20 4 16.5 4 12 V6 Z"/></svg></div>
+        <h3>Can't see your data</h3>
+        <p>Your messages, contacts, photos and files stay out of reach. A block only knows simple things, like the time and the day.</p>
+      </div>
+      <div class="card">
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12 C5 6.5 8.5 4.5 12 4.5 S19 6.5 22 12 C19 17.5 15.5 19.5 12 19.5 S5 17.5 2 12 Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>You see it first</h3>
+        <p>Open this page on your Tome phone and tap Install. Tome Home shows you what the rune changes before you add it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" aria-labelledby="gallery-h">
+    <h2 id="gallery-h">The gallery</h2>
+    <p class="sub">Every rune here was checked by hand. On a computer, Install saves the file: send it to your phone and tap it there.</p>
+
+    <div class="controls" hidden>
+      <div class="filters" role="group" aria-label="Show runes that change">
+        <button type="button" class="btn" data-kind="all" aria-pressed="true">All</button>
+        <button type="button" class="btn" data-kind="colors" aria-pressed="false">Colors</button>
+        <button type="button" class="btn" data-kind="motion" aria-pressed="false">Motion</button>
+        <button type="button" class="btn" data-kind="blocks" aria-pressed="false">Blocks</button>
+      </div>
+      <div class="search">
+        <label for="q" class="visually-hidden">Search runes</label>
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16 L20.5 20.5"/></svg>
+        <input id="q" type="search" placeholder="Search runes" autocomplete="off" spellcheck="false">
+      </div>
+    </div>
+    <p id="count" role="status" aria-live="polite">6 runes</p>
+
+    <ul class="runes">
+      <!-- runes:start -->
+      <li class="card rune" id="rune-ocean-calm" data-kinds="colors motion" data-search="ocean calm tome os deep sea blues, softer corners and a slow fade between tabs. colors round corners fade between tabs">
+        <div class="preview themed bd-plain mv-fade" style="--r-abyss:#03121B;--r-night:#06202D;--r-page:#0B2C3D;--r-cover:#123D52;--r-starlight:#E6F6FB;--r-blue:#4FD1E0;--r-purple:#7FB5FF;--r-onaccent:#03121B;--r-muted:#8DB3C2;--r-corner:16px;--r-ms:320ms;--r-ease:cubic-bezier(0.4,0,0.2,1)" aria-hidden="true"><span class="pv-screen"><span class="pv-main pv-anim"><span class="pv-clock">Aa</span><span class="pv-block"><i></i><i class="short"></i></span><span class="pv-dots"><i class="d1"></i><i class="d2"></i><i class="d3"></i></span></span><span class="pv-rail"><i class="on"></i><i></i><i></i><i></i></span></span></div>
+        <h3>Ocean calm</h3>
+        <p class="by">by Tome OS · version 1.0</p>
+        <p class="about">Deep sea blues, softer corners and a slow fade between tabs.</p>
+        <ul class="chips" aria-label="What it changes"><li class="pill planned">Colors</li><li class="pill planned">Round corners</li><li class="pill planned">Fade between tabs</li></ul>
+        <div class="rune-actions">
+          <a class="btn primary" href="files/ocean-calm.rune" download="ocean-calm.rune"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 V15 M7 10 L12 15 L17 10 M5 20 H19"/></svg>Install<span class="visually-hidden"> Ocean calm</span></a>
+          <a class="report" href="mailto:alid0ndev@gmail.com?subject=Report%20rune%20ocean-calm">Report<span class="visually-hidden"> Ocean calm</span></a>
+        </div>
+        <details class="code">
+          <summary>View code<span class="visually-hidden"> for Ocean calm</span></summary>
+          <pre tabindex="0" aria-label="The code of Ocean calm"><code>{
+  &quot;tomeRune&quot;: 1,
+  &quot;id&quot;: &quot;ocean-calm&quot;,
+  &quot;name&quot;: &quot;Ocean calm&quot;,
+  &quot;author&quot;: &quot;Tome OS&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;about&quot;: &quot;Deep sea blues, softer corners and a slow fade between tabs.&quot;,
+  &quot;theme&quot;: {
+    &quot;base&quot;: &quot;orb_midnight&quot;,
+    &quot;abyss&quot;: &quot;#03121B&quot;,
+    &quot;night&quot;: &quot;#06202D&quot;,
+    &quot;page&quot;: &quot;#0B2C3D&quot;,
+    &quot;cover&quot;: &quot;#123D52&quot;,
+    &quot;starlight&quot;: &quot;#E6F6FB&quot;,
+    &quot;blue&quot;: &quot;#4FD1E0&quot;,
+    &quot;purple&quot;: &quot;#7FB5FF&quot;,
+    &quot;onAccent&quot;: &quot;#03121B&quot;,
+    &quot;muted&quot;: &quot;#8DB3C2&quot;,
+    &quot;corner&quot;: 16,
+    &quot;backdrop&quot;: &quot;plain&quot;
+  },
+  &quot;transition&quot;: {
+    &quot;style&quot;: &quot;fade&quot;,
+    &quot;ms&quot;: 320,
+    &quot;easing&quot;: [
+      0.4,
+      0,
+      0.2,
+      1
+    ]
+  }
+}</code></pre>
+        </details>
+      </li>
+      <li class="card rune" id="rune-day-left" data-kinds="blocks" data-search="day left tome os a block on home that counts down the hours left in the day. block: day left">
+        <div class="preview neutral" aria-hidden="true"><span class="pv-screen"><span class="pv-main pv-anim"><span class="pv-block big"><b>Day left</b><i></i><i class="short"></i></span><span class="pv-block"><i></i></span></span><span class="pv-rail"><i class="on"></i><i></i><i></i><i></i></span></span></div>
+        <h3>Day left</h3>
+        <p class="by">by Tome OS · version 1.0</p>
+        <p class="about">A block on Home that counts down the hours left in the day.</p>
+        <ul class="chips" aria-label="What it changes"><li class="pill planned">Block: Day left</li></ul>
+        <div class="rune-actions">
+          <a class="btn primary" href="files/day-left.rune" download="day-left.rune"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 V15 M7 10 L12 15 L17 10 M5 20 H19"/></svg>Install<span class="visually-hidden"> Day left</span></a>
+          <a class="report" href="mailto:alid0ndev@gmail.com?subject=Report%20rune%20day-left">Report<span class="visually-hidden"> Day left</span></a>
+        </div>
+        <details class="code">
+          <summary>View code<span class="visually-hidden"> for Day left</span></summary>
+          <pre tabindex="0" aria-label="The code of Day left"><code>{
+  &quot;tomeRune&quot;: 1,
+  &quot;id&quot;: &quot;day-left&quot;,
+  &quot;name&quot;: &quot;Day left&quot;,
+  &quot;author&quot;: &quot;Tome OS&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;about&quot;: &quot;A block on Home that counts down the hours left in the day.&quot;,
+  &quot;blocks&quot;: [
+    {
+      &quot;title&quot;: &quot;Day left&quot;,
+      &quot;everyMinutes&quot;: 1,
+      &quot;script&quot;: [
+        &quot;local left = (23 - tome.hour) * 60 + (60 - tome.minute)&quot;,
+        &quot;local h, m = math.floor(left / 60), left % 60&quot;,
+        &quot;return {&quot;,
+        &quot;  text = h .. \&quot; h \&quot; .. m .. \&quot; min left in \&quot; .. tome.weekday,&quot;,
+        &quot;  lines = { \&quot;You&#x27;re \&quot; .. string.lower(tome.mood) .. \&quot;.\&quot; }&quot;,
+        &quot;}&quot;
+      ]
+    }
+  ]
+}</code></pre>
+        </details>
+      </li>
+      <li class="card rune" id="rune-cozy-autumn" data-kinds="colors motion" data-search="cozy autumn tome os warm paper, pumpkin and cinnamon, with a bookish serif font. light colors serif font round corners rise between tabs">
+        <div class="preview themed font-serif bd-plain mv-rise" style="--r-abyss:#EADBC4;--r-night:#F6ECDD;--r-page:#FFF8EE;--r-cover:#F0DDC4;--r-starlight:#3A2416;--r-blue:#B4501A;--r-purple:#8E3B2E;--r-onaccent:#FFF8EE;--r-muted:#6E513C;--r-corner:20px;--r-ms:280ms;--r-ease:cubic-bezier(0.2,0,0,1)" aria-hidden="true"><span class="pv-screen"><span class="pv-main pv-anim"><span class="pv-clock">Aa</span><span class="pv-block"><i></i><i class="short"></i></span><span class="pv-dots"><i class="d1"></i><i class="d2"></i><i class="d3"></i></span></span><span class="pv-rail"><i class="on"></i><i></i><i></i><i></i></span></span></div>
+        <h3>Cozy autumn</h3>
+        <p class="by">by Tome OS · version 1.0</p>
+        <p class="about">Warm paper, pumpkin and cinnamon, with a bookish serif font.</p>
+        <ul class="chips" aria-label="What it changes"><li class="pill planned">Light colors</li><li class="pill planned">Serif font</li><li class="pill planned">Round corners</li><li class="pill planned">Rise between tabs</li></ul>
+        <div class="rune-actions">
+          <a class="btn primary" href="files/cozy-autumn.rune" download="cozy-autumn.rune"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 V15 M7 10 L12 15 L17 10 M5 20 H19"/></svg>Install<span class="visually-hidden"> Cozy autumn</span></a>
+          <a class="report" href="mailto:alid0ndev@gmail.com?subject=Report%20rune%20cozy-autumn">Report<span class="visually-hidden"> Cozy autumn</span></a>
+        </div>
+        <details class="code">
+          <summary>View code<span class="visually-hidden"> for Cozy autumn</span></summary>
+          <pre tabindex="0" aria-label="The code of Cozy autumn"><code>{
+  &quot;tomeRune&quot;: 1,
+  &quot;id&quot;: &quot;cozy-autumn&quot;,
+  &quot;name&quot;: &quot;Cozy autumn&quot;,
+  &quot;author&quot;: &quot;Tome OS&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;about&quot;: &quot;Warm paper, pumpkin and cinnamon, with a bookish serif font.&quot;,
+  &quot;theme&quot;: {
+    &quot;base&quot;: &quot;common&quot;,
+    &quot;abyss&quot;: &quot;#EADBC4&quot;,
+    &quot;night&quot;: &quot;#F6ECDD&quot;,
+    &quot;page&quot;: &quot;#FFF8EE&quot;,
+    &quot;cover&quot;: &quot;#F0DDC4&quot;,
+    &quot;starlight&quot;: &quot;#3A2416&quot;,
+    &quot;blue&quot;: &quot;#B4501A&quot;,
+    &quot;purple&quot;: &quot;#8E3B2E&quot;,
+    &quot;onAccent&quot;: &quot;#FFF8EE&quot;,
+    &quot;muted&quot;: &quot;#6E513C&quot;,
+    &quot;font&quot;: &quot;serif&quot;,
+    &quot;corner&quot;: 20,
+    &quot;backdrop&quot;: &quot;plain&quot;
+  },
+  &quot;transition&quot;: {
+    &quot;style&quot;: &quot;rise&quot;,
+    &quot;ms&quot;: 280,
+    &quot;easing&quot;: [
+      0.2,
+      0,
+      0,
+      1
+    ]
+  }
+}</code></pre>
+        </details>
+      </li>
+      <li class="card rune" id="rune-slide-tabs" data-kinds="motion" data-search="sliding tabs tome os tabs slide in from the direction you moved on the rail. slide between tabs">
+        <div class="preview neutral mv-slide" style="--r-ms:260ms;--r-ease:cubic-bezier(0.2,0,0,1)" aria-hidden="true"><span class="pv-screen"><span class="pv-main pv-stack"><span class="pv-page back"></span><span class="pv-page front pv-anim"><i></i><i class="short"></i></span></span><span class="pv-rail"><i class="on"></i><i></i><i></i><i></i></span></span></div>
+        <h3>Sliding tabs</h3>
+        <p class="by">by Tome OS · version 1.0</p>
+        <p class="about">Tabs slide in from the direction you moved on the rail.</p>
+        <ul class="chips" aria-label="What it changes"><li class="pill planned">Slide between tabs</li></ul>
+        <div class="rune-actions">
+          <a class="btn primary" href="files/slide-tabs.rune" download="slide-tabs.rune"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 V15 M7 10 L12 15 L17 10 M5 20 H19"/></svg>Install<span class="visually-hidden"> Sliding tabs</span></a>
+          <a class="report" href="mailto:alid0ndev@gmail.com?subject=Report%20rune%20slide-tabs">Report<span class="visually-hidden"> Sliding tabs</span></a>
+        </div>
+        <details class="code">
+          <summary>View code<span class="visually-hidden"> for Sliding tabs</span></summary>
+          <pre tabindex="0" aria-label="The code of Sliding tabs"><code>{
+  &quot;tomeRune&quot;: 1,
+  &quot;id&quot;: &quot;slide-tabs&quot;,
+  &quot;name&quot;: &quot;Sliding tabs&quot;,
+  &quot;author&quot;: &quot;Tome OS&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;about&quot;: &quot;Tabs slide in from the direction you moved on the rail.&quot;,
+  &quot;transition&quot;: {
+    &quot;style&quot;: &quot;slide&quot;,
+    &quot;ms&quot;: 260,
+    &quot;easing&quot;: [
+      0.2,
+      0,
+      0,
+      1
+    ]
+  }
+}</code></pre>
+        </details>
+      </li>
+      <li class="card rune" id="rune-forest" data-kinds="colors" data-search="forest tome os mossy greens and soft round letters, like a walk under the trees. colors rounded font round corners dust backdrop">
+        <div class="preview themed font-rounded bd-dust" style="--r-abyss:#07130D;--r-night:#0D1F16;--r-page:#14301F;--r-cover:#1C4029;--r-starlight:#E9F5E4;--r-blue:#7FD49A;--r-purple:#C6E07A;--r-onaccent:#07130D;--r-muted:#9CBFA3;--r-corner:24px" aria-hidden="true"><span class="pv-screen"><span class="pv-main pv-anim"><span class="pv-clock">Aa</span><span class="pv-block"><i></i><i class="short"></i></span><span class="pv-dots"><i class="d1"></i><i class="d2"></i><i class="d3"></i></span></span><span class="pv-rail"><i class="on"></i><i></i><i></i><i></i></span></span></div>
+        <h3>Forest</h3>
+        <p class="by">by Tome OS · version 1.0</p>
+        <p class="about">Mossy greens and soft round letters, like a walk under the trees.</p>
+        <ul class="chips" aria-label="What it changes"><li class="pill planned">Colors</li><li class="pill planned">Rounded font</li><li class="pill planned">Round corners</li><li class="pill planned">Dust backdrop</li></ul>
+        <div class="rune-actions">
+          <a class="btn primary" href="files/forest.rune" download="forest.rune"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 V15 M7 10 L12 15 L17 10 M5 20 H19"/></svg>Install<span class="visually-hidden"> Forest</span></a>
+          <a class="report" href="mailto:alid0ndev@gmail.com?subject=Report%20rune%20forest">Report<span class="visually-hidden"> Forest</span></a>
+        </div>
+        <details class="code">
+          <summary>View code<span class="visually-hidden"> for Forest</span></summary>
+          <pre tabindex="0" aria-label="The code of Forest"><code>{
+  &quot;tomeRune&quot;: 1,
+  &quot;id&quot;: &quot;forest&quot;,
+  &quot;name&quot;: &quot;Forest&quot;,
+  &quot;author&quot;: &quot;Tome OS&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;about&quot;: &quot;Mossy greens and soft round letters, like a walk under the trees.&quot;,
+  &quot;theme&quot;: {
+    &quot;base&quot;: &quot;orb_midnight&quot;,
+    &quot;abyss&quot;: &quot;#07130D&quot;,
+    &quot;night&quot;: &quot;#0D1F16&quot;,
+    &quot;page&quot;: &quot;#14301F&quot;,
+    &quot;cover&quot;: &quot;#1C4029&quot;,
+    &quot;starlight&quot;: &quot;#E9F5E4&quot;,
+    &quot;blue&quot;: &quot;#7FD49A&quot;,
+    &quot;purple&quot;: &quot;#C6E07A&quot;,
+    &quot;onAccent&quot;: &quot;#07130D&quot;,
+    &quot;muted&quot;: &quot;#9CBFA3&quot;,
+    &quot;font&quot;: &quot;rounded&quot;,
+    &quot;corner&quot;: 24,
+    &quot;backdrop&quot;: &quot;dust&quot;
+  }
+}</code></pre>
+        </details>
+      </li>
+      <li class="card rune" id="rune-neon-arcade" data-kinds="colors motion" data-search="neon arcade tome os bright cyan and pink on deep purple, square corners and a quick zoom. colors mono font sharp corners scanlines backdrop zoom between tabs">
+        <div class="preview themed font-mono bd-scanlines mv-zoom" style="--r-abyss:#07040F;--r-night:#0E0820;--r-page:#1A0F38;--r-cover:#251552;--r-starlight:#F5F0FF;--r-blue:#00E5F5;--r-purple:#FF4FCF;--r-onaccent:#07040F;--r-muted:#B3A6DE;--r-corner:4px;--r-ms:200ms;--r-ease:cubic-bezier(0.3,0,0,1)" aria-hidden="true"><span class="pv-screen"><span class="pv-main pv-anim"><span class="pv-clock">Aa</span><span class="pv-block"><i></i><i class="short"></i></span><span class="pv-dots"><i class="d1"></i><i class="d2"></i><i class="d3"></i></span></span><span class="pv-rail"><i class="on"></i><i></i><i></i><i></i></span></span></div>
+        <h3>Neon arcade</h3>
+        <p class="by">by Tome OS · version 1.0</p>
+        <p class="about">Bright cyan and pink on deep purple, square corners and a quick zoom.</p>
+        <ul class="chips" aria-label="What it changes"><li class="pill planned">Colors</li><li class="pill planned">Mono font</li><li class="pill planned">Sharp corners</li><li class="pill planned">Scanlines backdrop</li><li class="pill planned">Zoom between tabs</li></ul>
+        <div class="rune-actions">
+          <a class="btn primary" href="files/neon-arcade.rune" download="neon-arcade.rune"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 V15 M7 10 L12 15 L17 10 M5 20 H19"/></svg>Install<span class="visually-hidden"> Neon arcade</span></a>
+          <a class="report" href="mailto:alid0ndev@gmail.com?subject=Report%20rune%20neon-arcade">Report<span class="visually-hidden"> Neon arcade</span></a>
+        </div>
+        <details class="code">
+          <summary>View code<span class="visually-hidden"> for Neon arcade</span></summary>
+          <pre tabindex="0" aria-label="The code of Neon arcade"><code>{
+  &quot;tomeRune&quot;: 1,
+  &quot;id&quot;: &quot;neon-arcade&quot;,
+  &quot;name&quot;: &quot;Neon arcade&quot;,
+  &quot;author&quot;: &quot;Tome OS&quot;,
+  &quot;version&quot;: &quot;1.0&quot;,
+  &quot;about&quot;: &quot;Bright cyan and pink on deep purple, square corners and a quick zoom.&quot;,
+  &quot;theme&quot;: {
+    &quot;base&quot;: &quot;orb_midnight&quot;,
+    &quot;abyss&quot;: &quot;#07040F&quot;,
+    &quot;night&quot;: &quot;#0E0820&quot;,
+    &quot;page&quot;: &quot;#1A0F38&quot;,
+    &quot;cover&quot;: &quot;#251552&quot;,
+    &quot;starlight&quot;: &quot;#F5F0FF&quot;,
+    &quot;blue&quot;: &quot;#00E5F5&quot;,
+    &quot;purple&quot;: &quot;#FF4FCF&quot;,
+    &quot;onAccent&quot;: &quot;#07040F&quot;,
+    &quot;muted&quot;: &quot;#B3A6DE&quot;,
+    &quot;font&quot;: &quot;mono&quot;,
+    &quot;corner&quot;: 4,
+    &quot;backdrop&quot;: &quot;scanlines&quot;
+  },
+  &quot;transition&quot;: {
+    &quot;style&quot;: &quot;zoom&quot;,
+    &quot;ms&quot;: 200,
+    &quot;easing&quot;: [
+      0.3,
+      0,
+      0,
+      1
+    ]
+  }
+}</code></pre>
+        </details>
+      </li>
+      <!-- runes:end -->
+    </ul>
+    <div class="empty" hidden>
+      <p>No runes match that yet.</p>
+      <button type="button" class="btn" id="show-all">Show all runes</button>
+    </div>
+    <p class="no-count">We don't count downloads or keep track of who installs what.</p>
+  </section>
+
+  <section id="yours" aria-labelledby="yours-h">
+    <h2 id="yours-h">Make one your own</h2>
+    <p class="sub">Like a rune but want a different blue? Change it on your phone, then share it if you like.</p>
+    <div class="yours">
+      <div class="card">
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20 L8 19 L19 8 a2.1 2.1 0 0 0 -3 -3 L5 16 Z"/><path d="M14 7 L17 10"/></svg></div>
+        <h3>Remix</h3>
+        <p>On your Tome phone, open a rune you've added and tap Remix. You get your own copy to change, and the original stays as it was.</p>
+        <span class="cmd">Settings → Runes → a rune → Remix</span>
+      </div>
+      <div class="card">
+        <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="currentColor"/></svg></div>
+        <h3>Share it here</h3>
+        <p>Made something lovely? Send it in. We read every rune by hand before it goes in the gallery.</p>
+        <div class="actions"><a class="btn" href="/runes/submit">How to share a rune</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <span>Tome OS · <a href="/runes/">Runes</a> · <a href="/telemancer/">Telemancer</a> · <a href="/contact">Contact</a></span>
+    <span>Not affiliated with Google. Android is a trademark of Google LLC.</span>
+  </div>
+</footer>
+<script>
+// Filtering and search. Without JavaScript every rune is still listed above.
+(function () {
+  var controls = document.querySelector(".controls");
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".rune"));
+  var buttons = Array.prototype.slice.call(document.querySelectorAll(".filters button"));
+  var input = document.getElementById("q");
+  var count = document.getElementById("count");
+  var empty = document.querySelector(".empty");
+  var kind = "all";
+  var timer;
+
+  function apply() {
+    var words = input.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    var shown = 0;
+    cards.forEach(function (card) {
+      var kinds = card.getAttribute("data-kinds").split(" ");
+      var text = card.getAttribute("data-search");
+      var ok = (kind === "all" || kinds.indexOf(kind) !== -1) &&
+        words.every(function (w) { return text.indexOf(w) !== -1; });
+      card.hidden = !ok;
+      if (ok) shown++;
+    });
+    empty.hidden = shown > 0;
+    var total = cards.length;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      count.textContent = shown === total ? total + " runes"
+        : shown === 0 ? "No runes match"
+        : "Showing " + shown + " of " + total + " runes";
+    }, 250);
+  }
+
+  function choose(next) {
+    kind = next;
+    buttons.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-kind") === kind)); });
+    apply();
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () { choose(b.getAttribute("data-kind")); });
+  });
+  input.addEventListener("input", apply);
+  document.getElementById("show-all").addEventListener("click", function () {
+    input.value = "";
+    choose("all");
+    buttons[0].focus();
+  });
+  controls.hidden = false;
+})();
+</script>
+</body>
+</html>

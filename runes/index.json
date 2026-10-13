@@ -1,0 +1,68 @@
+{
+  "tomeRunes": 1,
+  "runes": [
+    {
+      "id": "ocean-calm",
+      "name": "Ocean calm",
+      "author": "Tome OS",
+      "about": "Deep sea blues, softer corners and a slow fade between tabs.",
+      "file": "files/ocean-calm.rune",
+      "kinds": [
+        "colors",
+        "motion"
+      ]
+    },
+    {
+      "id": "day-left",
+      "name": "Day left",
+      "author": "Tome OS",
+      "about": "A block on Home that counts down the hours left in the day.",
+      "file": "files/day-left.rune",
+      "kinds": [
+        "blocks"
+      ]
+    },
+    {
+      "id": "cozy-autumn",
+      "name": "Cozy autumn",
+      "author": "Tome OS",
+      "about": "Warm paper, pumpkin and cinnamon, with a bookish serif font.",
+      "file": "files/cozy-autumn.rune",
+      "kinds": [
+        "colors",
+        "motion"
+      ]
+    },
+    {
+      "id": "slide-tabs",
+      "name": "Sliding tabs",
+      "author": "Tome OS",
+      "about": "Tabs slide in from the direction you moved on the rail.",
+      "file": "files/slide-tabs.rune",
+      "kinds": [
+        "motion"
+      ]
+    },
+    {
+      "id": "forest",
+      "name": "Forest",
+      "author": "Tome OS",
+      "about": "Mossy greens and soft round letters, like a walk under the trees.",
+      "file": "files/forest.rune",
+      "kinds": [
+        "colors"
+      ]
+    },
+    {
+      "id": "neon-arcade",
+      "name": "Neon arcade",
+      "author": "Tome OS",
+      "about": "Bright cyan and pink on deep purple, square corners and a quick zoom.",
+      "file": "files/neon-arcade.rune",
+      "kinds": [
+        "colors",
+        "motion"
+      ]
+    }
+  ]
+}
