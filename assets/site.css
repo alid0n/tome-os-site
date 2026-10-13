@@ -1,19 +1,19 @@
 /* tome-os.com: the theme and the parts every page shares. */
 :root {
   color-scheme: dark;
-  --abyss: #08060f;
-  --night: #14102b;
-  --page: #1f1842;
-  --raised: #2b2163;
-  --line: #3a2f73;
-  --text: #efeaff;
-  --muted: #c9c1ec;
-  --faint: #a99fd6;
-  --glow: #9d7bff;
+  --abyss: #000000;
+  --night: #0c0a12;
+  --page: #18131f;
+  --raised: #241c30;
+  --line: #2e2540;
+  --text: #f3eefc;
+  --muted: #c4bcd3;
+  --faint: #9c94ad;
+  --glow: #b57bff;
   --talk: #5cc8ff;
   --hush: #f2b84b;
   --accent: var(--glow);
-  --accent-hover: #b39bff;
+  --accent-hover: #c99bff;
   --display: 'Cinzel', Georgia, serif;
   --body: 'Space Grotesk', system-ui, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -24,7 +24,7 @@
 html { scroll-behavior: smooth; }
 body {
   margin: 0; color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.6;
-  background: radial-gradient(ellipse at 90% 0%, rgba(43, 33, 99, 0.6), transparent 60%) no-repeat, var(--night);
+  background: radial-gradient(ellipse at 90% 0%, rgba(181, 123, 255, 0.6), transparent 60%) no-repeat, var(--night);
 }
 a { color: var(--text); }
 a:hover { color: var(--accent); }
@@ -93,10 +93,10 @@ ol.steps h3 { margin: 0 0 4px; font-size: 18px; }
 ol.steps p { margin: 0; color: var(--muted); font-size: 16px; }
 
 /* A phone screenshot in a frame */
-.phone { width: 240px; flex-shrink: 0; border-radius: 32px; padding: 8px; background: #0b0918; border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45); }
+.phone { width: 240px; flex-shrink: 0; border-radius: 32px; padding: 8px; background: #050408; border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45); }
 .phone img { display: block; width: 100%; height: auto; border-radius: 24px; }
 .hero-art .phone { width: min(78%, 290px); position: relative; z-index: 1; }
-.hero-art .aura { position: absolute; inset: 8% 6%; border-radius: 50%; background: radial-gradient(circle, rgba(92, 200, 255, 0.35), rgba(157, 123, 255, 0.18) 45%, transparent 70%); filter: blur(10px); }
+.hero-art .aura { position: absolute; inset: 8% 6%; border-radius: 50%; background: radial-gradient(circle, rgba(92, 200, 255, 0.35), rgba(181, 123, 255, 0.18) 45%, transparent 70%); filter: blur(10px); }
 
 /* Questions */
 .faq { display: grid; gap: 12px; }
@@ -133,3 +133,14 @@ main.legal strong { color: var(--text); }
 main.legal .updated { color: var(--faint); font-size: 14px; margin-top: -8px; }
 mark.todo { background: var(--hush); color: var(--abyss); padding: 0 4px; border-radius: 4px; }
 .draft-note { background: var(--raised); border: 1px solid var(--hush); border-radius: 12px; padding: 10px 14px; color: var(--text) !important; }
+
+/* Tome's look: near-black with a soft purple glow. */
+body { background: radial-gradient(64rem 36rem at 88% -12%, rgba(181,123,255,.16), transparent 70%) no-repeat, radial-gradient(44rem 30rem at -12% 28%, rgba(181,123,255,.07), transparent 70%) no-repeat, var(--night); }
+header, header.site { border-bottom-color: rgba(181,123,255,.14); }
+footer, footer.site { border-top-color: rgba(181,123,255,.14); }
+h1 { text-shadow: 0 0 30px rgba(181,123,255,.22); }
+.card, ol.steps li, .faq details, .table-box { background: linear-gradient(160deg, rgba(181,123,255,.08), transparent 55%), var(--page); border-color: rgba(181,123,255,.16); transition: border-color .25s, box-shadow .25s; }
+.card:hover, .faq details:hover { border-color: rgba(181,123,255,.38); box-shadow: 0 0 34px -10px rgba(181,123,255,.45); }
+.btn.primary { box-shadow: 0 0 26px -6px rgba(181,123,255,.7); }
+.icon, ol.steps li::before { box-shadow: inset 0 0 0 1px rgba(181,123,255,.22), 0 0 18px -6px rgba(181,123,255,.5); }
+.pill.ready { background: rgba(181,123,255,.18); color: #eadcff; }
