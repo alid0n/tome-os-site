@@ -11,6 +11,7 @@ Releases page is where public downloads go.
 | Path | What |
 | --- | --- |
 | `index.html` | Home page: Tome OS (features, the per-phone download table, install steps) |
+| `install/` | The Tome OS web installer (WebUSB, Chrome or Edge). It flashes a `tome-os-<version>-<codename>-factory.zip` the visitor chooses; fastboot.js is vendored in `install/vendor/` |
 | `telemancer/` | Telemancer: features, plans, download, install, questions |
 | `os/` | Forwards old `/os/` links to the home page |
 | `t.html` | Telemancer invite links (`tome-os.com/t#...`). The invite rides after the `#`, which browsers never send to the server |
@@ -32,7 +33,8 @@ Releases page is where public downloads go.
 
 ## Publishing a Tome OS build
 
-Make a release on this repo with `tome-os-<version>-<codename>.zip`,
+Make a release on this repo with `tome-os-<version>-<codename>-factory.zip`
+(for the web installer), `tome-os-<version>-<codename>.zip`,
 `tome-os-<version>-<codename>-boot.zip` and a `.sha256` beside each. The
 download table on the home page fills itself in from the newest releases.
 

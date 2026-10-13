@@ -3,34 +3,112 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tome OS</title>
-<meta name="description" content="Tome OS is a private, Google-free operating system for Android phones, with live talk built in, a command bar and themes.">
+<title>Tome OS · Fewer distractions. Magical communication.</title>
+<meta name="description" content="Tome OS is a private, Google-free operating system for Android phones, with live talk, Channels, a command bar and five themes.">
 <link rel="canonical" href="https://tome-os.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Tome OS">
-<meta property="og:title" content="Tome OS: privacy, with a little magic">
+<meta property="og:title" content="Tome OS: Fewer distractions. Magical communication.">
 <meta property="og:description" content="A private operating system for Android phones, built around talking to the people you trust.">
 <meta property="og:url" content="https://tome-os.com/">
 <meta property="og:image" content="https://tome-os.com/assets/og-os.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Tome OS: Privacy, with a little magic. A crystal ball resting on an open book.">
+<meta property="og:image:alt" content="Tome OS: a crystal ball resting on an open book.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#14102b">
 <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css">
 <style>
+:root {
+  color-scheme: dark;
+  --night: #14102b;
+  --page: #1f1842;
+  --raised: #2b2163;
+  --line: #3a2f73;
+  --text: #efeaff;
+  --muted: #c9c1ec;
+  --faint: #a99fd6;
+  --glow: #9d7bff;
+  --talk: #5cc8ff;
+  --hush: #f2b84b;
+  --display: 'Cinzel', Georgia, serif;
+  --body: 'Space Grotesk', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--night); color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.6; }
+a { color: var(--text); }
+a:hover { color: var(--glow); }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+@media (min-width: 720px) { .wrap { padding: 0 32px; } }
+
+header { border-bottom: 1px solid var(--line); }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 68px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--display); font-weight: 700; letter-spacing: 3px; font-size: 20px; }
+.brand img { width: 36px; height: 33px; }
+nav ul { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+nav a { text-decoration: none; color: var(--muted); font-size: 15px; }
+
+.hero { display: grid; gap: 32px; align-items: center; padding: 56px 0 48px; }
+@media (min-width: 860px) { .hero { grid-template-columns: 1.1fr 0.9fr; padding: 88px 0 72px; } }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 6.4vw, 56px); line-height: 1.08; letter-spacing: 1px; overflow-wrap: break-word; text-wrap: balance; margin: 0 0 20px; }
+.lede { font-size: 19px; color: var(--muted); max-width: 34em; margin: 0 0 28px; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border-radius: 24px; font-weight: 600; text-decoration: none; border: 1px solid var(--line); }
+.btn.primary { background: var(--glow); color: var(--night); border-color: var(--glow); }
+.btn.primary:hover { color: var(--night); background: #b39bff; }
+.btn.huge { min-height: 68px; padding: 0 34px; border-radius: 34px; font-size: 1.25rem; font-weight: 700; flex: 0 0 100%; max-width: 460px; box-shadow: 0 0 0 6px rgba(157,123,255,.18), 0 18px 48px -14px rgba(157,123,255,.75); }
+.hero-art { display: flex; justify-content: center; }
 .hero-art svg { width: min(100%, 380px); height: auto; }
+
+.notice { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; border-radius: 14px; background: #3a2c14; color: #fbe2b0; margin-bottom: 72px; }
+.notice svg { flex-shrink: 0; margin-top: 4px; }
+
+section { padding: 0 0 80px; }
+h2 { font-family: var(--display); font-size: clamp(28px, 4vw, 38px); letter-spacing: 1px; margin: 0 0 12px; }
+.sub { color: var(--muted); margin: 0 0 32px; max-width: 40em; }
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.card { background: var(--page); border: 1px solid var(--line); border-radius: 18px; padding: 22px; }
+.card h3 { margin: 12px 0 6px; font-size: 19px; }
+.card p { margin: 0; color: var(--muted); font-size: 16px; }
+.icon { width: 44px; height: 44px; border-radius: 12px; background: var(--raised); display: flex; align-items: center; justify-content: center; color: var(--glow); }
+.icon.talk { color: var(--talk); }
+code, .cmd { font-family: var(--mono); font-size: 14px; }
+.cmd { display: inline-block; margin-top: 10px; padding: 4px 10px; border-radius: 8px; background: var(--night); color: #b6f5c6; }
+
 .devices { width: 100%; border-collapse: collapse; }
 .table-box { overflow-x: auto; border: 1px solid var(--line); border-radius: 18px; background: var(--page); }
 .devices th, .devices td { text-align: left; padding: 14px 18px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 .devices tr:last-child td { border-bottom: 0; }
 .devices th { font-size: 13px; letter-spacing: 2px; color: var(--faint); font-weight: 600; }
+.pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 13px; font-weight: 600; }
+.pill.soon { background: #3a2c14; color: #fbe2b0; }
+.pill.planned { background: var(--raised); color: var(--muted); }
+.pill.ready { background: #123a52; color: #bfe9ff; }
 .dl a { margin-right: 14px; }
 .dl-note { color: var(--muted); font-size: 15px; margin: 16px 0 0; }
+
+ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 0; display: grid; gap: 14px; }
+ol.steps li { counter-increment: s; display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; background: var(--page); border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
+ol.steps li::before { content: counter(s); width: 44px; height: 44px; border-radius: 50%; background: var(--raised); color: var(--glow); font-weight: 700; display: flex; align-items: center; justify-content: center; }
+ol.steps h3 { margin: 0 0 4px; font-size: 18px; }
+ol.steps p { margin: 0; color: var(--muted); font-size: 16px; }
+
+footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--faint); font-size: 14px; }
+footer .wrap { display: flex; gap: 16px; justify-content: space-between; flex-wrap: wrap; }
+
+.halo { transform-box: fill-box; transform-origin: center; animation: breathe 4s ease-in-out infinite; }
+@keyframes breathe { 0%,100% { opacity: .10; transform: scale(.94); } 50% { opacity: .30; transform: scale(1.06); } }
+.spark { transform-box: fill-box; transform-origin: center; animation: spark 2.6s ease-in-out infinite; }
+@keyframes spark { 0%,100% { opacity: .3; transform: scale(.6); } 50% { opacity: 1; transform: scale(1.2); } }
+.mote { animation: mote 5s linear infinite; opacity: 0; }
+.m2 { animation-delay: 1.6s; } .m3 { animation-delay: 3.2s; }
+@keyframes mote { 0% { opacity: 0; transform: translateY(0); } 20% { opacity: .9; } 100% { opacity: 0; transform: translateY(-70px); } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } html { scroll-behavior: auto; } }
 .tm-band { display: grid; gap: 20px; align-items: center; background: linear-gradient(160deg, #18324a, var(--page) 55%); border: 1px solid #2c5a7a; border-radius: 18px; padding: 28px; }
 @media (min-width: 860px) { .tm-band { grid-template-columns: auto 1fr auto; padding: 32px 36px; } }
 .tm-band img { width: 64px; height: 64px; border-radius: 16px; }
@@ -39,14 +117,13 @@
 </style>
 </head>
 <body>
-<a class="skip" href="#top">Skip to content</a>
-<header class="site">
+<header>
   <div class="wrap bar">
-    <a class="brand" href="/"><img src="/assets/mark.svg" alt="">TOME OS</a>
+    <a class="brand" href="#top"><img src="assets/mark.svg" alt="">TOME OS</a>
     <nav aria-label="Main">
       <ul>
         <li><a href="/telemancer/">Telemancer</a></li>
-        <li><a href="/" aria-current="page">Tome OS</a></li>
+        <li><a href="#features">Features</a></li>
         <li><a href="#download">Download</a></li>
         <li><a href="#install">Install</a></li>
       </ul>
@@ -57,11 +134,12 @@
 <main id="top" class="wrap">
   <div class="hero">
     <div>
-      <p class="eyebrow">The operating system</p>
-      <h1>Privacy, with a little magic.</h1>
+      <h1>Fewer distractions. Magical communication.</h1>
       <p class="lede">Tome OS is a private operating system for Android phones. No Google tracking, live talk with the people you trust, and a command bar that reaches every setting.</p>
       <div class="actions">
-        <a class="btn primary" href="#download">Download</a>
+        <a class="btn primary huge" href="install/">Get Tome OS now for free</a>
+        <span style="flex-basis:100%;height:0"></span>
+        <a class="btn" href="#download">Downloads</a>
         <a class="btn" href="#install">How to install</a>
       </div>
     </div>
@@ -85,7 +163,7 @@
         <circle class="mote" cx="70" cy="124" r="2.5" fill="#9d7bff"/>
         <circle class="mote m2" cx="150" cy="122" r="2" fill="#efeaff"/>
         <circle class="mote m3" cx="88" cy="120" r="2" fill="#efeaff"/>
-        <path d="M92 118 L128 118" stroke="#9d7bff" stroke-width="5" stroke-linecap="round"/>
+        <path d="M100 115h20l4 5h-28z" fill="#9d7bff"/><rect x="91" y="119.5" width="38" height="5" rx="2.5" fill="#c8b4ff"/>
       </svg>
     </div>
   </div>
@@ -101,8 +179,8 @@
     <div class="grid">
       <div class="card">
         <div class="icon talk"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11 a7 7 0 0 0 14 0 M12 18 V21"/></svg></div>
-        <h3>Telemancer, built in</h3>
-        <p>Hold a contact to talk and they hear you live, like a radio. If they've turned live audio off, your words arrive as a Scroll instead.</p>
+        <h3>Telemancer</h3>
+        <p>Hold a favorite to telemance them: they hear you live, like a radio. Set your status to Available, Busy or Away, and if someone is away your words arrive as a Scroll they can play later.</p>
       </div>
       <div class="card">
         <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 L20 6 V12 C20 16.5 16.5 20 12 21 C7.5 20 4 16.5 4 12 V6 Z"/></svg></div>
@@ -112,23 +190,23 @@
       <div class="card">
         <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" fill="currentColor"/></svg></div>
         <h3>Command bar</h3>
-        <p>Type to do almost anything, from messaging a friend to changing a setting.</p>
+        <p>Type to do almost anything, from messaging a friend to changing your status. Every setting is in reach, and your tabs sit on the right edge where your thumb is.</p>
         <span class="cmd">@tim on my way</span>
       </div>
       <div class="card">
         <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="8" r="4"/><path d="M3 20 c0-4 3-6 7-6 c1.5 0 2.8 .3 3.8 .8"/><path d="M15 18 L17 20 L21 15"/></svg></div>
         <h3>You decide who reaches you</h3>
-        <p>Only contacts you approve can talk to you live. Turn live audio off whenever you like, and their words wait for you as a Scroll.</p>
+        <p>Only contacts you approve can talk to you live. When you're Busy, people are asked before they telemance you. Quiet hours turn everything into Scrolls overnight.</p>
       </div>
       <div class="card">
         <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11 V8 a4 4 0 0 1 8 0 V11"/></svg></div>
         <h3>Encrypted end to end</h3>
-        <p>Live talk and Scrolls are locked on your phone and unlocked only on theirs. Nobody in between can listen, including us.</p>
+        <p>Live talk and voice messages are locked on your phone and unlocked only on theirs. Nobody in between can listen, including us.</p>
       </div>
       <div class="card">
         <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5 H20 V16 H9 L5 20 V16 H4 Z"/></svg></div>
-        <h3>Calls, texts and voice together</h3>
-        <p>Regular calls, text messages and Scrolls from each person sit in one conversation, so nothing gets lost between apps.</p>
+        <h3>Channels for your groups</h3>
+        <p>Hold to talk to the whole family or crew at once. Admins can pin announcements, choose who can talk, and decide whether messages arrive silently or can be replayed.</p>
       </div>
     </div>
   </section>
@@ -146,7 +224,7 @@
 
   <section id="download" aria-labelledby="download-h">
     <h2 id="download-h">Download</h2>
-    <p class="sub">Each phone gets its own build. Find yours below. Downloads appear here as each one is ready.</p>
+    <p class="sub">Each phone gets its own build. Find yours below. Downloads will appear here and on the <a href="https://github.com/alid0n/tome-os-site/releases">releases page</a> as each one is ready.</p>
     <div class="table-box">
       <table class="devices">
         <thead><tr><th scope="col">PHONE</th><th scope="col">STATUS</th><th scope="col">DOWNLOAD</th></tr></thead>
@@ -177,30 +255,32 @@
         </tbody>
       </table>
     </div>
-    <p class="dl-note">Each phone has two files: the system and its boot images. Download both. The checksum links let you check a file wasn't changed on the way to you.</p>
+    <p class="dl-note">To install, download the <strong>Factory image</strong> and use the <a href="install/">web installer</a>. The system and boot image files are for installing from a command line instead. The checksum links let you check a file wasn't changed on the way to you.</p>
   </section>
 
   <section id="install" aria-labelledby="install-h">
     <h2 id="install-h">How to install</h2>
-    <p class="sub">Installing Tome OS erases the phone, so back up anything you want to keep first.</p>
+    <p class="sub">Install from your browser with the web installer: no tools to set up. Installing Tome OS erases the phone, so back up anything you want to keep first.</p>
     <ol class="steps">
-      <li><div><h3>Update, then unlock</h3><p>Update the phone to Android 17, then turn on OEM unlocking in Developer options. Phones locked to a carrier, like Verizon Pixels, can't be unlocked.</p></div></li>
-      <li><div><h3>Get the tools</h3><p>Install Google's free Android Platform Tools on your Windows, Mac or Linux computer and connect the phone by USB.</p></div></li>
-      <li><div><h3>Flash Tome OS</h3><p>Download the build for your phone and run the flash script. It checks the phone model first and asks before erasing anything.</p></div></li>
+      <li><div><h3>Turn on OEM unlocking</h3><p>In Developer options on the phone. Phones locked to a carrier, like Verizon Pixels, can't be unlocked.</p></div></li>
+      <li><div><h3>Download the factory image</h3><p>Get the Factory image for your phone from the table above. Don't unzip it.</p></div></li>
+      <li><div><h3>Start Tome</h3><p>Open the <a href="install/">web installer</a> in Chrome or Edge, plug the phone in and press Start Tome. It unlocks the phone, installs Tome OS and locks it again with Tome OS's own key, so it's as secure as stock.</p></div></li>
       <li><div><h3>Changed your mind?</h3><p>You can always go back to stock Android with Google's Android Flash Tool at flash.android.com.</p></div></li>
     </ol>
+    <div class="actions" style="margin-top:24px"><a class="btn primary" href="install/">Open the web installer</a></div>
   </section>
 </main>
 
-<footer class="site">
+<footer>
   <div class="wrap">
-    <span>Tome OS · <a href="/telemancer/">Telemancer</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/refunds">Refunds</a> · <a href="/contact">Contact</a></span>
+    <span>Tome OS · <a href="/telemancer/">Telemancer</a></span>
     <span>Not affiliated with Google. Android is a trademark of Google LLC.</span>
   </div>
 </footer>
 <script>
-// Fill the download table from the newest release on the public site repo.
-// Files are named tome-os-<version>-<codename>.zip and tome-os-<version>-<codename>-boot.zip.
+// Fill the download table from the newest GitHub release. Files are named
+// tome-os-<version>-<codename>-factory.zip (for the web installer),
+// tome-os-<version>-<codename>.zip and tome-os-<version>-<codename>-boot.zip.
 (function () {
   fetch("https://api.github.com/repos/alid0n/tome-os-site/releases?per_page=10")
     .then(function (r) { return r.ok ? r.json() : []; })
@@ -215,9 +295,10 @@
           var sys = find(".zip"), boot = find("-boot.zip");
           if (!sys || !boot) continue;
           var sum = find(".zip.sha256"), bootSum = find("-boot.zip.sha256");
+          var factory = find("-factory.zip"), factorySum = find("-factory.zip.sha256");
           var cell = row.querySelector(".dl");
           cell.textContent = "";
-          [[sys, "System"], [boot, "Boot images"], [sum, "Checksum"], [bootSum, "Boot checksum"]].forEach(function (pair) {
+          [[factory, "Factory image"], [factorySum, "Factory checksum"], [sys, "System"], [boot, "Boot images"], [sum, "Checksum"], [bootSum, "Boot checksum"]].forEach(function (pair) {
             if (!pair[0]) return;
             var a = document.createElement("a");
             a.href = pair[0].browser_download_url;

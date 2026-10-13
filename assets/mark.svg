@@ -1,11 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 200" width="440" height="400" role="img" aria-label="Tome OS: a crystal ball resting on an open hardcover book">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 200" width="440" height="400" role="img" aria-label="Tome OS: a crystal ball on a small pedestal, resting on an open hardcover book">
 <title>Tome OS</title>
 <circle cx="110" cy="70" r="58" fill="#9d7bff" opacity="0.14"/>
 <g>
   <circle cx="110" cy="70" r="44" fill="none" stroke="#9d7bff" stroke-width="5"/>
   <path d="M88 56 a26 26 0 0 1 22 -12" fill="none" stroke="#efeaff" stroke-width="4" stroke-linecap="round"/>
   <circle cx="126" cy="84" r="4" fill="#efeaff"/>
-  <path d="M92 118 L128 118" stroke="#9d7bff" stroke-width="5" stroke-linecap="round"/>
 </g>
 <path d="M6 122 L106 122 L110 125 L114 122 L214 122 L214 188 L114 188 L110 192 L106 188 L6 188 Z" fill="#2b2163" stroke="#efeaff" stroke-width="4" stroke-linejoin="miter"/>
 <g fill="none" stroke="#efeaff" stroke-linecap="round">
@@ -18,4 +17,6 @@
   <path d="M124 136 Q160 124 186 134"/><path d="M124 148 Q160 136 186 146"/><path d="M136 158 Q164 150 186 158"/>
 </g>
 <path d="M110 126 L110 192" stroke="#efeaff" stroke-width="5" stroke-linecap="round"/>
+<!-- The pedestal the crystal ball rests on -->
+<path d="M100 115h20l4 5h-28z" fill="#9d7bff"/><rect x="91" y="119.5" width="38" height="5" rx="2.5" fill="#c8b4ff"/>
 </svg>
