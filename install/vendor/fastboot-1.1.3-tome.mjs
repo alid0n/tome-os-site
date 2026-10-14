@@ -1,7 +1,7 @@
 /*
  * fastboot.js 1.1.3 (npm "android-fastboot", https://github.com/kdrag0n/fastboot.js),
  * MIT licence (fastboot.js-LICENSE.txt), bundled with zip.js (BSD licence,
- * notices below). Vendored for Tome OS's web installer with four changes,
+ * notices below). Vendored for Tome OS's web installer with five changes,
  * each marked "Tome OS:":
  *   - system_dlkm is flashed too (Pixel 8 and later have it; without it the
  *     phone would not start).
@@ -12,6 +12,7 @@
  *   - A factory zip carrying the super partition as pieces (super_1.img,
  *     super_2.img, ...) is written entirely from the bootloader, without
  *     restarting into fastbootd.
+ *   - Wiping erases metadata as well as userdata, as "fastboot -w" does.
  */
 var DebugLevel;
 (function (DebugLevel) {
@@ -8168,6 +8169,12 @@ async function flashZip(device, blob, wipe, onReconnect, onProgress = (_action, 
     // 8. Wipe userdata
     if (wipe) {
         await runWithTimedProgress(onProgress, "wipe", "data", USERDATA_ERASE_TIME, device.runCommand("erase:userdata"));
+        // Tome OS: metadata too, as "fastboot -w" does. It holds the storage
+        // encryption keys of the system that was there before; left behind,
+        // they don't match the wiped storage and the phone can't start.
+        if ((await device.getVariable("has-slot:metadata")) !== null) {
+            await device.runCommand("erase:metadata");
+        }
     }
 }
 
