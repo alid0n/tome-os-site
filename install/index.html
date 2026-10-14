@@ -102,9 +102,17 @@ h1:focus { outline: none; }
 .tile[aria-pressed="true"] { border-color: var(--glow); background: rgba(181,123,255,.16); box-shadow: 0 0 0 1px var(--glow), 0 0 22px rgba(181,123,255,.25); }
 .tile[aria-pressed="true"] small { color: var(--glow-hi); }
 .tile[disabled] { opacity: .45; cursor: not-allowed; }
-.soon { margin: -8px 0 22px; }
-.soon summary { cursor: pointer; color: var(--muted); font-size: 15px; margin-bottom: 12px; }
-.soon .tiles { margin: 0; }
+.tile .arrow { color: var(--faint); }
+.search { display: block; margin: 0 0 14px; }
+.search input { width: 100%; box-sizing: border-box; padding: 12px 16px; border-radius: 14px; border: 1px solid var(--line); background: rgba(36,28,48,.6); color: inherit; font: inherit; }
+.search input::placeholder { color: var(--faint); }
+.search input:focus { border-color: var(--glow); outline: none; box-shadow: 0 0 0 1px var(--glow), 0 0 22px rgba(181,123,255,.25); }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 12px; font-size: 15px; color: var(--faint); }
+.crumbs button { background: none; border: 0; padding: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font: inherit; }
+.crumbs button:hover { color: var(--glow-hi); }
+.crumbs [aria-current] { color: var(--glow-hi); }
+.tiles .empty { grid-column: 1 / -1; color: var(--faint); margin: 0; }
+.picked { margin: -8px 0 22px; color: var(--glow-hi); font-size: 15px; }
 
 /* Lists that tick themselves, and lists the person ticks */
 .ticks { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-direction: column; gap: 10px; }
@@ -288,12 +296,14 @@ h1:focus { outline: none; }
     <div class="words">
       <div class="count"></div>
       <h1 tabindex="-1">Which phone are you installing on?</h1>
-      <p class="say">Pick it below. Tome OS is made for each phone separately, so this makes sure you get the right one.</p>
-      <div class="tiles" id="tiles"></div>
-      <details class="soon" id="tiles-soon" hidden><summary>Phones coming soon</summary><div class="tiles"></div></details>
+      <p class="say">Pick it below, or search for it. Tome OS is made for each phone separately, so this makes sure you get the right one.</p>
+      <label class="search"><span class="visually-hidden">Search for your phone</span><input type="search" id="phone-search" placeholder="Search for your phone, like Pixel 8 Pro" autocomplete="off" spellcheck="false"></label>
+      <nav class="crumbs" id="crumbs" aria-label="Phone choices" hidden></nav>
+      <div class="tiles" id="tiles" aria-live="polite"></div>
+      <p class="picked" id="picked" hidden></p>
       <div class="row"><button class="btn primary" data-next disabled>Continue</button><button class="link" id="which">How do I check?</button></div>
       <details class="help"><summary>Stuck? Get help with this step</summary><div>
-        <p><strong>Not a Pixel?</strong> Tome OS only runs on the phones listed here for now. More are on the way.</p>
+        <p><strong>Can't find your phone?</strong> Search for its model name from <strong>Settings › About phone</strong>. If it isn't listed, Tome OS doesn't run on it yet. More phones are on the way.</p>
         <p><strong>Your phone says "Coming soon"?</strong> It's being built. Check back soon.</p>
       </div></details>
     </div>
@@ -554,15 +564,34 @@ import * as fastboot from "./vendor/fastboot-1.1.3-tome.mjs";
 const DOWNLOAD_RELAY = "https://tome-download.alid0ndev.workers.dev";
 const RELEASES = "https://api.github.com/repos/alid0n/tome-os-site/releases?per_page=10";
 
-// Codenames from the home page's download table.
-const PHONES = {
-  oriole: "Pixel 6", raven: "Pixel 6 Pro", bluejay: "Pixel 6a",
-  panther: "Pixel 7", cheetah: "Pixel 7 Pro", lynx: "Pixel 7a", felix: "Pixel Fold",
-  shiba: "Pixel 8", husky: "Pixel 8 Pro", akita: "Pixel 8a",
-  tokay: "Pixel 9", caiman: "Pixel 9 Pro", komodo: "Pixel 9 Pro XL", comet: "Pixel 9 Pro Fold", tegu: "Pixel 9a",
-  frankel: "Pixel 10", blazer: "Pixel 10 Pro", mustang: "Pixel 10 Pro XL", rango: "Pixel 10 Pro Fold",
-};
-const phoneName = (code) => PHONES[code] ? `Google ${PHONES[code]}` : `"${code}"`;
+// Every phone the installer knows, in the order they're offered. Picking goes
+// family, then series, then model, skipping any level with only one choice,
+// so adding phones adds a few buttons, not a wall of them. A phone from a new
+// maker gets its own family; "aka" adds words search should match.
+const PHONE_LIST = [
+  { code: "oriole", brand: "Google", family: "Pixel", series: "Pixel 6", name: "Pixel 6" },
+  { code: "raven", brand: "Google", family: "Pixel", series: "Pixel 6", name: "Pixel 6 Pro" },
+  { code: "bluejay", brand: "Google", family: "Pixel", series: "Pixel 6", name: "Pixel 6a" },
+  { code: "panther", brand: "Google", family: "Pixel", series: "Pixel 7", name: "Pixel 7" },
+  { code: "cheetah", brand: "Google", family: "Pixel", series: "Pixel 7", name: "Pixel 7 Pro" },
+  { code: "lynx", brand: "Google", family: "Pixel", series: "Pixel 7", name: "Pixel 7a" },
+  { code: "shiba", brand: "Google", family: "Pixel", series: "Pixel 8", name: "Pixel 8" },
+  { code: "husky", brand: "Google", family: "Pixel", series: "Pixel 8", name: "Pixel 8 Pro" },
+  { code: "akita", brand: "Google", family: "Pixel", series: "Pixel 8", name: "Pixel 8a" },
+  { code: "tokay", brand: "Google", family: "Pixel", series: "Pixel 9", name: "Pixel 9" },
+  { code: "caiman", brand: "Google", family: "Pixel", series: "Pixel 9", name: "Pixel 9 Pro" },
+  { code: "komodo", brand: "Google", family: "Pixel", series: "Pixel 9", name: "Pixel 9 Pro XL" },
+  { code: "tegu", brand: "Google", family: "Pixel", series: "Pixel 9", name: "Pixel 9a" },
+  { code: "frankel", brand: "Google", family: "Pixel", series: "Pixel 10", name: "Pixel 10" },
+  { code: "blazer", brand: "Google", family: "Pixel", series: "Pixel 10", name: "Pixel 10 Pro" },
+  { code: "mustang", brand: "Google", family: "Pixel", series: "Pixel 10", name: "Pixel 10 Pro XL" },
+  { code: "felix", brand: "Google", family: "Pixel", series: "Pixel Fold", name: "Pixel Fold", aka: "foldable" },
+  { code: "comet", brand: "Google", family: "Pixel", series: "Pixel Fold", name: "Pixel 9 Pro Fold", aka: "foldable" },
+  { code: "rango", brand: "Google", family: "Pixel", series: "Pixel Fold", name: "Pixel 10 Pro Fold", aka: "foldable" },
+];
+const PHONES = Object.fromEntries(PHONE_LIST.map((p) => [p.code, p.name]));
+const BRANDS = Object.fromEntries(PHONE_LIST.map((p) => [p.code, p.brand]));
+const phoneName = (code) => PHONES[code] ? `${BRANDS[code]} ${PHONES[code]}` : `"${code}"`;
 
 const $ = (id) => document.getElementById(id);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -654,25 +683,86 @@ function buildFor(codename) {
   }
   return null;
 }
-function drawTiles() {
-  const tile = ([c, name]) => {
-    const ready = !!buildFor(c);
-    return `<button class="tile" data-code="${c}" aria-pressed="${c === code}"${ready ? "" : " disabled"}><b>${name}</b><small>${ready ? "Ready" : "Coming soon"}</small></button>`;
-  };
-  // Phones Tome OS is ready for come first; the rest wait behind a fold.
-  const all = Object.entries(PHONES);
-  const ready = all.filter(([c]) => buildFor(c)), soon = all.filter(([c]) => !buildFor(c));
-  $("tiles").innerHTML = (ready.length ? ready : all).map(tile).join("");
-  $("tiles-soon").hidden = !ready.length || !soon.length;
-  $("tiles-soon").querySelector(".tiles").innerHTML = soon.map(tile).join("");
-  $$(".tile:not([disabled])").forEach((t) => t.addEventListener("click", () => pickPhone(t.dataset.code)));
-  if (ready.length === 1 && !code) pickPhone(ready[0][0]);
+// Where the person is in the picker: [] (families), [family] or [family, series].
+let path = [];
+const unique = (list) => [...new Set(list)];
+const squash = (t) => t.toLowerCase().replace(/[^a-z0-9]/g, "");
+const escAttr = (t) => String(t).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[ch]);
+function matches(query) {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  return PHONE_LIST.filter((p) => {
+    const hay = `${p.brand} ${p.family} ${p.name} ${p.code} ${p.aka || ""}`.toLowerCase();
+    return words.every((w) => hay.includes(w)) || squash(hay).includes(squash(query));
+  });
 }
+function drawTiles() {
+  const modelTile = (p, withBrand) => {
+    const ready = !!buildFor(p.code);
+    const note = (withBrand ? `${p.brand} · ` : "") + (ready ? "Ready" : "Coming soon");
+    return `<button class="tile" data-code="${p.code}" aria-pressed="${p.code === code}"${ready ? "" : " disabled"}><b>${escAttr(p.name)}</b><small>${escAttr(note)}</small></button>`;
+  };
+  const groupTile = (kind, label, phones) => {
+    const ready = phones.filter((p) => buildFor(p.code)).length;
+    const holds = phones.some((p) => p.code === code);
+    const note = ready ? (phones.length === 1 ? "Ready" : `${ready} of ${phones.length} ready`) : "Coming soon";
+    return `<button class="tile" data-${kind}="${escAttr(label)}" aria-pressed="${holds}"><b>${escAttr(label)} <span class="arrow" aria-hidden="true">›</span></b><small>${note}</small></button>`;
+  };
+  const query = $("phone-search").value.trim();
+  let html;
+  if (query) {
+    const found = matches(query);
+    html = found.length ? found.map((p) => modelTile(p, true)).join("")
+      : `<p class="empty">No phone matches "${escAttr(query)}". Check the model in Settings › About phone. If it isn't here, Tome OS doesn't run on it yet.</p>`;
+  } else {
+    const [family, series] = path;
+    if (!family) {
+      html = unique(PHONE_LIST.map((p) => p.family)).map((f) => groupTile("family", f, PHONE_LIST.filter((p) => p.family === f))).join("");
+    } else if (!series) {
+      const inFamily = PHONE_LIST.filter((p) => p.family === family);
+      html = unique(inFamily.map((p) => p.series)).map((sr) => {
+        const phones = inFamily.filter((p) => p.series === sr);
+        // A series of one is the phone itself.
+        return phones.length === 1 ? modelTile(phones[0]) : groupTile("series", sr, phones);
+      }).join("");
+    } else {
+      html = PHONE_LIST.filter((p) => p.family === family && p.series === series).map((p) => modelTile(p)).join("");
+    }
+  }
+  $("tiles").innerHTML = html;
+  // The way back up, as links: All phones › Pixel › Pixel 8.
+  const crumbs = query ? [] : path;
+  $("crumbs").hidden = !crumbs.length;
+  $("crumbs").innerHTML = crumbs.length ? [`<button data-depth="0">All phones</button>`, ...crumbs.map((c, i) =>
+    i === crumbs.length - 1 ? `<span aria-current="location">${escAttr(c)}</span>` : `<button data-depth="${i + 1}">${escAttr(c)}</button>`)].join(' <span aria-hidden="true">›</span> ') : "";
+  $$("#crumbs button").forEach((b) => b.addEventListener("click", () => { path = path.slice(0, +b.dataset.depth); drawTiles(); }));
+  $$("#tiles [data-family]").forEach((t) => t.addEventListener("click", () => {
+    path = [t.dataset.family];
+    const series = unique(PHONE_LIST.filter((p) => p.family === path[0]).map((p) => p.series));
+    if (series.length === 1) path.push(series[0]);
+    drawTiles();
+    $("tiles").querySelector("button")?.focus();
+  }));
+  $$("#tiles [data-series]").forEach((t) => t.addEventListener("click", () => {
+    path = [path[0], t.dataset.series];
+    drawTiles();
+    $("tiles").querySelector("button")?.focus();
+  }));
+  $$("#tiles [data-code]:not([disabled])").forEach((t) => t.addEventListener("click", () => pickPhone(t.dataset.code)));
+  // With only one phone ready, it's picked for the person.
+  const ready = PHONE_LIST.filter((p) => buildFor(p.code));
+  if (ready.length === 1 && !code) pickPhone(ready[0].code);
+}
+$("phone-search").addEventListener("input", drawTiles);
 function pickPhone(c) {
   if (c !== code) { pack = null; downloading = null; resetDownloadUi(); }
   code = c;
   build = buildFor(c);
-  $$(".tile").forEach((t) => t.setAttribute("aria-pressed", t.dataset.code === c));
+  const p = PHONE_LIST.find((x) => x.code === c);
+  path = [p.family, p.series];
+  if (!$("phone-search").value.trim()) drawTiles();
+  $$(".tile[data-code]").forEach((t) => t.setAttribute("aria-pressed", t.dataset.code === c));
+  $("picked").hidden = false;
+  $("picked").textContent = `Installing on the ${phoneName(c)}.`;
   $$(".phone-name, .model-name").forEach((e) => { e.textContent = PHONES[c]; });
   $$(".code-name").forEach((e) => { e.textContent = c; });
   nextIn(steps[0]).disabled = false;
