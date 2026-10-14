@@ -1,7 +1,7 @@
 /*
  * fastboot.js 1.1.3 (npm "android-fastboot", https://github.com/kdrag0n/fastboot.js),
  * MIT licence (fastboot.js-LICENSE.txt), bundled with zip.js (BSD licence,
- * notices below). Vendored for Tome OS's web installer with three changes,
+ * notices below). Vendored for Tome OS's web installer with four changes,
  * each marked "Tome OS:":
  *   - system_dlkm is flashed too (Pixel 8 and later have it; without it the
  *     phone would not start).
@@ -9,6 +9,9 @@
  *     vendor_boot.img.
  *   - ZipReader and BlobReader are exported, so the page can check a factory
  *     zip before installing it.
+ *   - A factory zip carrying the super partition as pieces (super_1.img,
+ *     super_2.img, ...) is written entirely from the bootloader, without
+ *     restarting into fastbootd.
  */
 var DebugLevel;
 (function (DebugLevel) {
@@ -8097,6 +8100,14 @@ async function flashZip(device, blob, wipe, onReconnect, onProgress = (_action, 
     if (snapshotStatus !== null && snapshotStatus !== "none") {
         await device.runCommand("snapshot-update:cancel");
     }
+    // Tome OS: the super partition in pieces, written from the bootloader.
+    // They hold slot a's partitions, so slot a is made the one that starts.
+    let superPieces = entries
+        .filter((e) => /(?:^|\/)super_\d+\.img$/.test(e.filename))
+        .sort((a, b) => Number(a.filename.match(/super_(\d+)\.img$/)[1]) - Number(b.filename.match(/super_(\d+)\.img$/)[1]));
+    if (superPieces.length > 0) {
+        await device.runCommand("set_active:a");
+    }
     // Load nested images for the following steps
     logDebug("Loading nested images from zip");
     onProgress("unpack", "images", 0.0);
@@ -8116,6 +8127,13 @@ async function flashZip(device, blob, wipe, onReconnect, onProgress = (_action, 
     }
     // 4. Boot-critical images
     await tryFlashImages(device, imageEntries, onProgress, BOOT_CRITICAL_IMAGES);
+    // Tome OS: the pieces, one after another. Each covers the whole partition
+    // and carries only its own blocks.
+    for (let i = 0; i < superPieces.length; i++) {
+        await flashEntryBlob(device, superPieces[i], (action, _item, progress) => {
+            onProgress(action, "super", (i + progress) / superPieces.length);
+        }, "super");
+    }
     // 5. Super partition template
     // This is also where we reboot to fastbootd.
     entry = imageEntries.find((e) => e.filename === "super_empty.img");
