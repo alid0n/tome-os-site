@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Install Tome OS</title>
-<meta name="description" content="Install Tome OS on a Google Pixel from your browser, then lock the bootloader so the phone is as secure as stock.">
+<meta name="description" content="Install Tome OS on a Google Pixel from your browser, step by step, then lock the bootloader so the phone is as secure as stock.">
 <link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 /* The same colors and type as the home page (../index.html). */
 :root {
@@ -21,8 +21,10 @@
   --muted: #c4bcd3;
   --faint: #9c94ad;
   --glow: #b57bff;
+  --glow-hi: #c99bff;
   --talk: #5cc8ff;
   --hush: #f2b84b;
+  --good: #6fe3a4;
   --warn-bg: #3a2c14;
   --warn-text: #fbe2b0;
   --ok-bg: #123a52;
@@ -34,110 +36,189 @@
   --mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--night); color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.6; }
+body { margin: 0; color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.55; background: radial-gradient(64rem 36rem at 88% -12%, rgba(181,123,255,.16), transparent 70%) no-repeat, radial-gradient(44rem 30rem at -12% 28%, rgba(181,123,255,.07), transparent 70%) no-repeat, var(--night); }
 a { color: var(--text); }
 a:hover { color: var(--glow); }
+button { font: inherit; color: inherit; }
 :focus-visible { outline: 3px solid var(--glow); outline-offset: 3px; border-radius: 6px; }
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
 @media (min-width: 720px) { .wrap { padding: 0 32px; } }
-.narrow { max-width: 760px; }
+code { font-family: var(--mono); font-size: 14px; }
+[hidden] { display: none !important; }
 
-header { border-bottom: 1px solid var(--line); }
+header { border-bottom: 1px solid rgba(181,123,255,.14); }
 .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 68px; flex-wrap: wrap; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--display); font-weight: 700; letter-spacing: 3px; font-size: 20px; }
 .brand img { width: 36px; height: 33px; }
 nav ul { display: flex; gap: 20px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
 nav a { text-decoration: none; color: var(--muted); font-size: 15px; }
+footer { border-top: 1px solid rgba(181,123,255,.14); padding: 28px 0 40px; color: var(--faint); font-size: 14px; }
+footer .wrap { display: flex; gap: 16px; justify-content: space-between; flex-wrap: wrap; }
 
-h1 { font-family: var(--display); font-weight: 700; font-size: clamp(34px, 6vw, 56px); line-height: 1.1; letter-spacing: 2px; margin: 48px 0 16px; }
-.lede { font-size: 19px; color: var(--muted); margin: 0 0 32px; }
-h2 { font-family: var(--display); font-size: clamp(24px, 3.4vw, 32px); letter-spacing: 1px; margin: 0 0 12px; }
-section { padding: 0 0 48px; }
-.sub { color: var(--muted); margin: 0 0 20px; }
-code { font-family: var(--mono); font-size: 14px; }
+/* The trail of steps along the top */
+.trail { display: flex; gap: 6px; padding: 24px 0 4px; }
+.trail button { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; background: none; border: 0; padding: 0; cursor: pointer; color: var(--faint); font-size: 13px; text-align: left; }
+.trail button[disabled] { cursor: default; }
+.trail i { display: block; height: 4px; border-radius: 2px; background: var(--line); }
+.trail [data-s="done"] i, .trail [data-s="now"] i { background: var(--glow); box-shadow: 0 0 10px rgba(181,123,255,.7); }
+.trail [data-s="now"] { color: var(--text); font-weight: 600; }
+.trail [data-s="done"] { color: var(--muted); }
+.trail span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 760px) { .trail span { display: none; } .trail { padding-bottom: 0; } }
 
-.notice { display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; border-radius: 14px; background: var(--warn-bg); color: var(--warn-text); margin: 0 0 16px; }
-.notice svg { flex-shrink: 0; margin-top: 4px; }
-.notice a { color: var(--warn-text); }
+/* One step at a time: words on the left, the practice phone on the right */
+.step { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 48px; align-items: center; padding: 28px 0 56px; min-height: 600px; }
+@media (max-width: 760px) { .step { grid-template-columns: 1fr; gap: 16px; min-height: 0; padding-top: 16px; } .step .visual { order: -1; } }
+.count { font-family: var(--mono); font-size: 13px; color: var(--glow-hi); letter-spacing: 1px; text-transform: uppercase; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(28px, 4.5vw, 42px); line-height: 1.15; letter-spacing: 1px; margin: 6px 0 12px; text-wrap: balance; text-shadow: 0 0 30px rgba(181,123,255,.22); }
+h1:focus { outline: none; }
+.say { color: var(--muted); max-width: 56ch; margin: 0 0 22px; }
+.say strong { color: var(--text); }
+.words { min-width: 0; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 24px; font-weight: 600; text-decoration: none; border: 1px solid rgba(181,123,255,.45); background: rgba(181,123,255,.1); cursor: pointer; }
+.btn:hover { background: rgba(181,123,255,.2); color: var(--text); }
+.btn.primary { background: var(--glow); border-color: var(--glow); color: var(--night); box-shadow: 0 0 26px -6px rgba(181,123,255,.8); }
+.btn.primary:hover { background: var(--glow-hi); color: var(--night); }
+.btn.primary[disabled] { background: var(--raised); border-color: var(--line); color: var(--faint); box-shadow: none; cursor: not-allowed; }
+.btn.danger { background: var(--hush); border-color: var(--hush); color: var(--night); }
+.btn.danger:hover { background: #f6cb78; color: var(--night); }
+.row { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: center; }
+.link { background: none; border: 0; padding: 0; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-size: 15px; }
+.link:hover { color: var(--glow-hi); }
+
+.notice { padding: 12px 16px; border-radius: 14px; background: var(--warn-bg); color: var(--warn-text); font-size: 15px; margin: 0 0 18px; }
+.notice a { color: inherit; }
 .notice.bad { background: var(--bad-bg); color: var(--bad-text); }
 .notice.ok { background: var(--ok-bg); color: var(--ok-text); }
 .notice p { margin: 0; }
 .notice p + p { margin-top: 6px; }
 
-.card { background: var(--page); border: 1px solid var(--line); border-radius: 18px; padding: 22px; }
-.card + .card { margin-top: 16px; }
+/* Phone choice */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 0 0 22px; }
+.tile { display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: rgba(36,28,48,.6); cursor: pointer; text-align: left; }
+.tile small { color: var(--faint); font-size: 13px; }
+.tile:hover:not([disabled]) { border-color: rgba(181,123,255,.6); }
+.tile[aria-pressed="true"] { border-color: var(--glow); background: rgba(181,123,255,.16); box-shadow: 0 0 0 1px var(--glow), 0 0 22px rgba(181,123,255,.25); }
+.tile[aria-pressed="true"] small { color: var(--glow-hi); }
+.tile[disabled] { opacity: .45; cursor: not-allowed; }
+.soon { margin: -8px 0 22px; }
+.soon summary { cursor: pointer; color: var(--muted); font-size: 15px; margin-bottom: 12px; }
+.soon .tiles { margin: 0; }
 
-ul.check { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
-ul.check li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; }
-ul.check li::before { content: ""; width: 22px; height: 22px; margin-top: 3px; border-radius: 6px; border: 2px solid var(--glow); }
-ul.check strong { display: block; }
-ul.check span { color: var(--muted); font-size: 16px; }
-
-.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border-radius: 24px; font: inherit; font-weight: 600; text-decoration: none; border: 1px solid var(--line); background: transparent; color: var(--text); cursor: pointer; }
-.btn:hover { border-color: var(--glow); color: var(--text); }
-.btn.primary { background: var(--glow); color: var(--night); border-color: var(--glow); }
-.btn.primary:hover { color: var(--night); background: #c99bff; }
-.btn.big { min-height: 60px; padding: 0 36px; font-size: 20px; border-radius: 30px; }
-.btn.danger { background: var(--hush); border-color: var(--hush); color: var(--night); }
-.btn.danger:hover { background: #f6cb78; color: var(--night); }
-.btn[disabled] { opacity: .5; cursor: not-allowed; }
-.actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-
-.file-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.file-name { color: var(--muted); font-size: 16px; overflow-wrap: anywhere; }
-.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
-.start { text-align: center; padding: 8px 0 0; }
-.start p { color: var(--muted); font-size: 15px; margin: 12px 0 0; }
-
-.warning { border: 2px solid var(--hush); background: var(--warn-bg); color: var(--warn-text); border-radius: 18px; padding: 22px; margin-top: 20px; }
-.warning h3 { font-family: var(--display); font-size: 22px; margin: 0 0 8px; color: var(--text); }
-.warning p { margin: 0 0 16px; }
-
-.run { margin-top: 20px; }
-ol.progress { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 8px; }
-ol.progress li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: center; color: var(--faint); }
-ol.progress li::before { content: ""; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--line); box-sizing: border-box; justify-self: center; }
-ol.progress li[data-state="now"] { color: var(--text); font-weight: 600; }
-ol.progress li[data-state="now"]::before { border-color: var(--glow); border-top-color: transparent; animation: spin 1s linear infinite; }
-ol.progress li[data-state="done"] { color: var(--muted); }
-ol.progress li[data-state="done"]::before { content: "✓"; border-color: var(--glow); background: var(--glow); color: var(--night); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-ol.progress li[data-state="skipped"] { color: var(--faint); }
-ol.progress li[data-state="skipped"]::before { content: "–"; display: flex; align-items: center; justify-content: center; font-size: 14px; }
-ol.progress li .note { font-weight: 400; font-size: 14px; color: var(--faint); margin-left: 6px; }
+/* Lists that tick themselves, and lists the person ticks */
+.ticks { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-direction: column; gap: 10px; }
+.ticks li { display: grid; grid-template-columns: 22px minmax(0, 1fr); column-gap: 12px; align-items: start; color: var(--faint); }
+.ticks li small { grid-column: 2; display: block; color: var(--faint); font-size: 14px; font-weight: 400; }
+.ticks li[data-s="now"] { color: var(--text); font-weight: 600; }
+.ticks li[data-s="done"] { color: var(--muted); }
+.ticks li[data-s="bad"] { color: var(--bad-text); }
+.ticks li::before { content: ""; flex: none; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; font-size: 13px; font-weight: 700; }
+.ticks li[data-s="now"]::before { border-color: var(--glow); border-top-color: transparent; animation: spin 1s linear infinite; }
+.ticks li[data-s="done"]::before { content: "✓"; border-color: transparent; background: rgba(111,227,164,.2); color: var(--good); }
+.ticks li[data-s="skip"]::before { content: "–"; }
+.ticks li[data-s="bad"]::before { content: "!"; border-color: transparent; background: rgba(255,107,143,.22); color: #ff8fab; }
+.ticks.plain li[data-s="now"]::before { animation: none; border-top-color: var(--glow); }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.status { margin: 0 0 8px; }
-progress { width: 100%; height: 10px; appearance: none; -webkit-appearance: none; border: 0; border-radius: 5px; background: var(--raised); overflow: hidden; }
-progress::-webkit-progress-bar { background: var(--raised); }
-progress::-webkit-progress-value { background: var(--glow); }
-progress::-moz-progress-bar { background: var(--glow); }
+.checks { list-style: none; padding: 0; margin: 0 0 22px; display: flex; flex-direction: column; gap: 8px; }
+.checks label { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(36,28,48,.5); cursor: pointer; }
+.checks label:has(input:checked) { border-color: rgba(111,227,164,.45); background: rgba(111,227,164,.06); }
+.checks input { appearance: none; -webkit-appearance: none; flex: none; width: 22px; height: 22px; margin: 2px 0 0; border-radius: 6px; border: 2px solid var(--faint); display: grid; place-items: center; cursor: pointer; }
+.checks input:checked { border-color: var(--good); background: var(--good); }
+.checks input:checked::after { content: ""; width: 6px; height: 11px; border: solid var(--night); border-width: 0 3px 3px 0; transform: translateY(-1px) rotate(45deg); }
+.checks small { display: block; color: var(--faint); font-size: 14px; }
 
-.phone-prompt { display: flex; gap: 16px; align-items: center; padding: 18px; border-radius: 14px; background: var(--raised); border: 2px solid var(--glow); margin: 16px 0 0; font-size: 18px; font-weight: 600; }
-.phone-prompt svg { flex-shrink: 0; color: var(--glow); }
+.meter { height: 10px; border-radius: 5px; background: var(--raised); overflow: hidden; margin: 6px 0 8px; }
+.meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--glow), var(--glow-hi)); box-shadow: 0 0 12px var(--glow); transition: width .3s linear; }
+.meter.busy i { width: 35% !important; animation: slide 1.4s ease-in-out infinite; }
+@keyframes slide { from { transform: translateX(-100%); } to { transform: translateX(290%); } }
+.meter-label { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.fine { color: var(--faint); font-size: 14px; margin: 8px 0 0; }
 
-ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 0; display: grid; gap: 14px; }
-ol.steps li { counter-increment: s; display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; background: var(--page); border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
-ol.steps li::before { content: counter(s); width: 44px; height: 44px; border-radius: 50%; background: var(--raised); color: var(--glow); font-weight: 700; display: flex; align-items: center; justify-content: center; }
-ol.steps h3 { margin: 0 0 4px; font-size: 18px; }
-ol.steps p { margin: 0; color: var(--muted); font-size: 16px; }
+.callout { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; border: 2px solid var(--talk); background: rgba(92,200,255,.08); margin: 0 0 18px; animation: callout 1.6s ease-in-out infinite; }
+.callout b { display: block; color: var(--text); }
+@keyframes callout { 50% { box-shadow: 0 0 22px rgba(92,200,255,.35); } }
 
-footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--faint); font-size: 14px; }
-footer .wrap { display: flex; gap: 16px; justify-content: space-between; flex-wrap: wrap; }
+.help { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 12px; }
+.help summary { cursor: pointer; color: var(--muted); font-size: 15px; }
+.help summary:hover { color: var(--glow-hi); }
+.help > div { color: var(--muted); font-size: 15px; padding-top: 6px; }
+.help p { margin: 8px 0 0; }
+.help strong { color: var(--text); }
 
-[hidden] { display: none !important; }
-@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } html { scroll-behavior: auto; } }
-/* Tome's look: near-black with a soft purple glow. */
-body { background: radial-gradient(64rem 36rem at 88% -12%, rgba(181,123,255,.16), transparent 70%) no-repeat, radial-gradient(44rem 30rem at -12% 28%, rgba(181,123,255,.07), transparent 70%) no-repeat, var(--night); }
-header, header.site { border-bottom-color: rgba(181,123,255,.14); }
-footer, footer.site { border-top-color: rgba(181,123,255,.14); }
-h1 { text-shadow: 0 0 30px rgba(181,123,255,.22); }
-.card, ol.steps li, .faq details, .table-box { background: linear-gradient(160deg, rgba(181,123,255,.08), transparent 55%), var(--page); border-color: rgba(181,123,255,.16); transition: border-color .25s, box-shadow .25s; }
-.card:hover, .faq details:hover { border-color: rgba(181,123,255,.38); box-shadow: 0 0 34px -10px rgba(181,123,255,.45); }
-.btn.primary { box-shadow: 0 0 26px -6px rgba(181,123,255,.7); }
-.icon, ol.steps li::before { box-shadow: inset 0 0 0 1px rgba(181,123,255,.22), 0 0 18px -6px rgba(181,123,255,.5); }
-.pill.ready { background: rgba(181,123,255,.18); color: #eadcff; }
+.file-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 0 0 12px; }
+.file-name { color: var(--muted); font-size: 15px; overflow-wrap: anywhere; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ----- The practice phone ----- */
+.visual { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.caption { min-height: 2.8em; margin: 0; text-align: center; color: var(--muted); font-size: 14px; max-width: 250px; }
+.caption b { color: var(--text); }
+.phone { position: relative; width: 200px; height: 410px; margin-bottom: 40px; border-radius: 32px; background: #050407; border: 3px solid #3b3150; box-shadow: 0 30px 60px rgba(0,0,0,.5), 0 0 60px rgba(181,123,255,.14); }
+@media (max-width: 760px) { .phone { width: 150px; height: 308px; border-radius: 26px; margin-bottom: 34px; } }
+.scr { position: absolute; inset: 7px; border-radius: 25px; overflow: hidden; background: #000; font-size: 11px; line-height: 1.35; }
+@media (max-width: 760px) { .scr { border-radius: 20px; font-size: 8.5px; } }
+.key { position: absolute; right: -8px; width: 6px; padding: 0; border: 0; border-radius: 0 3px 3px 0; background: #4a3f60; transition: background .15s, box-shadow .15s, transform .1s; }
+.key::before { content: ""; position: absolute; inset: -6px -16px -6px -10px; }
+.key.power { top: 22%; height: 9%; }
+.key.up { top: 35%; height: 12%; }
+.key.down { top: 48%; height: 12%; }
+.key.hint { background: var(--talk); box-shadow: 0 0 14px var(--talk); animation: nudge 1s ease-in-out infinite; cursor: pointer; }
+.key.press { transform: translateX(-3px); background: var(--glow-hi); box-shadow: 0 0 16px var(--glow); }
+@keyframes nudge { 50% { transform: translateX(-2px); } }
+.finger { position: absolute; right: -40px; width: 30px; height: 18px; border-radius: 9px 4px 4px 9px; background: #e8cfc0; opacity: 0; transition: opacity .2s, transform .15s; pointer-events: none; }
+.finger.on { opacity: .95; }
+.finger.push { transform: translateX(-6px); }
+.cable { position: absolute; left: 50%; bottom: -66px; width: 24px; margin-left: -12px; opacity: 0; transition: bottom .9s cubic-bezier(.3,.8,.3,1), opacity .3s; }
+.cable.in { bottom: -38px; opacity: 1; }
+.cable div { height: 24px; border-radius: 5px; background: #8d84a0; }
+.cable span { display: block; height: 16px; width: 8px; margin: 0 auto; background: #5d5470; }
+
+.v { position: absolute; inset: 0; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity .35s; }
+.v.on { opacity: 1; pointer-events: auto; }
+.v-tome { align-items: center; justify-content: center; gap: 10px; background: radial-gradient(circle at 50% 45%, rgba(181,123,255,.35), transparent 55%), #0c0a12; font-family: var(--display); letter-spacing: 3px; font-size: 1.5em; }
+.v-tome img { width: 44px; filter: drop-shadow(0 0 12px var(--glow)); }
+.v-set { background: #1b1b1f; color: #e6e1e5; padding: 28px 10px 10px; gap: 2px; }
+.v-set .ttl { font-size: 1.7em; margin: 6px 4px 12px; }
+.v-set .it { padding: 8px 6px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.v-set .it small { display: block; color: #9a95a0; }
+.v-set .it.tap { background: rgba(181,123,255,.2); box-shadow: inset 0 0 0 1px rgba(181,123,255,.6); cursor: pointer; }
+.sw { width: 30px; height: 16px; border-radius: 8px; background: #49454f; position: relative; flex: none; transition: background .2s; }
+.sw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #938f99; transition: left .2s, background .2s; }
+.sw.on { background: #a68bff; }
+.sw.on::after { left: 16px; background: #fff; }
+.toast { position: absolute; left: 8px; right: 8px; bottom: 24px; text-align: center; background: #e6e1e5; color: #1b1b1f; padding: 6px 8px; border-radius: 12px; opacity: 0; transition: opacity .2s; }
+.toast.on { opacity: 1; }
+.ripple { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; background: rgba(255,255,255,.45); animation: ripple .5s ease-out forwards; pointer-events: none; }
+@keyframes ripple { from { transform: scale(.2); opacity: 1; } to { transform: scale(2); opacity: 0; } }
+.v-fb, .v-ask { background: #000; color: #fff; font-family: var(--mono); padding: 22px 10px 10px; gap: 4px; font-size: .9em; }
+.v-fb .bot { align-self: center; width: 44px; height: 30px; margin: 10px 0 14px; border-radius: 6px 6px 3px 3px; background: #3ddc84; transform: rotate(-90deg); position: relative; }
+.v-fb .bot::after { content: ""; position: absolute; left: 8px; top: -12px; width: 28px; height: 14px; border-radius: 14px 14px 0 0; background: #3ddc84; }
+.v-fb .grn { color: #3ddc84; font-weight: 700; } .v-fb .red { color: #ff5a5a; } .dim { color: #9a9a9a; }
+.v-ask { gap: 6px; }
+.v-ask .opt { padding: 4px 6px; border-radius: 4px; }
+.v-ask .opt.hl { background: #fff; color: #000; font-weight: 700; }
+.v-boot { background: #000; align-items: center; justify-content: center; gap: 10px; padding: 14px; text-align: center; color: #fff; }
+.v-boot b { color: #fbbc05; font-size: 1.4em; }
+.v-off { background: #000; }
+
+.laptop { width: 260px; max-width: 100%; }
+.laptop .lid { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 10px 10px 0 0; border: 3px solid #3b3150; border-bottom: 0; background: #14111b; }
+.laptop .base { height: 12px; margin: 0 -14px; border-radius: 0 0 10px 10px; background: #3b3150; }
+.dialog { position: absolute; left: 50%; top: 16%; transform: translateX(-50%); width: 84%; background: #2a2632; border-radius: 8px; padding: 9px; font-size: 11px; box-shadow: 0 10px 30px rgba(0,0,0,.6); }
+.dialog .q { color: #ddd; margin-bottom: 6px; }
+.dialog .d { padding: 6px; border-radius: 4px; background: rgba(181,123,255,.3); box-shadow: 0 0 0 1px var(--glow); color: #fff; }
+.dialog .b { display: flex; justify-content: flex-end; gap: 6px; margin-top: 8px; }
+.dialog .b span { padding: 3px 8px; border-radius: 10px; background: #3a3544; }
+.dialog .b span.go { background: #8ab4f8; color: #111; animation: ping 1.2s infinite; }
+@keyframes ping { from { box-shadow: 0 0 0 0 rgba(138,180,248,.8); } to { box-shadow: 0 0 0 10px rgba(138,180,248,0); } }
+
+.confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+.confetti i { position: absolute; top: -12px; width: 8px; height: 14px; border-radius: 2px; animation: fall 2.6s ease-in forwards; }
+@keyframes fall { to { transform: translateY(110vh) rotate(540deg); opacity: .2; } }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 </style>
 </head>
 <body>
@@ -155,104 +236,254 @@ h1 { text-shadow: 0 0 30px rgba(181,123,255,.22); }
   </div>
 </header>
 
-<main class="wrap narrow">
-  <h1>Install Tome OS</h1>
-  <p class="lede">Install Tome OS on a Google Pixel right from this page, then lock the phone so it's as secure as when it came from Google. You need a computer (or another Android phone) with Chrome or Edge, and a USB cable.</p>
-
-  <div class="notice bad" id="no-usb" role="alert" hidden>
-    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7 V13 M12 16.5 V17"/></svg>
-    <p>This browser can't talk to phones over USB. Open this page in <strong>Chrome</strong> or <strong>Edge</strong> on a Windows, Mac, Linux or ChromeOS computer, or in Chrome on an Android phone.</p>
+<main class="wrap">
+  <div class="notice" id="unfinished" hidden style="margin-top:20px">
+    <p><strong>Your last install didn't finish.</strong> <span id="unfinished-text"></span></p>
+    <p style="margin-top:10px"><button class="btn" id="unfinished-go"></button></p>
   </div>
+  <nav class="trail" id="trail" aria-label="Install steps"></nav>
 
-  <section aria-labelledby="before-h">
-    <h2 id="before-h">Before you start</h2>
-    <div class="card">
-      <ul class="check">
-        <li><div><strong>Turn on OEM unlocking</strong><span>On the Pixel: Settings › About phone › tap Build number seven times. Then Settings › System › Developer options › turn on OEM unlocking. The phone needs to have been online once; on carrier-locked phones, like Verizon Pixels, it stays greyed out and Tome OS can't be installed.</span></div></li>
-        <li><div><strong>Back up anything you want to keep</strong><span>Installing erases everything on the phone: photos, messages, apps and accounts.</span></div></li>
-        <li><div><strong>Charge the phone</strong><span>Above 50% is plenty. Use a good USB cable, plugged straight into the computer (not through a hub).</span></div></li>
+  <!-- 1. Phone -->
+  <section class="step" data-step="phone" data-label="Your phone">
+    <div class="words">
+      <div class="count"></div>
+      <h1 tabindex="-1">Which phone are you installing on?</h1>
+      <p class="say">Pick it below. Tome OS is made for each phone separately, so this makes sure you get the right one.</p>
+      <div class="tiles" id="tiles"></div>
+      <details class="soon" id="tiles-soon" hidden><summary>Phones coming soon</summary><div class="tiles"></div></details>
+      <div class="row"><button class="btn primary" data-next disabled>Continue</button><button class="link" id="which">How do I check?</button></div>
+      <details class="help"><summary>Stuck? Get help with this step</summary><div>
+        <p><strong>Not a Pixel?</strong> Tome OS only runs on the phones listed here for now. More are on the way.</p>
+        <p><strong>Your phone says "Coming soon"?</strong> It's being built. Check back soon.</p>
+      </div></details>
+    </div>
+    <div class="visual" data-phone>
+      <div class="v v-tome on" data-v="tome"><img src="../assets/mark.svg" alt="">TOME</div>
+      <div class="v v-set" data-v="about"><div class="ttl">About phone</div><div class="it"><div>Device name<small>My phone</small></div></div><div class="it tap"><div>Model<small>Pixel 6</small></div></div><div class="it"><div>Android version<small>15</small></div></div></div>
+    </div>
+  </section>
+
+  <!-- 2. Computer -->
+  <section class="step" data-step="computer" data-label="This computer" hidden>
+    <div class="words">
+      <div class="count"></div>
+      <h1 tabindex="-1">Let's check this <span id="host-word">computer</span></h1>
+      <p class="say">Tome OS installs right from this page through a USB cable. This checks that everything here can do that.</p>
+      <ul class="ticks" id="host-checks">
+        <li data-s="now" id="chk-browser">Checking your browser…<small></small></li>
+        <li data-s="todo" id="chk-system">Checking your system…<small></small></li>
+        <li data-s="todo" id="chk-space">Checking for space…<small></small></li>
+        <li data-s="todo" id="chk-cable">A USB cable<small>The one that came with the phone works best. Plug it straight in, not through a hub.</small></li>
       </ul>
+      <div class="row"><button class="btn primary" data-next disabled>Continue</button></div>
+      <details class="help"><summary>Stuck? Get help with this step</summary><div>
+        <p><strong>Using Safari or Firefox?</strong> They can't talk to phones over USB. Open <code>tome-os.com/install</code> in <strong>Chrome</strong> or <strong>Edge</strong>.</p>
+        <p><strong>No computer?</strong> A second Android phone with Chrome works too, with a USB-C to USB-C cable.</p>
+      </div></details>
     </div>
-    <div class="notice" role="note" style="margin-top:16px">
-      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7 V13 M12 16.5 V17"/></svg>
-      <p><strong>On Windows:</strong> if the browser can't see the phone in fastboot mode, install <a href="https://developer.android.com/studio/run/win-usb">Google's USB driver</a>, then unplug the phone and plug it back in.</p>
-    </div>
-  </section>
-
-  <section aria-labelledby="file-h">
-    <h2 id="file-h">1. Get Tome OS for your phone</h2>
-    <p class="sub">Download the <strong>Factory image</strong> for your phone from the <a href="../#download">download table</a> or the <a href="https://github.com/alid0n/tome-os-site/releases">releases page</a>. It's called <code>tome-os-&lt;version&gt;-&lt;phone&gt;-factory.zip</code>. Don't unzip it. Then choose it here. If it came in parts (ending in <code>.part1</code>, <code>.part2</code>), choose all the parts together.</p>
-    <div class="card">
-      <div class="file-row">
-        <input type="file" id="file" class="visually-hidden" multiple>
-        <label for="file" class="btn" id="file-label" tabindex="0" role="button">Choose the downloaded file</label>
-        <span class="file-name" id="file-name">No file chosen yet.</span>
-      </div>
-      <p class="notice bad" id="file-error" role="alert" hidden style="margin:16px 0 0"></p>
+    <div class="visual">
+      <div class="laptop"><div class="lid"><div class="dialog"><div class="q">tome-os.com</div><div class="d" id="host-mini">Checking…</div></div></div><div class="base"></div></div>
+      <p class="caption">Any computer with Chrome or Edge works.</p>
     </div>
   </section>
 
-  <section aria-labelledby="go-h">
-    <h2 id="go-h">2. Connect the phone and start</h2>
-    <ol class="steps">
-      <li><div><h3>Put the phone in fastboot mode</h3><p>Turn the phone off. Hold <strong>Volume Down</strong>, and while holding it, press and hold <strong>Power</strong> until a screen with an Android lying on its back appears ("Fastboot Mode"). Then plug it into this computer.</p></div></li>
-      <li><div><h3>Press Start Tome</h3><p>Pick the phone when the browser asks. From there it runs by itself: it unlocks the phone, installs Tome OS, adds Tome OS's key and locks the phone again. It only stops twice, when the phone asks you to confirm with its buttons. Keep this page open and the phone plugged in until it says it's finished (about 10 minutes).</p></div></li>
-    </ol>
-
-    <div class="start">
-      <button type="button" class="btn primary big" id="start">Start Tome</button>
-      <p id="start-help">Leave the phone on the fastboot screen and plugged in.</p>
+  <!-- 3. Back up -->
+  <section class="step" data-step="backup" data-label="Back up" hidden>
+    <div class="words">
+      <div class="count"></div>
+      <h1 tabindex="-1">Save what you want to keep</h1>
+      <p class="say">Installing a new operating system wipes the phone clean, like a factory reset. Tick each one once it's taken care of.</p>
+      <ul class="checks" id="backup">
+        <li><label><input type="checkbox"><span>Photos and videos<small>Back them up to a cloud, or copy them to a computer.</small></span></label></li>
+        <li><label><input type="checkbox"><span>Messages and chats<small>WhatsApp, Signal and others each have a backup in their own settings.</small></span></label></li>
+        <li><label><input type="checkbox"><span>Sign-in codes<small>Move authenticator apps to another device first, or you could get locked out of your accounts.</small></span></label></li>
+        <li><label><input type="checkbox"><span>I understand everything on this phone will be erased<small>It can't be undone.</small></span></label></li>
+      </ul>
+      <div class="row"><button class="btn primary" data-next disabled>Everything's saved</button></div>
     </div>
+    <div class="visual" data-phone>
+      <div class="v v-tome on" data-v="tome"><img src="../assets/mark.svg" alt="">TOME</div>
+      <div class="v v-off" data-v="off"></div>
+    </div>
+  </section>
 
-    <div class="warning" id="warning" role="group" aria-labelledby="warning-h" hidden>
-      <h3 id="warning-h" tabindex="-1">Starting Tome will wipe and reset the device</h3>
-      <p id="warning-detail">Everything on the phone is erased and replaced with Tome OS. This can't be undone.</p>
-      <div class="actions">
-        <button type="button" class="btn danger" id="confirm">Wipe and install Tome OS</button>
-        <button type="button" class="btn" id="cancel">Cancel</button>
+  <!-- 4. Download -->
+  <section class="step" data-step="download" data-label="Download" hidden>
+    <div class="words">
+      <div class="count"></div>
+      <h1 tabindex="-1">Download Tome OS</h1>
+      <p class="say" id="dl-say">It's a big download, so it can take a while on slow internet. You can carry on with the next steps while it downloads.</p>
+
+      <div id="dl-direct">
+        <div class="row" id="dl-start-row"><button class="btn primary" id="dl-start">Download Tome OS</button></div>
+        <div id="dl-progress" hidden>
+          <div class="meter-label"><span id="dl-status">Starting…</span><span id="dl-count"></span></div>
+          <div class="meter" id="dl-meter"><i id="dl-bar"></i></div>
+          <div class="row" style="margin-top:14px"><button class="btn primary" data-next>Continue while it downloads</button></div>
+        </div>
+        <div class="notice bad" id="dl-error" role="alert" hidden></div>
+        <p class="fine" id="dl-other-row"><button class="link" id="dl-use-file">I already have the file</button></p>
       </div>
-    </div>
 
-    <div class="card run" id="run" hidden>
-      <h3 class="visually-hidden" id="run-h" tabindex="-1">Progress</h3>
-      <ol class="progress" aria-label="Install steps">
-        <li data-step="connect" data-state="todo">Connect to the phone</li>
-        <li data-step="unlock" data-state="todo">Unlock the bootloader</li>
-        <li data-step="install" data-state="todo">Install Tome OS</li>
-        <li data-step="key" data-state="todo">Add Tome OS's key</li>
-        <li data-step="lock" data-state="todo">Lock the bootloader</li>
+      <div id="dl-manual" hidden>
+        <ol class="ticks plain">
+          <li data-s="now">Download the file<small id="dl-manual-what">Press the button below. If your browser asks, allow it to download several files.</small></li>
+          <li data-s="todo">Choose it here<small>It's in your Downloads folder. Don't unzip it. If it came in parts, choose all of them together.</small></li>
+        </ol>
+        <div class="row" style="margin-bottom:14px"><button class="btn primary" id="dl-manual-get">Download</button></div>
+        <div class="file-row">
+          <input type="file" id="file" class="visually-hidden" multiple>
+          <label for="file" class="btn" id="file-label" tabindex="0" role="button">Choose the downloaded file</label>
+          <span class="file-name" id="file-name"></span>
+        </div>
+        <div class="notice bad" id="file-error" role="alert" hidden></div>
+        <div class="row"><button class="btn primary" data-next disabled id="manual-next">Continue</button></div>
+      </div>
+
+      <details class="help"><summary>Stuck? Get help with this step</summary><div>
+        <p><strong>Download stopped?</strong> Press the button again. It carries on from where it stopped.</p>
+        <p><strong>Where does it go?</strong> This page keeps it in the browser's own storage and uses it in the install step, so there's no file to find. It's deleted once Tome OS is installed.</p>
+      </div></details>
+    </div>
+    <div class="visual">
+      <div class="laptop"><div class="lid"><div class="dialog" style="top:28%"><div class="q" id="dl-mini-name">Tome OS</div><div class="meter" style="margin:8px 0 6px"><i id="dl-mini"></i></div><div class="q dim" id="dl-mini-text" style="margin:0">Ready to download</div></div></div><div class="base"></div></div>
+      <p class="caption">No zip files to open, nothing to unpack.</p>
+    </div>
+  </section>
+
+  <!-- 5. OEM unlocking -->
+  <section class="step" data-step="oem" data-label="Allow installing" hidden>
+    <div class="words">
+      <div class="count"></div>
+      <h1 tabindex="-1">Let your phone accept Tome OS</h1>
+      <p class="say">Phones only take a new operating system once you switch on a setting called <strong>OEM unlocking</strong>. It's hidden, so here's the trick. Try it on the practice phone, then do the same on your real phone.</p>
+      <ol class="ticks plain" id="oem-list">
+        <li data-s="done">Open Settings › About phone</li>
+        <li data-s="now">Tap Build number 7 times</li>
+        <li data-s="todo">Go back to Settings › System › Developer options</li>
+        <li data-s="todo">Turn on OEM unlocking</li>
       </ol>
-      <p class="status" id="status" aria-live="polite">Getting ready…</p>
-      <progress id="bar" max="1" value="0" aria-labelledby="status"></progress>
-
-      <div class="phone-prompt" id="prompt" role="alert" hidden>
-        <svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M18 8 H20 M18 12 H20 M11 18 H13"/></svg>
-        <span id="prompt-text"></span>
-      </div>
-
-      <div class="notice" id="reconnect" hidden style="margin:16px 0 0">
-        <div>
-          <p>Waiting for the phone to come back. If the phone shows the fastboot screen but nothing happens here, choose <strong>Reconnect</strong> and pick the phone again.</p>
-          <p><button type="button" class="btn" id="reconnect-btn">Reconnect</button></p>
-        </div>
-      </div>
-
-      <div class="notice bad" id="error" role="alert" hidden style="margin:16px 0 0"></div>
-      <div class="notice ok" id="done" hidden style="margin:16px 0 0">
-        <div>
-          <p><strong>Tome OS is installed and the phone is locked.</strong> It now restarts into Tome OS. The first start takes a few minutes. You can unplug it.</p>
-          <p>Each time it starts, the phone shows a yellow notice that it's running a different operating system. That's normal for a locked phone with an operating system other than Google's: it means the phone checked Tome OS with Tome OS's key before starting it.</p>
-        </div>
-      </div>
+      <div class="notice" id="oem-grey" hidden><p>Connect the phone to Wi-Fi, wait a minute, then look again. If it stays grey, the phone was locked by the carrier it was bought from (Verizon phones usually are), and Tome OS can't be installed on it.</p></div>
+      <div class="row"><button class="btn primary" data-next disabled>I've done it on my phone</button><button class="link" id="oem-skip">Skip, it's already on</button><button class="link" id="oem-grey-btn">It's greyed out</button></div>
+      <details class="help"><summary>Stuck? Get help with this step</summary><div>
+        <p><strong>Asked for your PIN?</strong> That's normal. Enter the phone's screen lock.</p>
+        <p><strong>Can't find Developer options?</strong> Go back to About phone and tap Build number a few more times.</p>
+        <p><strong>Phone already runs another custom OS, like LineageOS?</strong> OEM unlocking is already on. Skip this step.</p>
+      </div></details>
+    </div>
+    <div class="visual" data-phone>
+      <div class="v v-set on" data-v="about"><div class="ttl">About phone</div><div class="it"><div>Model<small class="model-name">Pixel 6</small></div></div><div class="it"><div>Android version<small>15</small></div></div><div class="it tap" id="p-build"><div>Build number<small>AP4A.250105.002</small></div></div><div class="toast" id="p-toast"></div></div>
+      <div class="v v-set" data-v="system"><div class="ttl">System</div><div class="it"><div>Languages</div></div><div class="it"><div>Gestures</div></div><div class="it"><div>Date &amp; time</div></div><div class="it tap" id="p-devopt"><div>Developer options</div></div></div>
+      <div class="v v-set" data-v="dev"><div class="ttl">Developer options</div><div class="it"><div>Use developer options</div><span class="sw on"></span></div><div class="it"><div>Memory</div></div><div class="it tap" id="p-oem"><div>OEM unlocking<small>Allow the bootloader to be unlocked</small></div><span class="sw" id="p-oem-sw"></span></div></div>
     </div>
   </section>
 
-  <section aria-labelledby="why-h">
-    <h2 id="why-h">Why lock the phone again?</h2>
-    <p class="sub">Unlocking lets the phone take a new operating system. Locking it again, with Tome OS's own key added, means it only starts Tome OS as we signed it. If anyone changes the system, even with the phone in their hands, it refuses to start. That's the same protection the phone had from Google. Updates still install as normal.</p>
-    <p class="sub">To go back to stock Android at any time, use Google's <a href="https://flash.android.com">Android Flash Tool</a> and choose <strong>Lock bootloader</strong> and <strong>Wipe device</strong>.</p>
+  <!-- 6. Fastboot -->
+  <section class="step" data-step="fastboot" data-label="Get it ready" hidden>
+    <div class="words">
+      <div class="count"></div>
+      <h1 tabindex="-1">Put the phone in install mode</h1>
+      <p class="say">Watch the practice phone, then do the same on yours. It's two buttons held together.</p>
+      <ol class="ticks plain" id="fb-list">
+        <li data-s="now">Turn the phone off</li>
+        <li data-s="todo">Hold Volume Down, then also hold Power</li>
+        <li data-s="todo">Let go when you see an Android lying on its back</li>
+        <li data-s="todo">Plug it in with the USB cable</li>
+      </ol>
+      <div class="row"><button class="btn primary" data-next disabled>My phone shows this screen</button><button class="link" id="fb-replay">Play it again</button></div>
+      <details class="help"><summary>Stuck? Get help with this step</summary><div>
+        <p><strong>Phone started normally instead?</strong> You let go too early. Turn it off and try again, holding both buttons until the Android appears.</p>
+        <p><strong>Screen says "Fastboot Mode" in red?</strong> That's exactly right.</p>
+        <p><strong>On Windows,</strong> if the next step can't find the phone, install <a href="https://developer.android.com/studio/run/win-usb">Google's USB driver</a>, then unplug the phone and plug it back in.</p>
+      </div></details>
+    </div>
+    <div class="visual" data-phone>
+      <div class="v v-tome on" data-v="tome"><img src="../assets/mark.svg" alt="">TOME</div>
+      <div class="v v-off" data-v="off"></div>
+      <div class="v v-fb" data-v="fb"><div class="grn">START</div><div class="bot"></div><div class="red">Fastboot Mode</div><div class="dim">PRODUCT_NAME - <span class="code-name">oriole</span></div><div class="dim">DEVICE STATE - locked</div></div>
+    </div>
+  </section>
+
+  <!-- 7. Install -->
+  <section class="step" data-step="install" data-label="Install" hidden>
+    <div class="words">
+      <div class="count"></div>
+      <h1 tabindex="-1" id="install-h">Install Tome OS</h1>
+      <p class="say" id="install-say">Press the button, then choose your phone in the box your browser shows. After that it runs by itself. It only needs you twice, to press buttons on the phone, and this page shows you which.</p>
+
+      <div id="i-ready">
+        <div class="notice" id="i-wait-dl" hidden><p>Waiting for the download to finish: <span id="i-wait-pct"></span></p></div>
+        <ul class="checks" id="i-driver" hidden>
+          <li><label><input type="checkbox" id="i-driver-ok"><span>I've installed Google's USB driver<small>This version of Tome OS restarts the phone into a second fastboot screen part way through, and Windows can't see the phone there without <a href="https://developer.android.com/studio/run/win-usb">Google's USB driver</a>. Install it before starting.</small></span></label></li>
+        </ul>
+        <div class="row"><button class="btn primary" id="i-connect">Erase the phone and install</button></div>
+        <p class="fine">Everything on the phone is erased and replaced with Tome OS. This can't be undone.</p>
+      </div>
+
+      <div id="i-run" hidden>
+        <ol class="ticks" id="i-list">
+          <li data-step="connect" data-s="todo">Connect to the phone</li>
+          <li data-step="unlock" data-s="todo">Unlock it to accept Tome OS</li>
+          <li data-step="install" data-s="todo">Install Tome OS</li>
+          <li data-step="key" data-s="todo">Add Tome OS's key</li>
+          <li data-step="test" data-s="todo">Check Tome OS starts</li>
+          <li data-step="lock" data-s="todo">Lock it again so it stays secure</li>
+        </ol>
+        <div id="i-test" hidden>
+          <div class="callout" role="alert"><span aria-hidden="true" style="font-size:22px">👀</span><div><b>Watch the phone.</b>It's starting Tome OS for the first time, which takes up to 5 minutes. First it shows an orange warning, which is normal while it's unlocked. Wait for the Tome welcome screen, but don't set it up yet: locking erases it once more.</div></div>
+          <div class="row" style="margin-bottom:18px"><button class="btn primary" id="i-test-ok">I see the welcome screen</button><button class="link" id="i-test-bad">It's stuck on the Google logo, or keeps restarting</button></div>
+        </div>
+        <div id="i-back" hidden>
+          <div class="callout" role="alert"><span aria-hidden="true" style="font-size:22px">👉</span><div><b>Now put it back in install mode.</b>Hold <strong>Power</strong> and <strong>Volume Down</strong> together until the fastboot screen shows, then let go. Keep it plugged in. This page carries on by itself.</div></div>
+        </div>
+        <div class="callout" id="i-prompt" role="alert" hidden><span aria-hidden="true" style="font-size:22px">👉</span><div><b>Your turn, on the phone.</b><span id="i-prompt-text"></span></div></div>
+        <div class="meter-label"><span id="i-status" aria-live="polite">Getting ready…</span><span id="i-pct"></span></div>
+        <div class="meter" id="i-meter"><i id="i-bar"></i></div>
+        <p class="fine" id="i-keep"><strong>Don't unplug the phone or close this page</strong> until it says it's finished, even if the phone's screen changes.</p>
+        <div class="notice" id="i-reconnect" hidden style="margin-top:16px">
+          <p><strong>Waiting for the phone to come back.</strong> If it shows a fastboot screen but nothing happens here, press <strong>Reconnect</strong> and pick the phone again. Don't unplug it.</p>
+          <p id="i-reconnect-win" hidden style="margin-top:6px">If the phone isn't in the list, Windows needs <a href="https://developer.android.com/studio/run/win-usb">Google's USB driver</a> to see it on this screen. Install it, then press Reconnect. The install carries on where it was.</p>
+          <p style="margin-top:10px"><button class="btn" id="i-reconnect-btn">Reconnect</button></p>
+        </div>
+        <div class="notice bad" id="i-error" role="alert" hidden style="margin-top:16px"></div>
+        <div class="row" id="i-retry-row" hidden><button class="btn primary" id="i-retry">Try again</button></div>
+      </div>
+      <details class="help"><summary>Stuck? Get help with this step</summary><div>
+        <p><strong>Your phone isn't in the list?</strong> Check it shows the fastboot screen and the cable is plugged straight in. On Windows, install <a href="https://developer.android.com/studio/run/win-usb">Google's USB driver</a>.</p>
+        <p><strong>Something stopped half way?</strong> Nothing is broken. Put the phone back in install mode and press Try again.</p>
+      </div></details>
+    </div>
+    <div class="visual" id="i-visual">
+      <div class="laptop" id="i-laptop"><div class="lid"><div class="dialog"><div class="q">tome-os.com wants to connect</div><div class="d"><span class="phone-name">Pixel 6</span></div><div class="b"><span>Cancel</span><span class="go">Connect</span></div></div></div><div class="base"></div></div>
+      <div data-phone hidden id="i-phone">
+        <div class="v v-fb on" data-v="fb"><div class="grn">START</div><div class="bot"></div><div class="red">Fastboot Mode</div><div class="dim">PRODUCT_NAME - <span class="code-name">oriole</span></div></div>
+        <div class="v v-ask" data-v="ask"><div id="ask-q">Unlock the bootloader?</div><div class="dim">Volume keys move · Power selects</div><div class="opt hl" id="ask-no">Do not unlock the bootloader</div><div class="opt" id="ask-yes">Unlock the bootloader</div></div>
+        <div class="v v-tome" data-v="tome"><img src="../assets/mark.svg" alt="">TOME</div>
+      </div>
+      <p class="caption" id="i-caption">Pick <b class="phone-name">Pixel 6</b> in the box, then press <b>Connect</b>.</p>
+    </div>
+  </section>
+
+  <!-- 8. Done -->
+  <section class="step" data-step="done" data-label="Done" hidden>
+    <div class="words">
+      <div class="count"></div>
+      <h1 tabindex="-1">Welcome to Tome OS</h1>
+      <p class="say">It's installed, and the phone is locked again, as secure as the day it came out of the box. You can unplug it now.</p>
+      <ul class="ticks">
+        <li data-s="done">The first start takes a few minutes<small>That's normal. It's setting things up.</small></li>
+        <li data-s="done">A yellow notice shows at every start<small>It says the phone runs a different operating system. That's the phone confirming it's genuine Tome OS. Nothing is wrong.</small></li>
+        <li data-s="done">Updates arrive by themselves<small>No need to come back here.</small></li>
+      </ul>
+      <p class="fine">To go back to stock Android any time, use Google's <a href="https://flash.android.com">Android Flash Tool</a> and choose <strong>Lock bootloader</strong> and <strong>Wipe device</strong>.</p>
+    </div>
+    <div class="visual" data-phone>
+      <div class="v v-boot on" data-v="boot"><b>!</b><div>Your device is loading a different operating system.</div></div>
+      <div class="v v-tome" data-v="tome"><img src="../assets/mark.svg" alt="">TOME</div>
+    </div>
   </section>
 </main>
+<div class="confetti" id="confetti" aria-hidden="true"></div>
 
 <footer>
   <div class="wrap">
@@ -262,11 +493,18 @@ h1 { text-shadow: 0 0 30px rgba(181,123,255,.22); }
 </footer>
 
 <script type="module">
-// The web installer. It talks to the phone's bootloader over WebUSB with
-// fastboot.js (vendor/, see the note at its top) and installs the factory zip
-// that scripts/release.sh builds: bootloader and radio from Google, Tome OS's
-// image zip and avb_pkmd.bin, Tome OS's verified boot key.
+// The web installer, as a guided walk through. It talks to the phone's
+// bootloader over WebUSB with fastboot.js (vendor/, see the note at its top)
+// and installs the factory zip that scripts/release.sh builds: bootloader and
+// radio from Google, Tome OS's image zip and avb_pkmd.bin, Tome OS's verified
+// boot key.
 import * as fastboot from "./vendor/fastboot-1.1.3-tome.mjs";
+
+// The Cloudflare Worker in cloudflare/download-worker.js, which lets this page
+// download release files itself. Empty: the person downloads the file and
+// chooses it instead.
+const DOWNLOAD_RELAY = "";
+const RELEASES = "https://api.github.com/repos/alid0n/tome-os-site/releases?per_page=10";
 
 // Codenames from the home page's download table.
 const PHONES = {
@@ -276,24 +514,365 @@ const PHONES = {
   tokay: "Pixel 9", caiman: "Pixel 9 Pro", komodo: "Pixel 9 Pro XL", comet: "Pixel 9 Pro Fold", tegu: "Pixel 9a",
   frankel: "Pixel 10", blazer: "Pixel 10 Pro", mustang: "Pixel 10 Pro XL", rango: "Pixel 10 Pro Fold",
 };
-const phoneName = (code) => PHONES[code] ? `Google ${PHONES[code]} (${code})` : `"${code}"`;
+const phoneName = (code) => PHONES[code] ? `Google ${PHONES[code]}` : `"${code}"`;
 
 const $ = (id) => document.getElementById(id);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const gb = (bytes) => bytes >= 1073741824 ? (bytes / 1073741824).toFixed(1) + " GB" : Math.round(bytes / 1048576) + " MB";
+
 const device = new fastboot.FastbootDevice();
-let pack = null;            // the chosen factory zip, once it checks out
-let startAfterPick = false; // Start was pressed before a file was chosen
+const steps = $$("section.step");
+let at = 0, reached = 0;
+let code = null;          // the chosen phone's codename
+let build = null;         // { tag, version, files: [assets], sum: asset } for that phone
+let pack = null;          // the factory zip, once it checks out
+let downloading = null;   // the running download, a promise for the joined file
 let running = false;
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// ----- Timers for the practice phone's animations, cleared on each step -----
+let timers = [];
+const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
 
-if (!("usb" in navigator)) {
-  $("no-usb").hidden = false;
-  $("start").disabled = true;
-  $("start-help").textContent = "Open this page in Chrome or Edge to install.";
+// ----- The practice phone -----
+// Every [data-phone] holds its screens; this wraps them in the phone's body,
+// keys, fingers and cable.
+$$("[data-phone]").forEach((holder) => {
+  const screens = holder.innerHTML;
+  holder.innerHTML = `<div class="phone"><button class="key power" tabindex="-1" aria-hidden="true"></button><button class="key up" tabindex="-1" aria-hidden="true"></button><button class="key down" tabindex="-1" aria-hidden="true"></button><div class="finger f-power" style="top:23%"></div><div class="finger f-down" style="top:51%"></div><div class="scr">${screens}</div><div class="cable"><div></div><span></span></div></div>`;
+  if (!holder.id) holder.classList.add("visual-phone");
+  if (!holder.querySelector(".caption") && !holder.closest("#i-visual")) holder.insertAdjacentHTML("beforeend", '<p class="caption"></p>');
+});
+const phoneIn = (section) => section.querySelector(".phone");
+function screen(section, name) { $$(".v", section).forEach((v) => v.classList.toggle("on", v.dataset.v === name)); }
+function caption(section, html) { const c = section.querySelector(".caption"); if (c) c.innerHTML = html; }
+function finger(section, which, push) {
+  const p = phoneIn(section);
+  p.querySelector(".f-" + which).classList.toggle("on", push !== null);
+  p.querySelector(".f-" + which).classList.toggle("push", !!push);
+  p.querySelector(".key." + which).classList.toggle("press", !!push);
+}
+function ripple(el, e) {
+  const scr = el.closest(".scr"), s = scr.getBoundingClientRect(), b = el.getBoundingClientRect();
+  const r = document.createElement("span");
+  r.className = "ripple";
+  r.style.left = ((e && e.clientX) || b.left + b.width / 2) - s.left + "px";
+  r.style.top = ((e && e.clientY) || b.top + b.height / 2) - s.top + "px";
+  scr.append(r);
+  setTimeout(() => r.remove(), 500);
+}
+function tick(list, i) {
+  $$("li", list).forEach((li, k) => { li.dataset.s = k < i ? "done" : k === i ? "now" : "todo"; });
 }
 
-// ----- Choosing the file -----
+// ----- Moving between steps -----
+function drawTrail() {
+  $("trail").innerHTML = steps.map((s, i) => {
+    const state = i < at ? "done" : i === at ? "now" : "todo";
+    // While installing, and once done, there's no going back.
+    const locked = i > reached || running || at === steps.length - 1;
+    return `<button data-i="${i}" data-s="${state}"${locked ? " disabled" : ""}${i === at ? ' aria-current="step"' : ""}><i></i><span>${s.dataset.label}</span></button>`;
+  }).join("");
+  $$("#trail button").forEach((b) => b.addEventListener("click", () => go(+b.dataset.i)));
+}
+function go(i) {
+  clearTimers();
+  at = i;
+  reached = Math.max(reached, i);
+  steps.forEach((s, k) => { s.hidden = k !== i; });
+  const section = steps[i];
+  section.querySelector(".count").textContent = `Step ${i + 1} of ${steps.length}`;
+  drawTrail();
+  enter[section.dataset.step]?.(section);
+  section.querySelector("h1").focus({ preventScroll: true });
+  window.scrollTo({ top: 0 });
+}
+$$("[data-next]").forEach((b) => b.addEventListener("click", () => go(at + 1)));
+const nextIn = (section) => section.querySelector("[data-next]");
 
+// ----- 1. Phone -----
+let releases = [];
+function buildFor(codename) {
+  for (const r of releases) {
+    const assets = r.assets || [];
+    const factory = assets.find((a) => a.name.endsWith(`-${codename}-factory.zip`));
+    const parts = assets.filter((a) => a.name.includes(`-${codename}-factory.zip.part`))
+      .sort((a, b) => Number(a.name.split(".part")[1]) - Number(b.name.split(".part")[1]));
+    if (!factory && !parts.length) continue;
+    const sum = assets.find((a) => a.name.endsWith(`-${codename}-factory.zip.sha256`));
+    const files = factory ? [factory] : parts;
+    return { tag: r.tag_name, version: r.tag_name.replace(/^v/, ""), files, sum, size: files.reduce((t, f) => t + f.size, 0) };
+  }
+  return null;
+}
+function drawTiles() {
+  const tile = ([c, name]) => {
+    const ready = !!buildFor(c);
+    return `<button class="tile" data-code="${c}" aria-pressed="${c === code}"${ready ? "" : " disabled"}><b>${name}</b><small>${ready ? "Ready" : "Coming soon"}</small></button>`;
+  };
+  // Phones Tome OS is ready for come first; the rest wait behind a fold.
+  const all = Object.entries(PHONES);
+  const ready = all.filter(([c]) => buildFor(c)), soon = all.filter(([c]) => !buildFor(c));
+  $("tiles").innerHTML = (ready.length ? ready : all).map(tile).join("");
+  $("tiles-soon").hidden = !ready.length || !soon.length;
+  $("tiles-soon").querySelector(".tiles").innerHTML = soon.map(tile).join("");
+  $$(".tile:not([disabled])").forEach((t) => t.addEventListener("click", () => pickPhone(t.dataset.code)));
+  if (ready.length === 1 && !code) pickPhone(ready[0][0]);
+}
+function pickPhone(c) {
+  if (c !== code) { pack = null; downloading = null; resetDownloadUi(); }
+  code = c;
+  build = buildFor(c);
+  $$(".tile").forEach((t) => t.setAttribute("aria-pressed", t.dataset.code === c));
+  $$(".phone-name, .model-name").forEach((e) => { e.textContent = PHONES[c]; });
+  $$(".code-name").forEach((e) => { e.textContent = c; });
+  nextIn(steps[0]).disabled = false;
+}
+fetch(RELEASES).then((r) => r.ok ? r.json() : []).catch(() => []).then((list) => {
+  releases = list;
+  drawTiles();
+});
+$("tiles").innerHTML = '<p class="fine">Finding the phones Tome OS is ready for…</p>';
+$("which").addEventListener("click", () => {
+  screen(steps[0], "about");
+  caption(steps[0], "Open <b>Settings</b>, scroll to the bottom and tap <b>About phone</b>. The model is listed there.");
+});
+
+const enter = {};
+enter.phone = (s) => { screen(s, "tome"); caption(s, "Your phone's model is in <b>Settings › About phone</b>."); };
+
+// ----- 2. This computer -----
+const ua = navigator.userAgent;
+const hostOs = /Android/.test(ua) ? "Android" : /Windows/.test(ua) ? "Windows" : /CrOS/.test(ua) ? "ChromeOS" : /Mac/.test(ua) ? "Mac" : /Linux/.test(ua) ? "Linux" : "";
+const hostNoun = hostOs === "Android" ? "phone" : "computer";
+$("host-word").textContent = hostNoun;
+const canDownloadHere = () => !!DOWNLOAD_RELAY && !!navigator.storage?.getDirectory;
+
+function setCheck(id, state, title, note = "") {
+  const li = $(id);
+  li.dataset.s = state;
+  li.firstChild.textContent = title;
+  li.querySelector("small").innerHTML = note;
+}
+enter.computer = async (s) => {
+  const next = nextIn(s);
+  const usb = "usb" in navigator;
+  await sleep(500);
+  setCheck("chk-browser", usb ? "done" : "bad",
+    usb ? "Your browser can talk to phones" : "This browser can't talk to phones",
+    usb ? "" : "Open <code>tome-os.com/install</code> in <strong>Chrome</strong> or <strong>Edge</strong> to install.");
+  $("host-mini").textContent = usb ? "Ready to install" : "Use Chrome or Edge";
+  $("chk-system").dataset.s = "now";
+  await sleep(500);
+  setCheck("chk-system", "done", hostOs ? `${hostOs} is ready` : "Your system is ready",
+    hostOs === "Windows" ? 'One extra thing on Windows: install <a href="https://developer.android.com/studio/run/win-usb">Google\'s USB driver</a> so the browser can see the phone.' : "Nothing else to install.");
+  $("chk-space").dataset.s = "now";
+  await sleep(400);
+  const need = build ? build.size : 0;
+  let free = null;
+  if (canDownloadHere()) {
+    try { const e = await navigator.storage.estimate(); free = e.quota - e.usage; } catch (e) { /* unknown */ }
+  }
+  if (free !== null && need && free < need) {
+    setCheck("chk-space", "bad", "Not quite enough space", `Tome OS needs ${gb(need)} free and this ${hostNoun} has ${gb(free)}. Free up some space, or download the file yourself in the next step.`);
+  } else {
+    setCheck("chk-space", "done", "There's room for the download", need ? `It needs ${gb(need)}.` : "");
+  }
+  $("chk-cable").dataset.s = "done";
+  next.disabled = !usb;
+};
+
+// ----- 3. Back up -----
+const backups = $$("#backup input");
+backups.forEach((c) => c.addEventListener("change", () => { nextIn(steps[2]).disabled = !backups.every((b) => b.checked); }));
+enter.backup = (s) => {
+  caption(s, "Everything on the phone is replaced with Tome OS.");
+  let off = false;
+  const loop = () => later(() => { off = !off; screen(s, off ? "off" : "tome"); loop(); }, 1800);
+  loop();
+};
+
+// ----- 4. Download -----
+// Straight into the browser's own private storage (the origin private file
+// system), so a 3 GB file never sits in memory and nobody has to find it.
+// Each part resumes from where it stopped.
+function resetDownloadUi() {
+  $("dl-start-row").hidden = false;
+  $("dl-progress").hidden = true;
+  $("dl-error").hidden = true;
+  $("dl-mini").style.width = "0";
+  $("dl-mini-text").textContent = "Ready to download";
+}
+function showManual() {
+  $("dl-direct").hidden = true;
+  $("dl-manual").hidden = false;
+  const many = build && build.files.length > 1;
+  $("dl-manual-get").textContent = many ? `Download all ${build.files.length} parts · ${gb(build.size)}` : `Download · ${build ? gb(build.size) : ""}`;
+}
+enter.download = (s) => {
+  if (!build) return;
+  $("dl-mini-name").textContent = `Tome OS ${build.version} for ${PHONES[code]}`;
+  $("dl-start").textContent = `Download Tome OS for ${PHONES[code]} · ${gb(build.size)}`;
+  if (!canDownloadHere() && !pack) showManual();
+};
+$("dl-use-file").addEventListener("click", showManual);
+
+async function fetchInto(dir, asset, onBytes) {
+  const handle = await dir.getFileHandle(asset.name, { create: true });
+  let have = (await handle.getFile()).size;
+  if (have === asset.size) { onBytes(have); return handle.getFile(); }
+  if (have > asset.size) have = 0;
+  const res = await fetch(`${DOWNLOAD_RELAY}/${build.tag}/${asset.name}`, { headers: have ? { Range: `bytes=${have}-` } : {} });
+  if (have && res.status !== 206) have = 0;
+  if (!res.ok) throw new Error(`The download server answered ${res.status}.`);
+  const out = await handle.createWritable({ keepExistingData: have > 0 });
+  if (have) await out.seek(have); else await out.truncate(0);
+  onBytes(have);
+  const reader = res.body.getReader();
+  try {
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      await out.write(value);
+      onBytes(value.length);
+    }
+  } finally {
+    // Closing keeps what arrived, so a retry carries on from there.
+    await out.close().catch(() => {});
+  }
+  const file = await handle.getFile();
+  if (file.size !== asset.size) throw new Error("The download was cut short.");
+  return file;
+}
+
+async function downloadBuild() {
+  const dir = await navigator.storage.getDirectory();
+  navigator.storage.persist?.().catch(() => {});
+  // Old versions and other phones' files are no longer needed.
+  const keep = new Set(build.files.map((f) => f.name));
+  for await (const name of dir.keys()) if (name.startsWith("tome-os-") && !keep.has(name)) await dir.removeEntry(name).catch(() => {});
+  let got = 0;
+  const show = (n) => {
+    got += n;
+    const p = Math.min(1, got / build.size);
+    $("dl-bar").style.width = $("dl-mini").style.width = (p * 100).toFixed(1) + "%";
+    $("dl-count").textContent = `${gb(got)} of ${gb(build.size)}`;
+    $("dl-mini-text").textContent = `${Math.round(p * 100)}%`;
+    $("i-wait-pct").textContent = `${Math.round(p * 100)}%`;
+  };
+  const files = [];
+  for (const asset of build.files) {
+    $("dl-status").textContent = build.files.length > 1 ? `Downloading part ${files.length + 1} of ${build.files.length}…` : "Downloading…";
+    let before = got;
+    for (let attempt = 0; ; attempt++) {
+      try {
+        files.push(await fetchInto(dir, asset, show));
+        break;
+      } catch (e) {
+        if (attempt >= 4) throw e;
+        got = before;
+        $("dl-status").textContent = "Connection dropped. Trying again…";
+        await sleep(2000 * 2 ** attempt);
+      }
+    }
+  }
+  $("dl-status").textContent = "Checking the download…";
+  $("dl-meter").classList.add("busy");
+  const joined = files.length === 1 ? files[0] : joinParts(files);
+  if (build.sum) {
+    const want = (await (await fetch(`${DOWNLOAD_RELAY}/${build.tag}/${build.sum.name}`)).text()).trim().split(/\s+/)[0];
+    const have = await sha256(joined, (p) => { $("dl-mini-text").textContent = `Checking ${Math.round(p * 100)}%`; });
+    if (want && have !== want) {
+      for (const f of build.files) await dir.removeEntry(f.name).catch(() => {});
+      throw new Error("The download didn't arrive intact, so it was thrown away. Press Download to fetch it again.");
+    }
+  }
+  $("dl-meter").classList.remove("busy");
+  return readPack(joined);
+}
+
+$("dl-start").addEventListener("click", () => {
+  $("dl-start-row").hidden = true;
+  $("dl-error").hidden = true;
+  $("dl-progress").hidden = false;
+  $("dl-other-row").hidden = true;
+  $("dl-bar").style.width = "0";
+  downloading = downloadBuild().then((p) => {
+    pack = p;
+    $("dl-status").textContent = `Downloaded and checked: Tome OS ${p.version}`;
+    $("dl-mini-text").textContent = "Ready to install";
+    $("dl-bar").style.width = $("dl-mini").style.width = "100%";
+    $("i-wait-dl").hidden = true;
+    return p;
+  }).catch((e) => {
+    downloading = null;
+    $("dl-meter").classList.remove("busy");
+    $("dl-progress").hidden = true;
+    $("dl-start-row").hidden = false;
+    $("dl-other-row").hidden = false;
+    $("dl-start").textContent = "Carry on downloading";
+    $("dl-error").textContent = `${e.message || e} If it keeps stopping, choose "I already have the file" to download it yourself.`;
+    $("dl-error").hidden = false;
+    if (at === 6) go(3);
+    throw e;
+  });
+  downloading.catch(() => {});
+});
+
+// A small SHA-256, so a 3 GB file can be checked in pieces (the browser's
+// own only takes the whole thing at once).
+const K = new Int32Array([0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+async function sha256(blob, onProgress) {
+  const H = new Uint32Array([0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19]);
+  const W = new Int32Array(64);
+  const blocks = (v, n) => {
+    let h0 = H[0], h1 = H[1], h2 = H[2], h3 = H[3], h4 = H[4], h5 = H[5], h6 = H[6], h7 = H[7];
+    for (let o = 0; o < n; o += 64) {
+      for (let t = 0; t < 16; t++) W[t] = v.getInt32(o + t * 4);
+      for (let t = 16; t < 64; t++) {
+        const x = W[t - 15], y = W[t - 2];
+        W[t] = (((x >>> 7 | x << 25) ^ (x >>> 18 | x << 14) ^ x >>> 3) + W[t - 7] + ((y >>> 17 | y << 15) ^ (y >>> 19 | y << 13) ^ y >>> 10) + W[t - 16]) | 0;
+      }
+      let a = h0, b = h1, c = h2, d = h3, e = h4, f = h5, g = h6, h = h7;
+      for (let t = 0; t < 64; t++) {
+        const t1 = (h + ((e >>> 6 | e << 26) ^ (e >>> 11 | e << 21) ^ (e >>> 25 | e << 7)) + ((e & f) ^ (~e & g)) + K[t] + W[t]) | 0;
+        const t2 = (((a >>> 2 | a << 30) ^ (a >>> 13 | a << 19) ^ (a >>> 22 | a << 10)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+        h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+      }
+      h0 = (h0 + a) | 0; h1 = (h1 + b) | 0; h2 = (h2 + c) | 0; h3 = (h3 + d) | 0; h4 = (h4 + e) | 0; h5 = (h5 + f) | 0; h6 = (h6 + g) | 0; h7 = (h7 + h) | 0;
+    }
+    H[0] = h0; H[1] = h1; H[2] = h2; H[3] = h3; H[4] = h4; H[5] = h5; H[6] = h6; H[7] = h7;
+  };
+  const CHUNK = 16 << 20;
+  for (let pos = 0; pos < blob.size; pos += CHUNK) {
+    const buf = await blob.slice(pos, pos + CHUNK).arrayBuffer();
+    const whole = buf.byteLength - (buf.byteLength % 64);
+    blocks(new DataView(buf), whole);
+    if (whole < buf.byteLength) {
+      // Only the very end of the file is short of a full block: pad it.
+      const rest = new Uint8Array(buf, whole);
+      const pad = new Uint8Array(rest.length + 9 > 64 ? 128 : 64);
+      pad.set(rest); pad[rest.length] = 0x80;
+      const v = new DataView(pad.buffer);
+      v.setUint32(pad.length - 8, Math.floor(blob.size / 0x20000000));
+      v.setUint32(pad.length - 4, (blob.size * 8) >>> 0);
+      blocks(v, pad.length);
+    }
+    onProgress?.(Math.min(1, (pos + CHUNK) / blob.size));
+    await sleep(0);
+  }
+  if (blob.size % 64 === 0) {
+    const pad = new Uint8Array(64); pad[0] = 0x80;
+    const v = new DataView(pad.buffer);
+    v.setUint32(56, Math.floor(blob.size / 0x20000000));
+    v.setUint32(60, (blob.size * 8) >>> 0);
+    blocks(v, 64);
+  }
+  return [...H].map((x) => x.toString(16).padStart(8, "0")).join("");
+}
+
+// ----- Choosing a file by hand -----
 // Reads only the zip's list of files (quick, even for a large file) and
 // checks it is a Tome OS factory zip with everything the install needs.
 async function readPack(file) {
@@ -310,7 +889,7 @@ async function readPack(file) {
   const image = find(/(^|\/)image-[a-z0-9]+-[^/]+\.zip$/);
   const top = find(/^tome-os-[^/]+\//);
   if (!image || !top) {
-    throw new Error("That isn't a Tome OS factory image. Choose the file ending in -factory.zip.");
+    throw new Error("That isn't a Tome OS factory image. Choose the file ending in -factory.zip, or all its parts.");
   }
   const missing = [];
   if (!find(/(^|\/)bootloader-[^/]+\.img$/)) missing.push("bootloader");
@@ -319,12 +898,11 @@ async function readPack(file) {
   if (missing.length) throw new Error(`That file is missing parts (${missing.join(", ")}). Download it again.`);
   const codename = image.match(/(?:^|\/)image-([a-z0-9]+)-/)[1];
   const version = (top.match(/^tome-os-(.+?)-[a-z0-9]+\//) || [])[1] || "";
-  return { file, codename, version };
+  // Newer factory zips carry the super partition in pieces the bootloader
+  // writes itself. Older ones restart into fastbootd for it.
+  const fastbootd = !find(/(^|\/)super_\d+\.img$/);
+  return { file, codename, version, fastbootd };
 }
-
-$("file-label").addEventListener("keydown", (e) => {
-  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("file").click(); }
-});
 
 // A factory zip over GitHub's 2 GB limit is published in parts
 // (name.part1, name.part2, ...). Chosen together, they're joined in order
@@ -344,163 +922,202 @@ function joinParts(files) {
   return joined;
 }
 
+// Starts each file's download a moment apart; the browser may ask once to
+// allow several downloads.
+$("dl-manual-get").addEventListener("click", () => {
+  if (!build) return;
+  build.files.forEach((f, n) => setTimeout(() => {
+    const a = document.createElement("a");
+    a.href = f.browser_download_url;
+    document.body.append(a); a.click(); a.remove();
+  }, n * 1500));
+  tick($$("#dl-manual ol")[0], 1);
+});
+$("file-label").addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("file").click(); }
+});
 $("file").addEventListener("change", async () => {
   const chosen = Array.from($("file").files);
   $("file-error").hidden = true;
   if (!chosen.length) return;
   pack = null;
-  let file;
+  $("manual-next").disabled = true;
   try {
-    file = joinParts(chosen);
+    const file = joinParts(chosen);
+    $("file-name").textContent = `Checking ${file.name}…`;
+    const p = await readPack(file);
+    if (code && p.codename !== code) throw new Error(`That file is for the ${phoneName(p.codename)}, but you picked the ${phoneName(code)}. Download the file for your phone.`);
+    pack = p;
+    downloading = null;
+    $("file-name").textContent = `Tome OS ${p.version} for the ${phoneName(p.codename)}. Ready.`;
+    $("file-label").textContent = "Choose a different file";
+    $("manual-next").disabled = false;
+    tick($$("#dl-manual ol")[0], 2);
   } catch (e) {
     $("file-name").textContent = chosen.map((f) => f.name).join(", ");
     $("file-error").textContent = e.message;
     $("file-error").hidden = false;
-    return;
-  }
-  $("file-name").textContent = `Checking ${file.name}…`;
-  try {
-    pack = await readPack(file);
-    $("file-name").textContent = `Tome OS ${pack.version} for the ${phoneName(pack.codename)}. Ready.`;
-    $("file-label").textContent = "Choose a different file";
-    if (startAfterPick) { startAfterPick = false; showWarning(); }
-  } catch (e) {
-    startAfterPick = false;
-    $("file-name").textContent = file.name;
-    $("file-error").textContent = e.message;
-    $("file-error").hidden = false;
   }
 });
 
-// ----- Start, warning, run -----
+// ----- 5. OEM unlocking -----
+let taps = 0;
+enter.oem = (s) => {
+  taps = 0;
+  screen(s, "about");
+  tick($("oem-list"), 1);
+  $("p-oem-sw").classList.remove("on");
+  $("p-toast").classList.remove("on");
+  caption(s, "<b>Tap Build number</b> 7 times.");
+};
+$("p-build").addEventListener("click", (e) => {
+  const s = steps[4];
+  if (taps >= 7) return;
+  ripple(e.currentTarget, e);
+  taps++;
+  const left = 7 - taps;
+  $("p-toast").textContent = left ? `You are now ${left} step${left === 1 ? "" : "s"} away from being a developer.` : "You are now a developer!";
+  if (taps >= 3) $("p-toast").classList.add("on");
+  if (!left) {
+    tick($("oem-list"), 2);
+    caption(s, "Now go back to <b>Settings › System</b>.");
+    later(() => { $("p-toast").classList.remove("on"); screen(s, "system"); caption(s, "Tap <b>Developer options</b>."); }, 1300);
+  }
+});
+$("p-devopt").addEventListener("click", (e) => {
+  ripple(e.currentTarget, e);
+  screen(steps[4], "dev");
+  tick($("oem-list"), 3);
+  caption(steps[4], "Switch on <b>OEM unlocking</b>.");
+});
+$("p-oem").addEventListener("click", (e) => {
+  ripple(e.currentTarget, e);
+  $("p-oem-sw").classList.add("on");
+  tick($("oem-list"), 4);
+  nextIn(steps[4]).disabled = false;
+  caption(steps[4], "That's it. <b>Now do the same on your phone.</b>");
+});
+$("oem-skip").addEventListener("click", () => go(5));
+$("oem-grey-btn").addEventListener("click", () => { $("oem-grey").hidden = false; });
 
-function showWarning() {
-  $("warning-detail").textContent = `Everything on the phone is erased and replaced with Tome OS ${pack.version} for the ${phoneName(pack.codename)}. This can't be undone.`;
-  $("warning").hidden = false;
-  $("start").hidden = true;
-  $("start-help").hidden = true;
-  $("warning-h").focus();
-}
+// ----- 6. Fastboot mode -----
+enter.fastboot = (s) => {
+  clearTimers();
+  const list = $("fb-list"), cable = phoneIn(s).querySelector(".cable");
+  tick(list, 0);
+  screen(s, "tome");
+  finger(s, "power", null); finger(s, "down", null);
+  cable.classList.remove("in");
+  caption(s, "Turn the phone <b>off</b>.");
+  later(() => finger(s, "power", true), 700);
+  later(() => { finger(s, "power", null); screen(s, "off"); }, 1600);
+  later(() => { tick(list, 1); caption(s, "Hold <b>Volume Down</b>…"); finger(s, "down", true); }, 2400);
+  later(() => { caption(s, "…and while holding it, hold <b>Power</b>."); finger(s, "power", true); }, 3300);
+  later(() => { tick(list, 2); screen(s, "fb"); caption(s, "When this screen shows, <b>let go</b>."); }, 5000);
+  later(() => { finger(s, "power", null); finger(s, "down", null); }, 5800);
+  later(() => { tick(list, 3); caption(s, `Plug the cable into this ${hostNoun}.`); cable.classList.add("in"); }, 6600);
+  later(() => { tick(list, 4); caption(s, "Ready. <b>Leave it on this screen.</b>"); nextIn(s).disabled = false; }, 7600);
+};
+$("fb-replay").addEventListener("click", () => enter.fastboot(steps[5]));
 
-function hideWarning() {
-  $("warning").hidden = true;
-  $("start").hidden = false;
-  $("start-help").hidden = false;
-}
-
-$("start").addEventListener("click", () => {
+// ----- 7. Install -----
+const iSection = steps[6];
+enter.install = () => {
   if (running) return;
-  if (!pack) {
-    // Ask for the file first, so nothing interrupts the install itself.
-    startAfterPick = true;
-    $("file").click();
-    return;
+  $("i-ready").hidden = false;
+  $("i-run").hidden = true;
+  $("i-laptop").hidden = false;
+  $("i-phone").hidden = true;
+  $("i-caption").innerHTML = `Your browser asks which phone to use. Pick <b>${PHONES[code] || "your phone"}</b>, then press <b>Connect</b>.`;
+  $("i-wait-dl").hidden = !!pack || !downloading;
+  const needDriver = hostOs === "Windows" && (!pack || pack.fastbootd);
+  $("i-driver").hidden = !needDriver;
+  $("i-connect").disabled = (!pack && !downloading) || (needDriver && !$("i-driver-ok").checked);
+  if (!pack && !downloading) {
+    $("i-wait-dl").hidden = false;
+    $("i-wait-dl").innerHTML = '<p>Tome OS hasn\'t been downloaded yet. <button class="link" id="i-to-dl">Go to the download step</button></p>';
+    $("i-to-dl").addEventListener("click", () => go(3));
   }
-  showWarning();
-});
-
-$("cancel").addEventListener("click", () => { hideWarning(); $("start").focus(); });
-
-// The browser only shows its "pick a USB device" list straight after a
-// click, so the phone is connected here, before anything else.
-$("confirm").addEventListener("click", () => {
-  $("warning").hidden = true;
-  $("run").hidden = false;
-  resetRun();
-  $("run-h").focus();
-  const connecting = device.isConnected ? Promise.resolve() : device.connect();
-  install(connecting);
-});
-
-function resetRun() {
-  document.querySelectorAll("ol.progress li").forEach((li) => {
-    li.dataset.state = "todo";
-    li.querySelector(".note")?.remove();
-  });
-  $("error").hidden = true;
-  $("done").hidden = true;
-  hidePrompt();
-  $("reconnect").hidden = true;
-}
+};
 
 function setStep(name, state = "now", note = "") {
-  const items = [...document.querySelectorAll("ol.progress li")];
+  const items = $$("#i-list li");
   const index = items.findIndex((li) => li.dataset.step === name);
-  if (state === "now") {
-    // Steps before this one are finished (unless they were skipped).
-    items.slice(0, index).forEach((li) => { if (li.dataset.state !== "skipped") li.dataset.state = "done"; });
-  }
-  items[index].dataset.state = state;
-  if (note) {
-    const span = document.createElement("span");
-    span.className = "note";
-    span.textContent = note;
-    items[index].append(span);
-  }
+  if (state === "now") items.slice(0, index).forEach((li) => { if (li.dataset.s !== "skip") li.dataset.s = "done"; });
+  items[index].dataset.s = state;
+  if (note) items[index].insertAdjacentHTML("beforeend", `<small>${note}</small>`);
 }
-
 function setStatus(text, progress = null) {
-  $("status").textContent = text;
-  if (progress === null) $("bar").removeAttribute("value");
-  else $("bar").value = progress;
+  $("i-status").textContent = text;
+  $("i-meter").classList.toggle("busy", progress === null);
+  $("i-pct").textContent = progress === null ? "" : `${Math.round(progress * 100)}%`;
+  if (progress !== null) $("i-bar").style.width = progress * 100 + "%";
 }
 
-function showPrompt(text) { $("prompt-text").textContent = text; $("prompt").hidden = false; }
-function hidePrompt() { $("prompt").hidden = true; }
+// The phone's own confirm screen, mirrored on the practice phone: the volume
+// key glows until the right choice would be highlighted, then Power does.
+function showPrompt(choice, verb) {
+  $("i-prompt-text").textContent = ` Press a volume button until "${choice}" is highlighted, then press Power.`;
+  $("i-prompt").hidden = false;
+  $("ask-q").textContent = `${verb} the bootloader?`;
+  $("ask-no").textContent = `Do not ${verb.toLowerCase()} the bootloader`;
+  $("ask-yes").textContent = choice;
+  screen(iSection, "ask");
+  const p = phoneIn(iSection), down = p.querySelector(".key.down"), power = p.querySelector(".key.power");
+  const loop = () => {
+    $("ask-no").classList.add("hl"); $("ask-yes").classList.remove("hl");
+    down.classList.add("hint"); power.classList.remove("hint");
+    $("i-caption").innerHTML = "Press <b>Volume Down</b>…";
+    later(() => { $("ask-no").classList.remove("hl"); $("ask-yes").classList.add("hl"); down.classList.remove("hint"); power.classList.add("hint"); $("i-caption").innerHTML = "…then press <b>Power</b>."; }, 1800);
+    later(loop, 3800);
+  };
+  loop();
+}
+function hidePrompt() {
+  clearTimers();
+  $("i-prompt").hidden = true;
+  $$(".key", iSection).forEach((k) => k.classList.remove("hint"));
+  screen(iSection, "fb");
+  $("i-caption").innerHTML = "Keep the phone plugged in.";
+}
 
 // After a restart the phone usually reconnects by itself. Android, and
 // sometimes desktops, need the person to pick it again, which must start
 // from a click.
 let reconnectTimer = null;
-function offerReconnect() { $("reconnect").hidden = false; }
-function waitingForPhone() {
-  clearTimeout(reconnectTimer);
-  reconnectTimer = setTimeout(offerReconnect, 30000);
-}
-function phoneBack() {
-  clearTimeout(reconnectTimer);
-  reconnectTimer = null;
-  $("reconnect").hidden = true;
-}
-$("reconnect-btn").addEventListener("click", async () => {
-  try {
-    await device.connect();
-    phoneBack();
-  } catch (e) {
-    /* The person closed the list; the button stays. */
-  }
+const offerReconnect = () => { $("i-reconnect").hidden = false; $("i-reconnect-win").hidden = hostOs !== "Windows"; };
+function waitingForPhone() { clearTimeout(reconnectTimer); reconnectTimer = setTimeout(offerReconnect, 30000); }
+function phoneBack() { clearTimeout(reconnectTimer); reconnectTimer = null; $("i-reconnect").hidden = true; }
+$("i-reconnect-btn").addEventListener("click", async () => {
+  try { await device.connect(); phoneBack(); } catch (e) { /* the list was closed; the button stays */ }
 });
 
 // Waits until the phone is connected and answering, after it may have
 // dropped off USB (unlocking and locking can reset the connection).
-async function waitForPhone() {
-  for (let attempt = 0; attempt < 120; attempt++) {
+async function waitForPhone(seconds = 120) {
+  for (let attempt = 0; attempt < seconds; attempt++) {
     if (device.isConnected) {
-      try {
-        await device.getVariable("product");
-        phoneBack();
-        return;
-      } catch (e) { /* not ready yet */ }
+      try { await device.getVariable("product"); phoneBack(); return; } catch (e) { /* not ready yet */ }
     }
     if (attempt === 0) waitingForPhone();
     await Promise.race([device.waitForConnect(offerReconnect), sleep(1000)]);
   }
-  throw new Error("The phone didn't come back. Check it shows the fastboot screen and is plugged in, then press Start Tome again.");
+  throw new Error("The phone didn't come back. Check it shows the fastboot screen and is plugged in, then press Try again.");
 }
 
 // Runs "flashing unlock" or "flashing lock", which the phone asks the person
 // to confirm with its buttons, and checks it worked.
-async function confirmOnPhone(command, choice, wantUnlocked) {
-  showPrompt(`On the phone: press Volume Down to choose "${choice}", then press Power.`);
+async function confirmOnPhone(command, choice, verb, wantUnlocked) {
+  showPrompt(choice, verb);
   try {
     await device.runCommand(command);
   } catch (e) {
     hidePrompt();
     if (e instanceof fastboot.FastbootError && e.status === "FAIL") {
       if (/not allowed|ability/i.test(e.message)) {
-        throw new Error("The phone won't unlock: OEM unlocking is off. Start the phone, turn on OEM unlocking (Settings › System › Developer options), then try again.");
+        throw new Error("The phone won't unlock because OEM unlocking is off. Start the phone, turn it on (step 5 shows how), then press Try again.");
       }
-      throw new Error(`"${choice}" wasn't chosen on the phone, so nothing was changed. Press Start Tome to try again.`);
+      throw new Error(`"${choice}" wasn't chosen on the phone, so nothing was changed. Press Try again.`);
     }
     throw e;
   }
@@ -509,9 +1126,7 @@ async function confirmOnPhone(command, choice, wantUnlocked) {
   await sleep(3000);
   await waitForPhone();
   const unlocked = await device.getVariable("unlocked");
-  if ((unlocked === "yes") !== wantUnlocked) {
-    throw new Error(`The phone didn't ${wantUnlocked ? "unlock" : "lock"}. Press Start Tome to try again.`);
-  }
+  if ((unlocked === "yes") !== wantUnlocked) throw new Error(`The phone didn't ${verb.toLowerCase()}. Press Try again.`);
 }
 
 function onFlashProgress(action, item, progress) {
@@ -520,76 +1135,244 @@ function onFlashProgress(action, item, progress) {
   if (action === "reboot") { if (!reconnectTimer) waitingForPhone(); } else phoneBack();
   if (item === "avb_custom_key") setStep("key");
   const verb = fastboot.USER_ACTION_MAP[action] || action;
-  const what = { device: "the phone", package: "the file", images: "Tome OS", avb_custom_key: "Tome OS's key", data: "the phone's storage" }[item] || item;
+  const what = { device: "the phone", package: "the file", images: "Tome OS", super: "Tome OS", avb_custom_key: "Tome OS's key", data: "the phone's storage" }[item] || item;
   setStatus(`${verb} ${what}…`, Math.min(progress, 1));
 }
 
-async function install(connecting) {
+// The browser only shows its "pick a USB device" list straight after a
+// click, so the phone is connected here, before anything else.
+// What this page last did to the phone, so a reload or a second visit can
+// pick up an install that didn't finish.
+const saved = {
+  get() { try { return JSON.parse(localStorage.getItem("tome-install")) || {}; } catch (e) { return {}; } },
+  set(v) { try { localStorage.setItem("tome-install", JSON.stringify(v)); } catch (e) { /* private window */ } },
+};
+
+function startInstall() {
+  const connecting = device.isConnected ? Promise.resolve() : device.connect();
+  install(connecting);
+}
+$("i-driver-ok").addEventListener("change", () => { $("i-connect").disabled = !$("i-driver-ok").checked || (!pack && !downloading); });
+$("i-connect").addEventListener("click", startInstall);
+$("i-retry").addEventListener("click", () => (lockOnly ? startLock() : startInstall()));
+
+// Answers from the person, while the phone starts for its test.
+let answer = null;
+const ask = () => new Promise((resolve) => { answer = resolve; });
+$("i-test-ok").addEventListener("click", () => answer?.("ok"));
+$("i-test-bad").addEventListener("click", () => answer?.("bad"));
+
+function runUi() {
   running = true;
+  drawTrail();
+  $("i-ready").hidden = true;
+  $("i-run").hidden = false;
+  $("i-error").hidden = true;
+  $("i-retry-row").hidden = true;
+  $("i-test").hidden = true;
+  $("i-back").hidden = true;
+  $$("#i-list li").forEach((li) => { li.dataset.s = "todo"; li.querySelector("small")?.remove(); });
+}
+
+function showPhone() {
+  $("i-laptop").hidden = true;
+  $("i-phone").hidden = false;
+  phoneIn(iSection).querySelector(".cable").classList.add("in");
+  screen(iSection, "fb");
+  $("i-caption").innerHTML = "Keep the phone plugged in.";
+}
+
+// Checks every phone gets before anything is written to it.
+async function checkPhone(codename) {
+  // In fastbootd (the "fastbootd" screen from recovery) the bootloader
+  // can't unlock or lock, so go back to the normal fastboot screen.
+  if (await device.getVariable("is-userspace") === "yes") {
+    waitingForPhone();
+    await device.reboot("bootloader", true, offerReconnect);
+    await waitForPhone();
+  }
+  const product = await device.getVariable("product");
+  if (codename && product !== codename) {
+    throw new Error(`This phone is a ${phoneName(product)}, but Tome OS was downloaded for the ${phoneName(codename)}. Nothing was changed. Go back to step 1 and pick this phone.`);
+  }
+  // A phone that runs flat part way through can be left half installed.
+  if (await device.getVariable("battery-soc-ok").catch(() => null) === "no") {
+    throw new Error("The phone's battery is too low to install safely. Nothing was changed. Charge it for half an hour, then press Try again.");
+  }
+  return product;
+}
+
+async function guarded(work) {
+  runUi();
   const keepAwake = await navigator.wakeLock?.request("screen").catch(() => null);
   window.onbeforeunload = () => "Tome OS is still installing.";
   try {
+    await work();
+  } catch (e) {
+    answer = null;
+    hidePrompt();
+    phoneBack();
+    $("i-test").hidden = true;
+    $("i-back").hidden = true;
+    const now = $$('#i-list li[data-s="now"]')[0];
+    if (now) now.dataset.s = "bad";
+    setStatus("Stopped.", 0);
+    $("i-error").innerHTML = "";
+    $("i-error").textContent = e instanceof Error && !(e instanceof fastboot.FastbootError) && !(e instanceof fastboot.UsbError)
+      ? e.message
+      : `Something went wrong: ${e.message || e}. Check the phone shows the fastboot screen and is plugged in, then press Try again.`;
+    // Whatever stopped it, the phone can be brought back the same way.
+    if (saved.get().phase) {
+      $("i-error").insertAdjacentHTML("beforeend", "<p style=\"margin-top:8px\">The phone is still unlocked, so nothing is lost and it's safe to start again. If it's stuck on the Google logo, hold <strong>Power</strong> and <strong>Volume Down</strong> for about 15 seconds until the fastboot screen shows, then press Try again.</p>");
+    }
+    $("i-error").hidden = false;
+    $("i-retry-row").hidden = false;
+  } finally {
+    running = false;
+    window.onbeforeunload = null;
+    keepAwake?.release().catch(() => {});
+    drawTrail();
+  }
+}
+
+let lockOnly = false;
+
+// The phone is only locked once Tome OS has been seen to start. A locked
+// phone that can't start Tome OS can't be unlocked again (that needs the
+// setting inside Android), so this check is what stops a brick.
+async function testThenLock() {
+  setStep("test");
+  setStatus("Starting Tome OS for a check…");
+  saved.set({ ...saved.get(), phase: "testing" });
+  try { await device.reboot(); } catch (e) { /* it restarts anyway */ }
+  screen(iSection, "tome");
+  $("i-caption").innerHTML = "An orange warning, then the Tome welcome screen.";
+  $("i-test").hidden = false;
+  const result = await ask();
+  $("i-test").hidden = true;
+  if (result === "bad") {
+    saved.set({ ...saved.get(), phase: "flashing" });
+    throw new Error("Tome OS didn't start, so the phone was left unlocked. That keeps it safe to fix: hold Power and Volume Down for about 15 seconds until the fastboot screen shows, then press Try again to install once more.");
+  }
+  await lock();
+}
+
+async function lock() {
+  setStep("test", "done");
+  setStep("lock");
+  $("i-back").hidden = false;
+  screen(iSection, "fb");
+  $("i-caption").innerHTML = "Hold <b>Power</b> and <b>Volume Down</b> until this screen shows.";
+  setStatus("Waiting for the fastboot screen…");
+  await waitForPhone(900);
+  $("i-back").hidden = true;
+  await checkPhone(saved.get().code);
+  if (await device.getVariable("unlocked") !== "yes") {
+    setStep("lock", "done");
+  } else {
+    setStatus("Locking. The phone asks you to confirm.");
+    await confirmOnPhone("flashing lock", "Lock the bootloader", "Lock", false);
+  }
+  setStep("lock", "done");
+  setStatus("Finished.", 1);
+  saved.set({});
+  try { await device.reboot(); } catch (e) { /* the phone restarts by itself or on Power */ }
+  screen(iSection, "tome");
+  // The downloaded copy isn't needed any more.
+  navigator.storage?.getDirectory?.().then(async (dir) => {
+    for await (const name of dir.keys()) if (name.startsWith("tome-os-")) await dir.removeEntry(name).catch(() => {});
+  }).catch(() => {});
+  running = false;
+  await sleep(1200);
+  go(steps.length - 1);
+}
+
+async function install(connecting) {
+  lockOnly = false;
+  await guarded(async () => {
     setStep("connect");
     setStatus("Choose the phone in the list the browser shows…");
     try {
       await connecting;
     } catch (e) {
-      throw new Error("No phone was chosen. Check it shows the fastboot screen and is plugged in, then press Start Tome again.");
+      throw new Error("No phone was chosen. Check it shows the fastboot screen and is plugged in, then press Try again.");
+    }
+    showPhone();
+    if (!pack) {
+      setStatus("Waiting for the download to finish…");
+      pack = await downloading;
     }
     setStatus("Checking the phone…");
-    // In fastbootd (the "fastbootd" screen from recovery) the bootloader
-    // can't unlock or lock, so go back to the normal fastboot screen.
-    if (await device.getVariable("is-userspace") === "yes") {
-      waitingForPhone();
-      await device.reboot("bootloader", true, offerReconnect);
-      await waitForPhone();
-    }
-    const product = await device.getVariable("product");
-    if (product !== pack.codename) {
-      throw new Error(`This phone is a ${phoneName(product)}, but the file is for the ${phoneName(pack.codename)}. Nothing was changed. Download the file for this phone.`);
-    }
+    await checkPhone(pack.codename);
 
     if (await device.getVariable("unlocked") === "yes") {
-      setStep("unlock", "skipped", "(already unlocked)");
+      setStep("unlock", "skip", "Already unlocked");
     } else {
       setStep("unlock");
       setStatus("Unlocking. The phone asks you to confirm.");
-      await confirmOnPhone("flashing unlock", "Unlock the bootloader", true);
+      await confirmOnPhone("flashing unlock", "Unlock the bootloader", "Unlock", true);
     }
 
     setStep("install");
     setStatus("Installing Tome OS. This takes several minutes.", 0);
+    saved.set({ code: pack.codename, phase: "flashing" });
     // Flashes the bootloader, radio and Tome OS, then avb_pkmd.bin as the
     // phone's avb_custom_key, and erases the user data.
     await device.flashFactoryZip(pack.file, true, offerReconnect, onFlashProgress);
     await waitForPhone();
+    await testThenLock();
+  });
+}
 
-    setStep("lock");
-    setStatus("Locking. The phone asks you to confirm.");
-    await confirmOnPhone("flashing lock", "Lock the bootloader", false);
+// Finishing an install whose phone was left unlocked after its test.
+function startLock() {
+  lockOnly = true;
+  const connecting = device.isConnected ? Promise.resolve() : device.connect();
+  guarded(async () => {
+    setStep("connect");
+    setStatus("Choose the phone in the list the browser shows…");
+    try { await connecting; } catch (e) { throw new Error("No phone was chosen. Check it shows the fastboot screen and is plugged in, then press Try again."); }
+    showPhone();
+    ["unlock", "install", "key"].forEach((n) => setStep(n, "done"));
+    await testThenLock();
+  });
+}
 
-    setStep("lock", "done");
-    setStatus("Finished.", 1);
-    try { await device.reboot(); } catch (e) { /* the phone restarts by itself or on Power */ }
-    $("done").hidden = false;
-  } catch (e) {
-    hidePrompt();
-    phoneBack();
-    const now = document.querySelector('ol.progress li[data-state="now"]');
-    if (now) now.dataset.state = "todo";
-    setStatus("Stopped.", 0);
-    $("error").textContent = e instanceof Error && !(e instanceof fastboot.FastbootError) && !(e instanceof fastboot.UsbError)
-      ? e.message
-      : `Something went wrong: ${e.message || e}. Check the phone shows the fastboot screen and is plugged in, then press Start Tome to try again. If it keeps happening, use the flashing guide linked below.`;
-    $("error").hidden = false;
-  } finally {
-    running = false;
-    window.onbeforeunload = null;
-    keepAwake?.release().catch(() => {});
-    $("start").hidden = false;
-    $("start-help").hidden = false;
+// An install that stopped part way, from an earlier visit.
+{
+  const last = saved.get();
+  if (last.phase) {
+    $("unfinished").hidden = false;
+    if (last.phase === "testing") {
+      $("unfinished-text").textContent = "Tome OS is installed but the phone isn't locked yet. Put it in fastboot mode (hold Power and Volume Down), plug it in, and finish here.";
+      $("unfinished-go").textContent = "Finish: check and lock";
+      $("unfinished-go").addEventListener("click", () => { $("unfinished").hidden = true; code = last.code; reached = 6; go(6); startLock(); });
+    } else {
+      $("unfinished-text").textContent = "If the phone is stuck on the Google logo, that's fixable and nothing is broken. Hold Power and Volume Down for about 15 seconds until the fastboot screen shows, then install again.";
+      $("unfinished-go").textContent = "Install again";
+      $("unfinished-go").addEventListener("click", () => { $("unfinished").hidden = true; });
+    }
   }
 }
+
+// ----- 8. Done -----
+enter.done = (s) => {
+  caption(s, "This yellow notice at start-up is normal.");
+  let tome = false;
+  const loop = () => later(() => { tome = !tome; screen(s, tome ? "tome" : "boot"); caption(s, tome ? "Then Tome OS starts." : "This yellow notice at start-up is normal."); loop(); }, 2400);
+  loop();
+  const box = $("confetti"), colors = ["#b57bff", "#c99bff", "#5cc8ff", "#f3eefc", "#6fe3a4"];
+  for (let i = 0; i < 60; i++) {
+    const c = document.createElement("i");
+    c.style.left = Math.random() * 100 + "%";
+    c.style.background = colors[i % colors.length];
+    c.style.animationDelay = Math.random() * 0.8 + "s";
+    box.append(c);
+  }
+  setTimeout(() => { box.innerHTML = ""; }, 3600);
+};
+
+go(0);
 </script>
 </body>
 </html>
