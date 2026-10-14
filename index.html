@@ -16,7 +16,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Tome OS: a crystal ball resting on an open book.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#14102b">
+<meta name="theme-color" content="#0c0a12">
 <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,14 +24,14 @@
 <style>
 :root {
   color-scheme: dark;
-  --night: #14102b;
-  --page: #1f1842;
-  --raised: #2b2163;
-  --line: #3a2f73;
-  --text: #efeaff;
-  --muted: #c9c1ec;
-  --faint: #a99fd6;
-  --glow: #9d7bff;
+  --night: #0c0a12;
+  --page: #18131f;
+  --raised: #241c30;
+  --line: #2e2540;
+  --text: #f3eefc;
+  --muted: #c4bcd3;
+  --faint: #9c94ad;
+  --glow: #b57bff;
   --talk: #5cc8ff;
   --hush: #f2b84b;
   --display: 'Cinzel', Georgia, serif;
@@ -60,8 +60,8 @@ h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 6.4vw
 .actions { display: flex; gap: 12px; flex-wrap: wrap; }
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border-radius: 24px; font-weight: 600; text-decoration: none; border: 1px solid var(--line); }
 .btn.primary { background: var(--glow); color: var(--night); border-color: var(--glow); }
-.btn.primary:hover { color: var(--night); background: #b39bff; }
-.btn.huge { min-height: 68px; padding: 0 34px; border-radius: 34px; font-size: 1.25rem; font-weight: 700; flex: 0 0 100%; max-width: 460px; box-shadow: 0 0 0 6px rgba(157,123,255,.18), 0 18px 48px -14px rgba(157,123,255,.75); }
+.btn.primary:hover { color: var(--night); background: #c99bff; }
+.btn.huge { min-height: 68px; padding: 0 34px; border-radius: 34px; font-size: 1.25rem; font-weight: 700; flex: 0 0 100%; max-width: 460px; box-shadow: 0 0 0 6px rgba(181,123,255,.18), 0 18px 48px -14px rgba(181,123,255,.75); }
 .hero-art { display: flex; justify-content: center; }
 .hero-art svg { width: min(100%, 380px); height: auto; }
 
@@ -89,7 +89,23 @@ code, .cmd { font-family: var(--mono); font-size: 14px; }
 .pill.soon { background: #3a2c14; color: #fbe2b0; }
 .pill.planned { background: var(--raised); color: var(--muted); }
 .pill.ready { background: #123a52; color: #bfe9ff; }
-.dl a { margin-right: 14px; }
+.devices td.dl { white-space: normal; min-width: 210px; }
+.dl .get { display: flex; flex-wrap: wrap; gap: 6px; }
+.dl a.part { display: inline-flex; align-items: center; min-height: 34px; padding: 0 12px; border-radius: 17px; background: rgba(181,123,255,.16); border: 1px solid rgba(181,123,255,.4); text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap; }
+.dl a.part:hover { color: var(--text); background: rgba(181,123,255,.28); }
+.dl .part.all { display: inline-flex; align-items: center; min-height: 34px; padding: 0 14px; border-radius: 17px; border: 1px solid; white-space: nowrap; font: inherit; font-size: 14px; font-weight: 700; color: #0c0a12; cursor: pointer; background: #b57bff; border-color: #b57bff; box-shadow: 0 0 18px rgba(181,123,255,.35); }
+.dl .part.all:hover { color: #0c0a12; background: #c99bff; }
+.dl .more { margin-top: 6px; font-size: 14px; }
+.dl .more summary { cursor: pointer; color: var(--muted); }
+@media (max-width: 640px) {
+  .devices thead { display: none; }
+  .devices tr { display: grid; grid-template-columns: 1fr auto; align-items: center; border-bottom: 1px solid var(--line); }
+  .devices tr:last-child { border-bottom: 0; }
+  .devices th, .devices td { border-bottom: 0; padding: 12px 16px; }
+  .devices td:nth-child(3) { display: none; }
+  .devices tr.has-dl td.dl { display: block; grid-column: 1 / -1; padding-top: 0; min-width: 0; }
+}
+.dl .more div { display: flex; flex-direction: column; gap: 2px; padding: 6px 0 2px; }
 .dl-note { color: var(--muted); font-size: 15px; margin: 16px 0 0; }
 
 ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 0; display: grid; gap: 14px; }
@@ -114,6 +130,16 @@ footer .wrap { display: flex; gap: 16px; justify-content: space-between; flex-wr
 .tm-band img { width: 64px; height: 64px; border-radius: 16px; }
 .tm-band h2 { font-size: clamp(24px, 3vw, 30px); margin-bottom: 6px; }
 .tm-band p { margin: 0; color: var(--muted); }
+/* Tome's look: near-black with a soft purple glow. */
+body { background: radial-gradient(64rem 36rem at 88% -12%, rgba(181,123,255,.16), transparent 70%) no-repeat, radial-gradient(44rem 30rem at -12% 28%, rgba(181,123,255,.07), transparent 70%) no-repeat, var(--night); }
+header, header.site { border-bottom-color: rgba(181,123,255,.14); }
+footer, footer.site { border-top-color: rgba(181,123,255,.14); }
+h1 { text-shadow: 0 0 30px rgba(181,123,255,.22); }
+.card, ol.steps li, .faq details, .table-box { background: linear-gradient(160deg, rgba(181,123,255,.08), transparent 55%), var(--page); border-color: rgba(181,123,255,.16); transition: border-color .25s, box-shadow .25s; }
+.card:hover, .faq details:hover { border-color: rgba(181,123,255,.38); box-shadow: 0 0 34px -10px rgba(181,123,255,.45); }
+.btn.primary { box-shadow: 0 0 26px -6px rgba(181,123,255,.7); }
+.icon, ol.steps li::before { box-shadow: inset 0 0 0 1px rgba(181,123,255,.22), 0 0 18px -6px rgba(181,123,255,.5); }
+.pill.ready { background: rgba(181,123,255,.18); color: #eadcff; }
 </style>
 </head>
 <body>
@@ -145,25 +171,25 @@ footer .wrap { display: flex; gap: 16px; justify-content: space-between; flex-wr
     </div>
     <div class="hero-art">
       <svg viewBox="0 0 220 200" role="img" aria-label="The Tome OS logo: a glowing crystal ball resting on an open book">
-        <circle class="halo" cx="110" cy="70" r="58" fill="#9d7bff"/>
-        <circle cx="110" cy="70" r="44" fill="none" stroke="#9d7bff" stroke-width="5"/>
-        <path d="M88 56 a26 26 0 0 1 22 -12" fill="none" stroke="#efeaff" stroke-width="4" stroke-linecap="round"/>
-        <circle class="spark" cx="126" cy="84" r="4" fill="#efeaff"/>
-        <path d="M6 122 L106 122 L110 125 L114 122 L214 122 L214 188 L114 188 L110 192 L106 188 L6 188 Z" fill="#2b2163" stroke="#efeaff" stroke-width="4"/>
-        <g fill="none" stroke="#efeaff" stroke-linecap="round">
+        <circle class="halo" cx="110" cy="70" r="58" fill="#b57bff"/>
+        <circle cx="110" cy="70" r="44" fill="none" stroke="#b57bff" stroke-width="5"/>
+        <path d="M88 56 a26 26 0 0 1 22 -12" fill="none" stroke="#f3eefc" stroke-width="4" stroke-linecap="round"/>
+        <circle class="spark" cx="126" cy="84" r="4" fill="#f3eefc"/>
+        <path d="M6 122 L106 122 L110 125 L114 122 L214 122 L214 188 L114 188 L110 192 L106 188 L6 188 Z" fill="#241c30" stroke="#f3eefc" stroke-width="4"/>
+        <g fill="none" stroke="#f3eefc" stroke-linecap="round">
           <path d="M20 172 Q65 152 110 172 Q155 152 200 172" stroke-width="2.5" opacity="0.6"/>
           <path d="M20 176 Q65 156 110 176 Q155 156 200 176" stroke-width="2.5" opacity="0.35"/>
         </g>
-        <path d="M20 126 Q65 106 110 126 Q155 106 200 126 L200 168 Q155 148 110 168 Q65 148 20 168 Z" fill="#1f1842" stroke="#efeaff" stroke-width="5" stroke-linejoin="round"/>
-        <g fill="none" stroke="#efeaff" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.35">
+        <path d="M20 126 Q65 106 110 126 Q155 106 200 126 L200 168 Q155 148 110 168 Q65 148 20 168 Z" fill="#18131f" stroke="#f3eefc" stroke-width="5" stroke-linejoin="round"/>
+        <g fill="none" stroke="#f3eefc" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.35">
           <path d="M34 134 Q60 124 96 136"/><path d="M34 146 Q60 136 96 148"/><path d="M34 158 Q56 150 84 158"/>
           <path d="M124 136 Q160 124 186 134"/><path d="M124 148 Q160 136 186 146"/><path d="M136 158 Q164 150 186 158"/>
         </g>
-        <path d="M110 126 L110 192" stroke="#efeaff" stroke-width="5" stroke-linecap="round"/>
-        <circle class="mote" cx="70" cy="124" r="2.5" fill="#9d7bff"/>
-        <circle class="mote m2" cx="150" cy="122" r="2" fill="#efeaff"/>
-        <circle class="mote m3" cx="88" cy="120" r="2" fill="#efeaff"/>
-        <path d="M100 115h20l4 5h-28z" fill="#9d7bff"/><rect x="91" y="119.5" width="38" height="5" rx="2.5" fill="#c8b4ff"/>
+        <path d="M110 126 L110 192" stroke="#f3eefc" stroke-width="5" stroke-linecap="round"/>
+        <circle class="mote" cx="70" cy="124" r="2.5" fill="#b57bff"/>
+        <circle class="mote m2" cx="150" cy="122" r="2" fill="#f3eefc"/>
+        <circle class="mote m3" cx="88" cy="120" r="2" fill="#f3eefc"/>
+        <path d="M100 115h20l4 5h-28z" fill="#b57bff"/><rect x="91" y="119.5" width="38" height="5" rx="2.5" fill="#c8b4ff"/>
       </svg>
     </div>
   </div>
@@ -263,7 +289,7 @@ footer .wrap { display: flex; gap: 16px; justify-content: space-between; flex-wr
     <p class="sub">Install from your browser with the web installer: no tools to set up. Installing Tome OS erases the phone, so back up anything you want to keep first.</p>
     <ol class="steps">
       <li><div><h3>Turn on OEM unlocking</h3><p>In Developer options on the phone. Phones locked to a carrier, like Verizon Pixels, can't be unlocked.</p></div></li>
-      <li><div><h3>Download the factory image</h3><p>Get the Factory image for your phone from the table above. Don't unzip it.</p></div></li>
+      <li><div><h3>Download the factory image</h3><p>Get the Factory image for your phone from the table above. Big ones come in parts: tap Download all to get every part at once. If your browser asks, allow multiple downloads. Don't unzip them.</p></div></li>
       <li><div><h3>Start Tome</h3><p>Open the <a href="install/">web installer</a> in Chrome or Edge, plug the phone in and press Start Tome. It unlocks the phone, installs Tome OS and locks it again with Tome OS's own key, so it's as secure as stock.</p></div></li>
       <li><div><h3>Changed your mind?</h3><p>You can always go back to stock Android with Google's Android Flash Tool at flash.android.com.</p></div></li>
     </ol>
@@ -301,14 +327,46 @@ footer .wrap { display: flex; gap: 16px; justify-content: space-between; flex-wr
             .sort(function (a, b) { return Number(a.name.split(".part")[1]) - Number(b.name.split(".part")[1]); });
           var cell = row.querySelector(".dl");
           cell.textContent = "";
-          var links = factory ? [[factory, "Factory image"]] : parts.map(function (p, n) { return [p, "Factory image, part " + (n + 1) + " of " + parts.length]; });
-          links.concat([[factorySum, "Factory checksum"], [sys, "System"], [boot, "Boot images"], [sum, "Checksum"], [bootSum, "Boot checksum"]]).forEach(function (pair) {
-            if (!pair[0]) return;
+          var size = function (a) { var g = a.size / 1073741824; return g >= 1 ? g.toFixed(1) + " GB" : Math.round(a.size / 1048576) + " MB"; };
+          var link = function (asset, label, cls) {
             var a = document.createElement("a");
-            a.href = pair[0].browser_download_url;
-            a.textContent = pair[1];
-            cell.appendChild(a);
+            a.href = asset.browser_download_url;
+            a.textContent = label;
+            if (cls) a.className = cls;
+            return a;
+          };
+          // The factory image is what the web installer needs, so it gets the buttons.
+          var get = document.createElement("div");
+          get.className = "get";
+          (factory ? [[factory, "Factory image"]] : parts.map(function (p, n) { return [p, "Part " + (n + 1) + " of " + parts.length]; }))
+            .forEach(function (pair) { get.appendChild(link(pair[0], pair[1] + " · " + size(pair[0]), "part")); });
+          // One button that starts every part, a moment apart so the browser keeps up.
+          if (!factory && parts.length > 1) {
+            var total = parts.reduce(function (t, p) { return t + p.size; }, 0);
+            var all = document.createElement("button");
+            all.type = "button";
+            all.className = "part all";
+            all.textContent = "Download all · " + size({ size: total });
+            all.addEventListener("click", function (urls) {
+              return function () {
+                urls.forEach(function (u, n) {
+                  setTimeout(function () { var a = document.createElement("a"); a.href = u; document.body.appendChild(a); a.click(); a.remove(); }, n * 1500);
+                });
+              };
+            }(parts.map(function (p) { return p.browser_download_url; })));
+            get.insertBefore(all, get.firstChild);
+          }
+          cell.appendChild(get);
+          var more = document.createElement("details");
+          more.className = "more";
+          more.innerHTML = "<summary>Other files</summary>";
+          var list = document.createElement("div");
+          [[factorySum, "Factory checksum"], [sys, "System (for updates)"], [boot, "Boot images"], [sum, "System checksum"], [bootSum, "Boot checksum"]].forEach(function (pair) {
+            if (pair[0]) list.appendChild(link(pair[0], pair[1]));
           });
+          more.appendChild(list);
+          cell.appendChild(more);
+          row.classList.add("has-dl");
           var pill = row.querySelector(".pill");
           pill.className = "pill ready";
           pill.textContent = "Ready · " + releases[i].tag_name;
