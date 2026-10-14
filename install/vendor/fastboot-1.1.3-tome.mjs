@@ -1,7 +1,7 @@
 /*
  * fastboot.js 1.1.3 (npm "android-fastboot", https://github.com/kdrag0n/fastboot.js),
  * MIT licence (fastboot.js-LICENSE.txt), bundled with zip.js (BSD licence,
- * notices below). Vendored for Tome OS's web installer with five changes,
+ * notices below). Vendored for Tome OS's web installer with six changes,
  * each marked "Tome OS:":
  *   - system_dlkm is flashed too (Pixel 8 and later have it; without it the
  *     phone would not start).
@@ -13,6 +13,8 @@
  *     super_2.img, ...) is written entirely from the bootloader, without
  *     restarting into fastbootd.
  *   - Wiping erases metadata as well as userdata, as "fastboot -w" does.
+ *   - The slot written is made the one that starts, which also clears a
+ *     failed-start count left by an earlier try.
  */
 var DebugLevel;
 (function (DebugLevel) {
@@ -8090,6 +8092,16 @@ async function flashZip(device, blob, wipe, onReconnect, onProgress = (_action, 
     if ((await device.getVariable("is-userspace")) === "yes") {
         await device.reboot("bootloader", true, onReconnect);
     }
+    // Tome OS: the super partition in pieces, written from the bootloader.
+    // They hold slot a's partitions, so slot a is made the one that starts,
+    // before the bootloader and radio are written, so they land in it too.
+    let superPieces = entries
+        .filter((e) => /(?:^|\/)super_\d+\.img$/.test(e.filename))
+        .sort((a, b) => Number(a.filename.match(/super_(\d+)\.img$/)[1]) - Number(b.filename.match(/super_(\d+)\.img$/)[1]));
+    if (superPieces.length > 0 && (await device.getVariable("current-slot"))?.replace(/^_/, "") !== "a") {
+        await device.runCommand("set_active:a");
+        await runWithTimedProgress(onProgress, "reboot", "device", BOOTLOADER_REBOOT_TIME, tryReboot(device, "bootloader", onReconnect));
+    }
     // 1. Bootloader pack
     await tryFlashImages(device, entries, onProgress, ["bootloader"]);
     await runWithTimedProgress(onProgress, "reboot", "device", BOOTLOADER_REBOOT_TIME, tryReboot(device, "bootloader", onReconnect));
@@ -8100,14 +8112,6 @@ async function flashZip(device, blob, wipe, onReconnect, onProgress = (_action, 
     let snapshotStatus = await device.getVariable("snapshot-update-status");
     if (snapshotStatus !== null && snapshotStatus !== "none") {
         await device.runCommand("snapshot-update:cancel");
-    }
-    // Tome OS: the super partition in pieces, written from the bootloader.
-    // They hold slot a's partitions, so slot a is made the one that starts.
-    let superPieces = entries
-        .filter((e) => /(?:^|\/)super_\d+\.img$/.test(e.filename))
-        .sort((a, b) => Number(a.filename.match(/super_(\d+)\.img$/)[1]) - Number(b.filename.match(/super_(\d+)\.img$/)[1]));
-    if (superPieces.length > 0) {
-        await device.runCommand("set_active:a");
     }
     // Load nested images for the following steps
     logDebug("Loading nested images from zip");
@@ -8172,9 +8176,18 @@ async function flashZip(device, blob, wipe, onReconnect, onProgress = (_action, 
         // Tome OS: metadata too, as "fastboot -w" does. It holds the storage
         // encryption keys of the system that was there before; left behind,
         // they don't match the wiped storage and the phone can't start.
+        // A bootloader that refuses is no reason to stop: the test start shows
+        // whether the phone needs a format from recovery instead.
         if ((await device.getVariable("has-slot:metadata")) !== null) {
-            await device.runCommand("erase:metadata");
+            await device.runCommand("erase:metadata").catch((e) => logDebug("Erasing metadata failed", e));
         }
+    }
+    // Tome OS: the slot just written starts next. Setting it again also
+    // clears a failed-start count an earlier try left, which would otherwise
+    // keep the phone in fastboot.
+    let slot = (await device.getVariable("current-slot"))?.replace(/^_/, "");
+    if (slot) {
+        await device.runCommand(`set_active:${slot}`);
     }
 }
 
