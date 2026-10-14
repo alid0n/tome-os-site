@@ -202,6 +202,13 @@ h1:focus { outline: none; }
 .v-boot { background: #000; align-items: center; justify-content: center; gap: 10px; padding: 14px; text-align: center; color: #fff; }
 .v-boot b { color: #fbbc05; font-size: 1.4em; }
 .v-off { background: #000; }
+.v-fbd { background: linear-gradient(#123a7a, #0a1f45); color: #fff; align-items: center; padding: 26px 12px 12px; gap: 6px; font-size: .85em; text-align: center; }
+.v-fbd img { width: 34px; margin-bottom: 4px; }
+.v-fbd .t { font-weight: 700; letter-spacing: 1px; }
+.v-fbd .menu { align-self: stretch; margin-top: 12px; display: flex; flex-direction: column; gap: 4px; text-align: left; color: #b9c9e8; }
+.v-fbd .menu div { padding: 4px 6px; border-radius: 4px; background: rgba(255,255,255,.06); }
+.handsoff { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: var(--card, rgba(255,255,255,.04)); border: 1px solid var(--line); margin: 0 0 16px; }
+.handsoff b { display: block; color: var(--text); }
 
 .laptop { width: 260px; max-width: 100%; }
 .laptop .lid { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 10px 10px 0 0; border: 3px solid #3b3150; border-bottom: 0; background: #14111b; }
@@ -471,6 +478,7 @@ h1:focus { outline: none; }
         <div id="i-back" hidden>
           <div class="callout" role="alert"><span aria-hidden="true" style="font-size:22px">👉</span><div><b>Now put it back in install mode.</b>Hold <strong>Power</strong> and <strong>Volume Down</strong> together until the fastboot screen shows, then let go. Keep it plugged in. This page carries on by itself.</div></div>
         </div>
+        <div class="handsoff" id="i-handsoff" hidden><span aria-hidden="true" style="font-size:22px">✋</span><div><b>Hands off the phone.</b><span id="i-handsoff-text">It restarts a few times and switches between two install screens by itself. Its screen going dark is normal. Don't press anything on it unless this page asks.</span></div></div>
         <div class="callout" id="i-prompt" role="alert" hidden><span aria-hidden="true" style="font-size:22px">👉</span><div><b>Your turn, on the phone.</b><span id="i-prompt-text"></span></div></div>
         <div class="meter-label"><span id="i-status" aria-live="polite">Getting ready…</span><span id="i-pct"></span></div>
         <div class="meter" id="i-meter"><i id="i-bar"></i></div>
@@ -497,6 +505,8 @@ h1:focus { outline: none; }
         <div class="v v-fb on" data-v="fb"><div class="grn">START</div><div class="bot"></div><div class="red">Fastboot Mode</div><div class="dim">PRODUCT_NAME - <span class="code-name">oriole</span></div></div>
         <div class="v v-ask" data-v="ask"><div id="ask-q">Unlock the bootloader?</div><div class="dim">Volume keys move · Power selects</div><div class="opt hl" id="ask-no">Do not unlock the bootloader</div><div class="opt" id="ask-yes">Unlock the bootloader</div></div>
         <div class="v v-tome" data-v="tome"><img src="../assets/mark.svg" alt="">TOME</div>
+        <div class="v v-off" data-v="off"></div>
+        <div class="v v-fbd" data-v="fbd"><img src="../assets/mark.svg" alt=""><div class="t">fastbootd</div><div class="dim">Tome OS install screen</div><div class="menu"><div>Reboot system now</div><div>Enter recovery</div><div>Power off</div></div></div>
       </div>
       <p class="caption" id="i-caption">Pick <b class="phone-name">Pixel 6</b> in the box, then press <b>Connect</b>.</p>
     </div>
@@ -1167,14 +1177,35 @@ async function confirmOnPhone(command, choice, verb, wantUnlocked) {
   if ((unlocked === "yes") !== wantUnlocked) throw new Error(`The phone didn't ${verb.toLowerCase()}. Press Try again.`);
 }
 
+// The practice phone follows the real one: dark while it restarts, then the
+// screen it restarts into, so the person can match what they see.
+const SCREEN_SAYS = {
+  fb: "The fastboot screen. <b>Don't press anything.</b>",
+  fbd: "Tome's second install screen. <b>Don't press anything.</b>",
+};
+let restartTimer = null;
+function phoneRestarts(target) {
+  clearTimeout(restartTimer);
+  const to = target === "fastboot" ? "fbd" : target === "bootloader" ? "fb" : null;
+  if (!to || !running) return;
+  screen(iSection, "off");
+  $("i-caption").innerHTML = "Restarting. The screen goes dark for a moment.";
+  restartTimer = setTimeout(() => { screen(iSection, to); $("i-caption").innerHTML = SCREEN_SAYS[to]; }, 2500);
+}
+{
+  const reboot = device.reboot.bind(device);
+  device.reboot = (target = "", ...rest) => { phoneRestarts(target); return reboot(target, ...rest); };
+}
+
 function onFlashProgress(action, item, progress) {
   // A restart shows progress on a timer, so only the next real step shows
   // the phone is back.
   if (action === "reboot") { if (!reconnectTimer) waitingForPhone(); } else phoneBack();
+  $("i-handsoff").hidden = false;
   if (item === "avb_custom_key") setStep("key");
   const verb = fastboot.USER_ACTION_MAP[action] || action;
   const what = { device: "the phone", package: "the file", images: "Tome OS", super: "Tome OS", avb_custom_key: "Tome OS's key", data: "the phone's storage" }[item] || item;
-  setStatus(`${verb} ${what}…`, Math.min(progress, 1));
+  setStatus(action === "reboot" ? "Restarting the phone. Its screen goes dark, then comes back by itself…" : `${verb} ${what}…`, Math.min(progress, 1));
 }
 
 // The browser only shows its "pick a USB device" list straight after a
@@ -1202,6 +1233,7 @@ $("i-test-bad").addEventListener("click", () => answer?.("bad"));
 
 function runUi() {
   running = true;
+  $("i-handsoff").hidden = true;
   drawTrail();
   $("i-ready").hidden = true;
   $("i-run").hidden = false;
@@ -1248,6 +1280,8 @@ async function guarded(work) {
     await work();
   } catch (e) {
     answer = null;
+    clearTimeout(restartTimer);
+    $("i-handsoff").hidden = true;
     hidePrompt();
     phoneBack();
     $("i-test").hidden = true;
@@ -1356,8 +1390,10 @@ async function install(connecting) {
     saved.set({ code: pack.codename, phase: "flashing" });
     // Flashes the bootloader, radio and Tome OS, then avb_pkmd.bin as the
     // phone's avb_custom_key, and erases the user data.
+    $("i-handsoff").hidden = false;
     await device.flashFactoryZip(pack.file, true, offerReconnect, onFlashProgress);
     await waitForPhone();
+    $("i-handsoff").hidden = true;
     await testThenLock();
   });
 }
