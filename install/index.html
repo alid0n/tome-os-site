@@ -218,6 +218,39 @@ h1:focus { outline: none; }
 .confetti i { position: absolute; top: -12px; width: 8px; height: 14px; border-radius: 2px; animation: fall 2.6s ease-in forwards; }
 @keyframes fall { to { transform: translateY(110vh) rotate(540deg); opacity: .2; } }
 
+/* A short picture-by-picture walkthrough (the Windows USB driver) */
+.walk { border: 1px solid rgba(181,123,255,.3); border-radius: 16px; background: rgba(24,19,31,.9); padding: 16px; margin: 0 0 16px; color: var(--text); }
+.walk h3 { margin: 0 0 12px; font-size: 17px; }
+.walk .shot { position: relative; height: 190px; border-radius: 10px; overflow: hidden; background: #1f6fb2; background: linear-gradient(135deg, #1b4f8a, #3a7cc4); margin-bottom: 12px; font-family: "Segoe UI", system-ui, sans-serif; font-size: 12px; color: #1b1b1b; }
+.walk .win { position: absolute; left: 6%; right: 6%; top: 12px; bottom: 12px; background: #f3f3f3; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.35); overflow: hidden; }
+.walk .win .tb { height: 24px; background: #e6e6e6; display: flex; align-items: center; padding: 0 10px; font-size: 11px; color: #444; gap: 6px; }
+.walk .win .body { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.walk .win.dark { background: #0c0c0c; color: #ccc; font-family: Consolas, ui-monospace, monospace; }
+.walk .win.dark .tb { background: #1f1f1f; color: #bbb; font-family: "Segoe UI", system-ui, sans-serif; }
+.walk .file { display: flex; align-items: center; gap: 8px; padding: 4px 6px; border-radius: 4px; }
+.walk .file i { width: 16px; height: 18px; border-radius: 2px; background: #f2c14e; flex: none; }
+.walk .file.zip i { background: repeating-linear-gradient(180deg, #f2c14e 0 3px, #8a6d1d 3px 5px); }
+.walk .file.inf i { background: #c9d6e8; }
+.walk .file.sel { background: #cce4f7; }
+.walk .menu { position: absolute; background: #fbfbfb; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,.25); padding: 4px; min-width: 150px; }
+.walk .menu div { padding: 5px 10px; border-radius: 4px; }
+.walk .menu .hit { background: #cce4f7; outline: 2px solid var(--talk); animation: hit 1.2s ease-in-out infinite; }
+@keyframes hit { 50% { outline-color: transparent; } }
+.walk .webbtn { align-self: flex-start; background: #1a73e8; color: #fff; padding: 6px 12px; border-radius: 4px; animation: hit 1.2s ease-in-out infinite; outline: 2px solid var(--talk); }
+.walk .type { overflow: hidden; white-space: nowrap; width: 0; animation: type 2.4s steps(40) .3s forwards; color: #f3f3f3; }
+@keyframes type { to { width: 100%; } }
+.walk .ok { opacity: 0; animation: show .1s 2.9s forwards; color: #6fe3a4; }
+@keyframes show { to { opacity: 1; } }
+.walk .start { position: absolute; left: 10px; bottom: 8px; width: 26px; height: 26px; border-radius: 5px; background: #fff; display: grid; grid-template: 1fr 1fr / 1fr 1fr; gap: 2px; padding: 5px; outline: 2px solid var(--talk); }
+.walk .start span { background: #1a73e8; border-radius: 1px; }
+.walk .words p { margin: 0 0 8px; color: var(--muted); font-size: 15px; }
+.walk .words strong { color: var(--text); }
+.walk .cmd { display: flex; gap: 8px; align-items: stretch; margin: 0 0 8px; }
+.walk .cmd code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; background: #000; color: #e6e6e6; border-radius: 8px; padding: 8px 10px; font-size: 12px; }
+.walk .nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 4px; }
+.walk .nav span { color: var(--faint); font-size: 13px; font-variant-numeric: tabular-nums; }
+.walk .nav .btn { min-height: 38px; padding: 0 16px; font-size: 15px; }
+
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 </style>
 </head>
@@ -413,9 +446,11 @@ h1:focus { outline: none; }
 
       <div id="i-ready">
         <div class="notice" id="i-wait-dl" hidden><p>Waiting for the download to finish: <span id="i-wait-pct"></span></p></div>
-        <ul class="checks" id="i-driver" hidden>
-          <li><label><input type="checkbox" id="i-driver-ok"><span>I've installed Google's USB driver<small>This version of Tome OS restarts the phone into a second fastboot screen part way through, and Windows can't see the phone there without <a href="https://developer.android.com/studio/run/win-usb">Google's USB driver</a>. Install it before starting.</small></span></label></li>
-        </ul>
+        <div id="i-driver" hidden>
+          <p class="say" style="margin-bottom:14px"><strong>One thing first on Windows.</strong> Part way through, the phone switches to a second install screen, and Windows can't see it there without Google's USB driver. It takes about two minutes.</p>
+          <div class="walk" data-walk="before"></div>
+          <ul class="checks"><li><label><input type="checkbox" id="i-driver-ok"><span>I've installed the driver</span></label></li></ul>
+        </div>
         <div class="row"><button class="btn primary" id="i-connect">Erase the phone and install</button></div>
         <p class="fine">Everything on the phone is erased and replaced with Tome OS. This can't be undone.</p>
       </div>
@@ -442,7 +477,10 @@ h1:focus { outline: none; }
         <p class="fine" id="i-keep"><strong>Don't unplug the phone or close this page</strong> until it says it's finished, even if the phone's screen changes.</p>
         <div class="notice" id="i-reconnect" hidden style="margin-top:16px">
           <p><strong>Waiting for the phone to come back.</strong> If it shows a fastboot screen but nothing happens here, press <strong>Reconnect</strong> and pick the phone again. Don't unplug it.</p>
-          <p id="i-reconnect-win" hidden style="margin-top:6px">If the phone isn't in the list, Windows needs <a href="https://developer.android.com/studio/run/win-usb">Google's USB driver</a> to see it on this screen. Install it, then press Reconnect. The install carries on where it was.</p>
+          <div id="i-reconnect-win" hidden style="margin-top:10px">
+            <p style="margin-bottom:10px"><strong>Phone not in the list?</strong> Windows needs Google's USB driver to see it on this screen. Leave the phone as it is and follow these steps. The install carries on where it was.</p>
+            <div class="walk" data-walk="during"></div>
+          </div>
           <p style="margin-top:10px"><button class="btn" id="i-reconnect-btn">Reconnect</button></p>
         </div>
         <div class="notice bad" id="i-error" role="alert" hidden style="margin-top:16px"></div>
@@ -1354,6 +1392,58 @@ function startLock() {
     }
   }
 }
+
+// ----- The Windows USB driver, picture by picture -----
+// fastbootd (the second fastboot screen) has no Microsoft OS descriptors, so
+// Windows binds no driver to it until Google's is in its driver store.
+// pnputil adds it there and binds it to a phone already plugged in.
+const DRIVER_CMD = 'pnputil /add-driver (Get-ChildItem "$env:USERPROFILE\\Downloads" -Recurse -Filter android_winusb.inf | Select-Object -First 1).FullName /install';
+const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+function driverFrames(last) {
+  return [
+    { title: "Download the driver",
+      shot: '<div class="win"><div class="tb">tome-os.com/install</div><div class="body"><b>Get the Google USB Driver</b><span class="webbtn">Download the driver</span><span>usb_driver_r13-windows.zip</span></div></div>',
+      words: '<p><a class="btn primary" href="https://dl.google.com/android/repository/usb_driver_r13-windows.zip">Download the driver</a></p><p style="font-size:14px">It\u2019s Google\u2019s own file. If that link doesn\u2019t download, get it from <a href="https://developer.android.com/studio/run/win-usb" target="_blank" rel="noopener">Google\u2019s driver page</a> instead.</p>' },
+    { title: "Unzip it",
+      shot: '<div class="win"><div class="tb">📁 Downloads</div><div class="body"><div class="file zip sel"><i></i>usb_driver_r13-windows.zip</div><div class="file"><i></i>Pictures</div></div><div class="menu" style="left:42%;top:44px"><div>Open</div><div class="hit">Extract All…</div><div>Share</div></div></div>',
+      words: "<p>Open your <strong>Downloads</strong> folder. Right-click the zip file, choose <strong>Extract All</strong>, then <strong>Extract</strong>.</p>" },
+    { title: "Open Terminal as administrator",
+      shot: '<div class="start"><span></span><span></span><span></span><span></span></div><div class="menu" style="left:44px;bottom:8px"><div>Device Manager</div><div class="hit">Terminal (Admin)</div><div>Task Manager</div><div>Settings</div></div>',
+      words: "<p>Right-click the <strong>Start</strong> button and choose <strong>Terminal (Admin)</strong>. On Windows 10 it\u2019s called <strong>Windows PowerShell (Admin)</strong>. Choose <strong>Yes</strong> when Windows asks.</p>" },
+    { title: "Paste this and press Enter",
+      shot: '<div class="win dark"><div class="tb">Administrator: Windows PowerShell</div><div class="body"><span>PS C:\\Windows\\system32&gt;</span><span class="type">pnputil /add-driver … android_winusb.inf /install</span><span class="ok">Driver package added successfully.</span></div></div>',
+      words: `<div class="cmd"><code>${esc(DRIVER_CMD)}</code><button class="btn" data-copy>Copy</button></div><p>Copy this, click in the Terminal window, right-click to paste, and press <strong>Enter</strong>. It should say <strong>Driver package added successfully</strong>.</p>` },
+    last,
+  ];
+}
+function walk(el, frames) {
+  let i = 0;
+  const draw = () => {
+    const f = frames[i];
+    el.innerHTML = `<h3>${i + 1}. ${f.title}</h3><div class="shot" aria-hidden="true">${f.shot}</div><div class="words">${f.words}</div><div class="nav"><button class="btn" data-back${i ? "" : " disabled"}>Back</button><span>${i + 1} of ${frames.length}</span><button class="btn${i < frames.length - 1 ? " primary" : ""}" data-fwd${i < frames.length - 1 ? "" : " disabled"}>Next</button></div>`;
+    el.querySelector("[data-back]").onclick = () => { i = Math.max(0, i - 1); draw(); };
+    el.querySelector("[data-fwd]").onclick = () => { i = Math.min(frames.length - 1, i + 1); draw(); };
+    const copy = el.querySelector("[data-copy]");
+    if (copy) copy.onclick = () => {
+      navigator.clipboard.writeText(DRIVER_CMD).then(() => { copy.textContent = "Copied"; }, () => {
+        const r = document.createRange(); r.selectNodeContents(el.querySelector(".cmd code"));
+        getSelection().removeAllRanges(); getSelection().addRange(r);
+      });
+    };
+  };
+  draw();
+}
+const notFound = '<p style="font-size:14px">Still not working? Open <strong>Device Manager</strong> (right-click Start), right-click the phone (usually under Other devices, with a yellow mark), choose <strong>Update driver</strong>, <strong>Browse my computer</strong>, <strong>Let me pick</strong>, <strong>Have Disk</strong>, pick the unzipped <code>usb_driver</code> folder, then <strong>Android Bootloader Interface</strong>.</p>';
+walk(document.querySelector('[data-walk="before"]'), driverFrames({
+  title: "That's it",
+  shot: '<div class="win dark"><div class="tb">Administrator: Windows PowerShell</div><div class="body"><span class="ok" style="opacity:1">Driver package added successfully.</span></div></div>',
+  words: "<p>Close the Terminal window, tick <strong>I\u2019ve installed the driver</strong> below and start the install.</p>",
+}));
+walk(document.querySelector('[data-walk="during"]'), driverFrames({
+  title: "Press Reconnect",
+  shot: '<div class="win"><div class="tb">tome-os.com wants to connect</div><div class="body"><div class="file sel"><i style="background:#3ddc84"></i>Pixel (fastboot)</div><span class="webbtn" style="align-self:flex-end">Connect</span></div></div>',
+  words: "<p>Press <strong>Reconnect</strong> below, pick the phone and press <strong>Connect</strong>. The install carries on by itself.</p>" + notFound,
+}));
 
 // ----- 8. Done -----
 enter.done = (s) => {
