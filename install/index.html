@@ -766,9 +766,16 @@ enter.download = (s) => {
 };
 $("dl-use-file").addEventListener("click", showManual);
 
+// A rebuilt Tome OS keeps its file names, so a kept file is only carried on
+// from when GitHub's id for it is the one it was downloaded from.
+const dlIds = {
+  get() { try { return JSON.parse(localStorage.getItem("tome-download-ids")) || {}; } catch (e) { return {}; } },
+  set(name, id) { try { localStorage.setItem("tome-download-ids", JSON.stringify({ ...this.get(), [name]: id })); } catch (e) { /* private window */ } },
+};
+
 async function fetchInto(dir, asset, onBytes) {
   const handle = await dir.getFileHandle(asset.name, { create: true });
-  let have = (await handle.getFile()).size;
+  let have = dlIds.get()[asset.name] === asset.id ? (await handle.getFile()).size : 0;
   if (have === asset.size) { onBytes(have); return handle.getFile(); }
   if (have > asset.size) have = 0;
   const res = await fetch(`${DOWNLOAD_RELAY}/${build.tag}/${asset.name}`, { headers: have ? { Range: `bytes=${have}-` } : {} });
@@ -776,6 +783,7 @@ async function fetchInto(dir, asset, onBytes) {
   if (!res.ok) throw new Error(`The download server answered ${res.status}.`);
   const out = await handle.createWritable({ keepExistingData: have > 0 });
   if (have) await out.seek(have); else await out.truncate(0);
+  dlIds.set(asset.name, asset.id);
   onBytes(have);
   const reader = res.body.getReader();
   try {
@@ -852,6 +860,7 @@ $("dl-start").addEventListener("click", () => {
     $("dl-mini-text").textContent = "Ready to install";
     $("dl-bar").style.width = $("dl-mini").style.width = "100%";
     $("i-wait-dl").hidden = true;
+    if (at === 6 && !running) enter.install();
     return p;
   }).catch((e) => {
     downloading = null;
@@ -1078,9 +1087,11 @@ enter.install = () => {
   $("i-phone").hidden = true;
   $("i-caption").innerHTML = `Your browser asks which phone to use. Pick <b>${PHONES[code] || "your phone"}</b>, then press <b>Connect</b>.`;
   $("i-wait-dl").hidden = !!pack || !downloading;
-  const needDriver = hostOs === "Windows" && (!pack || pack.fastbootd);
+  // Only a Tome OS that installs through fastbootd needs Google's driver on
+  // Windows, and the download says which, so Windows waits for it here.
+  const needDriver = hostOs === "Windows" && !!pack?.fastbootd;
   $("i-driver").hidden = !needDriver;
-  $("i-connect").disabled = (!pack && !downloading) || (needDriver && !$("i-driver-ok").checked);
+  $("i-connect").disabled = (!pack && (!downloading || hostOs === "Windows")) || (needDriver && !$("i-driver-ok").checked);
   if (!pack && !downloading) {
     $("i-wait-dl").hidden = false;
     $("i-wait-dl").innerHTML = '<p>Tome OS hasn\'t been downloaded yet. <button class="link" id="i-to-dl">Go to the download step</button></p>';
@@ -1433,7 +1444,9 @@ function startLock() {
 // fastbootd (the second fastboot screen) has no Microsoft OS descriptors, so
 // Windows binds no driver to it until Google's is in its driver store.
 // pnputil adds it there and binds it to a phone already plugged in.
-const DRIVER_CMD = 'pnputil /add-driver (Get-ChildItem "$env:USERPROFILE\\Downloads" -Recurse -Filter android_winusb.inf | Select-Object -First 1).FullName /install';
+// Wrapped in powershell so it runs the same pasted into Command Prompt, and
+// with no "$" for an outer PowerShell to expand.
+const DRIVER_CMD = 'powershell -NoProfile -Command "pnputil /add-driver (Get-ChildItem ~\\Downloads -Recurse -Filter android_winusb.inf | Select-Object -First 1).FullName /install"';
 const esc = (t) => t.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 function driverFrames(last) {
   return [
@@ -1445,10 +1458,10 @@ function driverFrames(last) {
       words: "<p>Open your <strong>Downloads</strong> folder. Right-click the zip file, choose <strong>Extract All</strong>, then <strong>Extract</strong>.</p>" },
     { title: "Open Terminal as administrator",
       shot: '<div class="start"><span></span><span></span><span></span><span></span></div><div class="menu" style="left:44px;bottom:8px"><div>Device Manager</div><div class="hit">Terminal (Admin)</div><div>Task Manager</div><div>Settings</div></div>',
-      words: "<p>Right-click the <strong>Start</strong> button and choose <strong>Terminal (Admin)</strong>. On Windows 10 it\u2019s called <strong>Windows PowerShell (Admin)</strong>. Choose <strong>Yes</strong> when Windows asks.</p>" },
+      words: "<p>Right-click the <strong>Start</strong> button and choose <strong>Terminal (Admin)</strong>. On Windows 10 it\u2019s called <strong>Windows PowerShell (Admin)</strong>. Choose <strong>Yes</strong> when Windows asks. The window\u2019s title should start with <strong>Administrator</strong>.</p>" },
     { title: "Paste this and press Enter",
       shot: '<div class="win dark"><div class="tb">Administrator: Windows PowerShell</div><div class="body"><span>PS C:\\Windows\\system32&gt;</span><span class="type">pnputil /add-driver … android_winusb.inf /install</span><span class="ok">Driver package added successfully.</span></div></div>',
-      words: `<div class="cmd"><code>${esc(DRIVER_CMD)}</code><button class="btn" data-copy>Copy</button></div><p>Copy this, click in the Terminal window, right-click to paste, and press <strong>Enter</strong>. It should say <strong>Driver package added successfully</strong>.</p>` },
+      words: `<div class="cmd"><code>${esc(DRIVER_CMD)}</code><button class="btn" data-copy>Copy</button></div><p>Copy this, click in that window, right-click to paste, and press <strong>Enter</strong>. It should say <strong>Driver package added successfully</strong>. If it says access is denied, the window isn\u2019t an Administrator one: close it and open it again as above.</p>` },
     last,
   ];
 }
