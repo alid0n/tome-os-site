@@ -200,23 +200,70 @@ h1:focus { outline: none; }
 .toast.on { opacity: 1; }
 .ripple { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; background: rgba(255,255,255,.45); animation: ripple .5s ease-out forwards; pointer-events: none; }
 @keyframes ripple { from { transform: scale(.2); opacity: 1; } to { transform: scale(2); opacity: 0; } }
-.v-fb, .v-ask { background: #000; color: #fff; font-family: var(--mono); padding: 22px 10px 10px; gap: 4px; font-size: .9em; }
-.v-fb .bot { align-self: center; width: 44px; height: 30px; margin: 10px 0 14px; border-radius: 6px 6px 3px 3px; background: #3ddc84; transform: rotate(-90deg); position: relative; }
-.v-fb .bot::after { content: ""; position: absolute; left: 8px; top: -12px; width: 28px; height: 14px; border-radius: 14px 14px 0 0; background: #3ddc84; }
-.v-fb .grn { color: #3ddc84; font-weight: 700; } .v-fb .red { color: #ff5a5a; } .dim { color: #9a9a9a; }
-.v-ask { gap: 6px; }
-.v-ask .opt { padding: 4px 6px; border-radius: 4px; }
-.v-ask .opt.hl { background: #fff; color: #000; font-weight: 700; }
+/* The phone's own screens, drawn like the real ones: the Pixel bootloader
+   (fastboot and its unlock/lock question), Tome OS's recovery in fastbootd,
+   Tome's start and welcome screens, and the power menu. */
+.v-fb, .v-ask, .v-unl { background: #000; color: #fff; font-family: Roboto, "Segoe UI", system-ui, sans-serif; padding: 56% 8px 8px; gap: 2px; }
+.fb-pick { position: absolute; right: 4px; top: 13%; max-width: 70%; text-align: right; font-size: 1.45em; font-weight: 700; line-height: 1.1; display: flex; align-items: center; gap: 3px; justify-content: flex-end; }
+.fb-pick::after { content: ""; flex: none; border: .35em solid transparent; border-left-color: currentColor; margin-right: -.4em; }
+.v-fb .bot { align-self: center; width: 52%; margin: 0 0 6px; }
+.fb-title { font-size: 1.35em; font-weight: 700; margin-bottom: 2px; }
+.fb-info { font-size: .82em; line-height: 1.45; color: #e8e8e8; }
+.grn { color: #3ddc84; } .red { color: #ff5a5a; } .dim { color: #9a9a9a; }
+.v-ask .ask-q { font-size: 1.25em; font-weight: 700; margin-bottom: 4px; }
+.v-ask p { margin: 0 0 5px; font-size: .78em; line-height: 1.35; color: #ddd; }
+.v-unl { align-items: center; justify-content: center; text-align: center; padding: 10px; gap: 6px; }
+.v-unl b { color: #ff8a00; font-size: 2em; line-height: 1; }
+.v-unl p { margin: 0; font-size: .85em; color: #ddd; }
+.v-unl .o { color: #ff8a00; font-weight: 700; }
 .v-boot { background: #000; align-items: center; justify-content: center; gap: 10px; padding: 14px; text-align: center; color: #fff; }
 .v-boot b { color: #fbbc05; font-size: 1.4em; }
 .v-off { background: #000; }
-.v-fbd { background: linear-gradient(#123a7a, #0a1f45); color: #fff; align-items: center; padding: 26px 12px 12px; gap: 6px; font-size: .85em; text-align: center; }
-.v-fbd img { width: 34px; margin-bottom: 4px; }
-.v-fbd .t { font-weight: 700; letter-spacing: 1px; }
-.v-fbd .menu { align-self: stretch; margin-top: 12px; display: flex; flex-direction: column; gap: 4px; text-align: left; color: #b9c9e8; }
-.v-fbd .menu div { padding: 4px 6px; border-radius: 4px; background: rgba(255,255,255,.06); }
+.v-tome { align-items: center; justify-content: center; background: radial-gradient(circle at 50% 46%, rgba(157,123,255,.28), transparent 50%), #000; }
+.v-tome img { width: 62%; filter: drop-shadow(0 0 10px rgba(157,123,255,.7)); }
+.v-welcome { align-items: center; background: #000; color: #efeaff; padding: 30% 10px 10px; gap: 6px; text-align: center; }
+.v-welcome img { width: 52%; filter: drop-shadow(0 0 10px rgba(157,123,255,.6)); }
+.v-welcome .wl-h { font-size: 1.6em; line-height: 1.15; margin-top: 6px; }
+.v-welcome .wl-lang { color: #b9b0d0; font-size: .9em; }
+.v-welcome .wl-go { position: absolute; right: 10px; bottom: 14px; padding: 4px 12px; border-radius: 12px; background: #b57bff; color: #0c0a12; font-weight: 600; }
+.v-pmenu { background: rgba(0,0,0,.82); align-items: center; justify-content: center; }
+.v-pmenu .pm { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 86%; }
+.v-pmenu .pm div { aspect-ratio: 1; border-radius: 14px; background: #2b2633; color: #efeaff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: .95em; }
+.v-pmenu .pm i { font-style: normal; font-size: 1.8em; line-height: 1; }
+.v-pmenu .pm .hit { background: #b57bff; color: #14102b; box-shadow: 0 0 0 2px var(--talk); }
+.v-fbd { background: #14102b; color: #efeaff; align-items: center; padding: 22% 8px 8px; gap: 3px; text-align: center; font-family: Roboto, system-ui, sans-serif; }
+.v-fbd img { width: 46%; margin-bottom: 6px; }
+.v-fbd .h { color: #f2b84b; font-size: .9em; }
+.v-fbd .menu { align-self: stretch; margin-top: 10px; display: flex; flex-direction: column; text-align: left; background: #1f1842; }
+.v-fbd .menu div { padding: 4px 6px; }
+.v-fbd .menu .sel { background: #f2b84b; color: #14102b; }
 .handsoff { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: var(--card, rgba(255,255,255,.04)); border: 1px solid var(--line); margin: 0 0 16px; }
 .handsoff b { display: block; color: var(--text); }
+
+/* "Look at your phone": a big card with a picture of the phone and what to
+   press, kept in view. On small screens it goes above the list and the big
+   practice phone steps aside, so the card and its buttons fit the screen. */
+.look { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 20px; align-items: start; padding: 18px; border-radius: 18px; border: 2px solid var(--talk); background: linear-gradient(160deg, rgba(92,200,255,.14), rgba(24,19,31,.96) 60%); box-shadow: 0 0 0 4px rgba(92,200,255,.1); margin: 0 0 18px; scroll-margin: 12px; animation: look 1.8s ease-in-out infinite; }
+@keyframes look { 50% { box-shadow: 0 0 0 4px rgba(92,200,255,.18), 0 0 36px rgba(92,200,255,.35); } }
+.look-tag { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--talk); }
+.look-h { display: block; font-size: 22px; line-height: 1.25; margin: 4px 0 10px; color: var(--text); }
+.look-steps { margin: 0 0 12px; padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; color: var(--muted); }
+.look-steps b, .look-words p strong { color: var(--text); }
+.look-words p { margin: 0 0 12px; color: var(--muted); font-size: 15px; }
+.look-pic { display: flex; justify-content: center; padding-right: 10px; }
+.look .phone { width: 120px; height: 246px; margin: 0; border-radius: 22px; box-shadow: 0 0 30px rgba(92,200,255,.18); }
+.look .scr { inset: 5px; border-radius: 17px; font-size: 6.4px; }
+.look .finger { right: -32px; width: 24px; height: 14px; }
+.look .walk { margin-top: 10px; }
+@media (max-width: 760px) {
+  #i-run { display: flex; flex-direction: column; }
+  #i-run > .look { order: -1; }
+  .look { grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 14px; }
+  .look .phone { width: 96px; height: 197px; border-radius: 18px; }
+  .look .scr { inset: 4px; border-radius: 14px; font-size: 5.1px; }
+  .look-h { font-size: 19px; }
+  .step:has(.look:not([hidden])) .visual, .step:has(.look:not([hidden])) .say { display: none; }
+}
 
 .laptop { width: 260px; max-width: 100%; }
 .laptop .lid { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 10px 10px 0 0; border: 3px solid #3b3150; border-bottom: 0; background: #14111b; }
@@ -266,6 +313,16 @@ h1:focus { outline: none; }
 .walk .nav span { color: var(--faint); font-size: 13px; font-variant-numeric: tabular-nums; }
 .walk .nav .btn { min-height: 38px; padding: 0 16px; font-size: 15px; }
 
+/* The live log under each step, with a copy button */
+.log { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 10px; }
+.log summary { cursor: pointer; color: var(--faint); font-size: 14px; display: flex; gap: 8px; align-items: baseline; list-style: none; }
+.log summary::-webkit-details-marker { display: none; }
+.log summary::before { content: "›"; transition: transform .15s; }
+.log[open] summary::before { transform: rotate(90deg); }
+.log summary .last { font-family: var(--mono); font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+.log pre { margin: 8px 0; max-height: 220px; overflow: auto; background: #000; color: #d8d2e6; border-radius: 10px; padding: 10px 12px; font-family: var(--mono); font-size: 12px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.log .btn { min-height: 36px; padding: 0 14px; font-size: 14px; }
+
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 </style>
 </head>
@@ -308,7 +365,7 @@ h1:focus { outline: none; }
       </div></details>
     </div>
     <div class="visual" data-phone>
-      <div class="v v-tome on" data-v="tome"><img src="../assets/mark.svg" alt="">TOME</div>
+      <div class="v v-tome on" data-v="tome"><img src="../assets/mark.svg" alt=""></div>
       <div class="v v-set" data-v="about"><div class="ttl">About phone</div><div class="it"><div>Device name<small>My phone</small></div></div><div class="it tap"><div>Model<small>Pixel 6</small></div></div><div class="it"><div>Android version<small>15</small></div></div></div>
     </div>
   </section>
@@ -352,7 +409,7 @@ h1:focus { outline: none; }
       <div class="row"><button class="btn primary" data-next disabled>I've backed everything up</button></div>
     </div>
     <div class="visual" data-phone>
-      <div class="v v-tome on" data-v="tome"><img src="../assets/mark.svg" alt="">TOME</div>
+      <div class="v v-tome on" data-v="tome"><img src="../assets/mark.svg" alt=""></div>
       <div class="v v-off" data-v="off"></div>
     </div>
   </section>
@@ -435,7 +492,7 @@ h1:focus { outline: none; }
       <h1 tabindex="-1">Put the phone in install mode</h1>
       <p class="say">Watch the practice phone, then do the same on yours. It's two buttons held together.</p>
       <ol class="ticks plain" id="fb-list">
-        <li data-s="now">Turn the phone off</li>
+        <li data-s="now">Turn the phone off<small>Hold Power and Volume Up together, then tap Power off.</small></li>
         <li data-s="todo">Hold Volume Down, then also hold Power</li>
         <li data-s="todo">Let go when you see an Android lying on its back</li>
         <li data-s="todo">Plug it in with the USB cable</li>
@@ -448,9 +505,10 @@ h1:focus { outline: none; }
       </div></details>
     </div>
     <div class="visual" data-phone>
-      <div class="v v-tome on" data-v="tome"><img src="../assets/mark.svg" alt="">TOME</div>
+      <div class="v v-tome on" data-v="tome"><img src="../assets/mark.svg" alt=""></div>
       <div class="v v-off" data-v="off"></div>
-      <div class="v v-fb" data-v="fb"><div class="grn">START</div><div class="bot"></div><div class="red">Fastboot Mode</div><div class="dim">PRODUCT_NAME - <span class="code-name">oriole</span></div><div class="dim">DEVICE STATE - locked</div></div>
+      <div class="v v-pmenu" data-v="pmenu"></div>
+      <div class="v v-fb" data-v="fb"></div>
     </div>
   </section>
 
@@ -481,26 +539,57 @@ h1:focus { outline: none; }
           <li data-step="test" data-s="todo">Check Tome OS starts</li>
           <li data-step="lock" data-s="todo">Lock it again so it stays secure</li>
         </ol>
-        <div id="i-test" hidden>
-          <div class="callout" role="alert"><span aria-hidden="true" style="font-size:22px">👀</span><div><b>Watch the phone.</b>It's starting Tome OS for the first time, which takes up to 5 minutes. First it shows an orange warning, which is normal while it's unlocked. Wait for the Tome welcome screen, but don't set it up yet: locking erases it once more.</div></div>
-          <div class="row" style="margin-bottom:18px"><button class="btn primary" id="i-test-ok">I see the welcome screen</button><button class="link" id="i-test-bad">It's stuck on the Google logo, or keeps restarting</button></div>
+        <div class="look" id="i-test" role="alert" hidden>
+          <div class="look-pic" data-phone><div class="v v-unl on" data-v="unl"></div><div class="v v-welcome" data-v="welcome"></div></div>
+          <div class="look-words">
+            <span class="look-tag">Watch your phone</span>
+            <b class="look-h">Wait for the Tome welcome screen</b>
+            <p>It's starting Tome OS for the first time, which takes up to 5 minutes. First it shows an orange warning, which is normal while it's unlocked. Don't set it up yet: locking erases it once more.</p>
+            <div class="row"><button class="btn primary" id="i-test-ok">I see the welcome screen</button><button class="link" id="i-test-bad">It's stuck on the Google logo, or keeps restarting</button></div>
+          </div>
         </div>
-        <div id="i-back" hidden>
-          <div class="callout" role="alert"><span aria-hidden="true" style="font-size:22px">👉</span><div><b>Now put it back in install mode.</b>Hold <strong>Power</strong> and <strong>Volume Down</strong> together until the fastboot screen shows, then let go. Keep it plugged in. This page carries on by itself.</div></div>
+        <div class="look" id="i-back" role="alert" hidden>
+          <div class="look-pic" data-phone><div class="v v-welcome on" data-v="welcome"></div><div class="v v-pmenu" data-v="pmenu"></div><div class="v v-off" data-v="off"></div><div class="v v-fb" data-v="fb"></div></div>
+          <div class="look-words">
+            <span class="look-tag">Your turn, on the phone</span>
+            <b class="look-h">Put it back in install mode</b>
+            <ol class="look-steps">
+              <li>Hold <b>Power</b> to turn the phone off first. When a menu shows, tap <b>Power off</b>.</li>
+              <li>Once the screen is dark, hold <b>Volume Down</b> and <b>Power</b> together.</li>
+              <li>Let go when the fastboot screen shows. Keep it plugged in.</li>
+            </ol>
+            <p>This page carries on by itself. <button class="link" id="i-back-stuck">It's on the fastboot screen, but this page hasn't moved on</button></p>
+          </div>
         </div>
         <div class="handsoff" id="i-handsoff" hidden><span aria-hidden="true" style="font-size:22px">✋</span><div><b>Hands off the phone.</b><span id="i-handsoff-text">It restarts a few times and switches between two install screens by itself. Its screen going dark is normal. Don't press anything on it unless this page asks.</span></div></div>
-        <div class="callout" id="i-prompt" role="alert" hidden><span aria-hidden="true" style="font-size:22px">👉</span><div><b>Your turn, on the phone.</b><span id="i-prompt-text"></span></div></div>
+        <div class="look" id="i-prompt" role="alert" hidden>
+          <div class="look-pic" data-phone><div class="v v-ask on" data-v="ask"></div></div>
+          <div class="look-words">
+            <span class="look-tag">Look at your phone</span>
+            <b class="look-h" id="i-prompt-h">Unlock the bootloader on the phone</b>
+            <ol class="look-steps">
+              <li>Press <b>Volume Down</b> until the top of the screen says <b class="ask-want">"Unlock the bootloader"</b>.</li>
+              <li>Press <b>Power</b>.</li>
+            </ol>
+            <p>Nothing to tap on the screen: it's the buttons on the side. This page carries on by itself.</p>
+          </div>
+        </div>
+        <div class="look" id="i-reconnect" hidden>
+          <div class="look-pic" data-phone><div class="v v-fb on" data-v="fb"></div></div>
+          <div class="look-words">
+            <span class="look-tag">Your turn, on this <span class="host-noun">computer</span></span>
+            <b class="look-h">Reconnect your phone</b>
+            <p>The phone restarted and came back as a new USB device, so the browser needs your permission to use it again. Press the button, pick the phone and press <strong>Connect</strong>. Don't unplug it: the install carries on where it was.</p>
+            <div class="row"><button class="btn primary" id="i-reconnect-btn">Reconnect your phone</button></div>
+            <div id="i-reconnect-win" hidden style="margin-top:14px">
+              <p><strong>Phone not in the list?</strong> Windows needs Google's USB driver to see it on this screen. Leave the phone as it is and follow these steps.</p>
+              <div class="walk" data-walk="during"></div>
+            </div>
+          </div>
+        </div>
         <div class="meter-label"><span id="i-status" aria-live="polite">Getting ready…</span><span id="i-pct"></span></div>
         <div class="meter" id="i-meter"><i id="i-bar"></i></div>
         <p class="fine" id="i-keep"><strong>Don't unplug the phone or close this page</strong> until it says it's finished, even if the phone's screen changes.</p>
-        <div class="notice" id="i-reconnect" hidden style="margin-top:16px">
-          <p><strong>Waiting for the phone to come back.</strong> If it shows a fastboot screen but nothing happens here, press <strong>Reconnect</strong> and pick the phone again. Don't unplug it.</p>
-          <div id="i-reconnect-win" hidden style="margin-top:10px">
-            <p style="margin-bottom:10px"><strong>Phone not in the list?</strong> Windows needs Google's USB driver to see it on this screen. Leave the phone as it is and follow these steps. The install carries on where it was.</p>
-            <div class="walk" data-walk="during"></div>
-          </div>
-          <p style="margin-top:10px"><button class="btn" id="i-reconnect-btn">Reconnect</button></p>
-        </div>
         <div class="notice bad" id="i-error" role="alert" hidden style="margin-top:16px"></div>
         <div class="row" id="i-retry-row" hidden><button class="btn primary" id="i-retry">Try again</button></div>
       </div>
@@ -512,11 +601,14 @@ h1:focus { outline: none; }
     <div class="visual" id="i-visual">
       <div class="laptop" id="i-laptop"><div class="lid"><div class="dialog"><div class="q">tome-os.com wants to connect</div><div class="d"><span class="phone-name">Pixel 6</span></div><div class="b"><span>Cancel</span><span class="go">Connect</span></div></div></div><div class="base"></div></div>
       <div data-phone hidden id="i-phone">
-        <div class="v v-fb on" data-v="fb"><div class="grn">START</div><div class="bot"></div><div class="red">Fastboot Mode</div><div class="dim">PRODUCT_NAME - <span class="code-name">oriole</span></div></div>
-        <div class="v v-ask" data-v="ask"><div id="ask-q">Unlock the bootloader?</div><div class="dim">Volume keys move · Power selects</div><div class="opt hl" id="ask-no">Do not unlock the bootloader</div><div class="opt" id="ask-yes">Unlock the bootloader</div></div>
-        <div class="v v-tome" data-v="tome"><img src="../assets/mark.svg" alt="">TOME</div>
+        <div class="v v-fb on" data-v="fb"></div>
+        <div class="v v-ask" data-v="ask"></div>
+        <div class="v v-unl" data-v="unl"></div>
+        <div class="v v-welcome" data-v="welcome"></div>
+        <div class="v v-pmenu" data-v="pmenu"></div>
+        <div class="v v-tome" data-v="tome"><img src="../assets/mark.svg" alt=""></div>
         <div class="v v-off" data-v="off"></div>
-        <div class="v v-fbd" data-v="fbd"><img src="../assets/mark.svg" alt=""><div class="t">fastbootd</div><div class="dim">Tome OS install screen</div><div class="menu"><div>Reboot system now</div><div>Enter recovery</div><div>Power off</div></div></div>
+        <div class="v v-fbd" data-v="fbd"></div>
       </div>
       <p class="caption" id="i-caption">Pick <b class="phone-name">Pixel 6</b> in the box, then press <b>Connect</b>.</p>
     </div>
@@ -537,7 +629,7 @@ h1:focus { outline: none; }
     </div>
     <div class="visual" data-phone>
       <div class="v v-boot on" data-v="boot"><b>!</b><div>Your device is loading a different operating system.</div></div>
-      <div class="v v-tome" data-v="tome"><img src="../assets/mark.svg" alt="">TOME</div>
+      <div class="v v-tome" data-v="tome"><img src="../assets/mark.svg" alt=""></div>
     </div>
   </section>
 </main>
@@ -607,25 +699,99 @@ let pack = null;          // the factory zip, once it checks out
 let downloading = null;   // the running download, a promise for the joined file
 let running = false;
 
+// ----- The live log under each step -----
+// What the page is doing, line by line ("Waiting for fastboot", "Flashing
+// boot_a, 42 of 64 MB"), under each step, with a button that copies all of
+// it for a bug report. A line with a key replaces the last line if that had
+// the same key, so progress counts up in place.
+const logLines = [];
+const LOG_START = new Date();
+function log(text, key = null) {
+  const step = steps[at]?.dataset.step || "phone";
+  const stamp = new Date().toTimeString().slice(0, 8);
+  const last = logLines[logLines.length - 1];
+  if (key && last && last.key === key && last.step === step) Object.assign(last, { text, stamp });
+  else logLines.push({ text, key, step, stamp });
+  if (logLines.length > 5000) logLines.splice(0, 1000);
+  drawLog(step);
+}
+function drawLog(step) {
+  const box = steps.find((s) => s.dataset.step === step)?.querySelector(".log");
+  if (!box) return;
+  const mine = logLines.filter((l) => l.step === step);
+  const pre = box.querySelector("pre");
+  const atEnd = pre.scrollTop + pre.clientHeight >= pre.scrollHeight - 4;
+  pre.textContent = mine.map((l) => `${l.stamp}  ${l.text}`).join("\n");
+  if (atEnd) pre.scrollTop = pre.scrollHeight;
+  box.querySelector(".last").textContent = mine.length ? mine[mine.length - 1].text : "";
+}
+function logReport() {
+  const head = [`Tome OS installer log, started ${LOG_START.toISOString()}`, navigator.userAgent,
+    `Phone: ${code || "not chosen"}${pack ? `, Tome OS ${pack.version}` : build ? `, Tome OS ${build.version}` : ""}`, ""];
+  return head.concat(logLines.map((l) => `${l.stamp}  [${l.step}] ${l.text}`)).join("\n");
+}
+steps.forEach((s) => {
+  s.querySelector(".words").insertAdjacentHTML("beforeend", '<details class="log"><summary><span>Details</span><span class="last"></span></summary><pre></pre><div class="row"><button class="btn" data-copy-log>Copy the log</button></div></details>');
+});
+$$("[data-copy-log]").forEach((b) => b.addEventListener("click", () => {
+  navigator.clipboard.writeText(logReport()).then(() => { b.textContent = "Copied"; setTimeout(() => { b.textContent = "Copy the log"; }, 1500); }, () => {
+    const pre = b.closest(".log").querySelector("pre");
+    pre.textContent = logReport();
+    const r = document.createRange(); r.selectNodeContents(pre);
+    getSelection().removeAllRanges(); getSelection().addRange(r);
+  });
+}));
+
 // ----- Timers for the practice phone's animations, cleared on each step -----
 let timers = [];
 const later = (fn, ms) => timers.push(setTimeout(fn, ms));
 const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
 
 // ----- The practice phone -----
+// The screens a phone can show, drawn like the real ones. The Pixel
+// bootloader shows the choice the volume keys move through at the top right,
+// next to the power key, which selects it.
+const ROBOT = '<svg class="bot" viewBox="0 0 120 62" aria-hidden="true"><g fill="#3ddc84"><path d="M31 11a20 20 0 0 0 0 40z"/><rect x="34" y="11" width="58" height="40" rx="6"/><rect x="44" y="1" width="26" height="7" rx="3.5"/><rect x="44" y="54" width="26" height="7" rx="3.5"/><rect x="95" y="17" width="16" height="9" rx="4.5"/><rect x="95" y="36" width="16" height="9" rx="4.5"/><path d="M13 19 4 12M13 43 4 50" stroke="#3ddc84" stroke-width="3" stroke-linecap="round"/></g><circle cx="21" cy="24" r="2.6"/><circle cx="21" cy="38" r="2.6"/><rect x="50" y="20" width="30" height="22" rx="2" fill="#111"/><path d="M50 20 38 9h30l12 11z" fill="#2fb36c"/><circle cx="65" cy="31" r="6" fill="none" stroke="#3ddc84" stroke-width="2"/></svg>';
+const SCREENS = {
+  fb: `<div class="fb-pick grn">Start</div>${ROBOT}<div class="fb-title red">Fastboot Mode</div><div class="fb-info">Product revision: <span class="code-name">oriole</span> MP1.0(ROW)<br>Bootloader version: slider-1.3-…<br>Baseband version: g5123b-…<br>Serial number: ••••••••••<br>Secure boot: PRODUCTION<br>NOS production: yes<br>DRAM: 8GB<br>UFS: 128GB<br>Device state: <span class="fb-state grn">locked</span><br>Boot slot: a</div>`,
+  ask: '<div class="fb-pick ask-pick grn">Do not unlock the bootloader</div><div class="ask-q">Unlock the bootloader?</div><p class="ask-p"></p><p>Press the Volume Up/Down buttons to select, then the Power button to continue.</p>',
+  unl: '<b>!</b><p class="o">The bootloader is unlocked and software integrity cannot be guaranteed.</p><p>Any data stored on the device may be available to attackers. Do not store any sensitive data on the device.</p><p class="dim">Press the power button to pause boot.</p>',
+  fbd: '<img src="../assets/mark.svg" alt=""><div class="h">fastbootd</div><div class="h">Product name - <span class="code-name">oriole</span></div><div class="dim">Tome OS</div><div class="menu"><div class="sel">Reboot system now</div><div>Enter recovery</div><div>Reboot to bootloader</div><div>Power off</div></div>',
+  tome: '<img src="../assets/mark.svg" alt="">',
+  welcome: '<img src="../assets/mark.svg" alt=""><div class="wl-h">Welcome to Tome OS</div><div class="wl-lang">English (United States)</div><div class="wl-go">Start</div>',
+  pmenu: '<div class="pm"><div class="hit"><i>⏻</i>Power off</div><div><i>↻</i>Restart</div></div>',
+};
+const ASK_SAYS = {
+  Unlock: "If you unlock the bootloader, you will be able to install custom operating system software on this phone. A custom OS is not subject to the same testing as the original OS. To prevent unauthorized access to your personal data, unlocking the bootloader will also delete all personal data on your phone.",
+  Lock: "If you lock the bootloader, you will not be able to install custom operating system software on this phone. To prevent unauthorized access to your personal data, locking the bootloader will also delete all personal data on your phone.",
+};
+for (const [name, html] of Object.entries(SCREENS)) $$(`.v-${name}`).forEach((v) => { if (!v.children.length) v.innerHTML = html; });
+$$(".ask-p").forEach((e) => { e.textContent = ASK_SAYS.Unlock; });
 // Every [data-phone] holds its screens; this wraps them in the phone's body,
 // keys, fingers and cable.
 $$("[data-phone]").forEach((holder) => {
   const screens = holder.innerHTML;
-  holder.innerHTML = `<div class="phone"><button class="key power" tabindex="-1" aria-hidden="true"></button><button class="key up" tabindex="-1" aria-hidden="true"></button><button class="key down" tabindex="-1" aria-hidden="true"></button><div class="finger f-power" style="top:23%"></div><div class="finger f-down" style="top:51%"></div><div class="scr">${screens}</div><div class="cable"><div></div><span></span></div></div>`;
-  if (!holder.id) holder.classList.add("visual-phone");
-  if (!holder.querySelector(".caption") && !holder.closest("#i-visual")) holder.insertAdjacentHTML("beforeend", '<p class="caption"></p>');
+  holder.innerHTML = `<div class="phone"><button class="key power" tabindex="-1" aria-hidden="true"></button><button class="key up" tabindex="-1" aria-hidden="true"></button><button class="key down" tabindex="-1" aria-hidden="true"></button><div class="finger f-power" style="top:23%"></div><div class="finger f-up" style="top:38%"></div><div class="finger f-down" style="top:51%"></div><div class="scr">${screens}</div><div class="cable"><div></div><span></span></div></div>`;
+  if (!holder.id && !holder.closest(".look")) holder.classList.add("visual-phone");
+  if (!holder.querySelector(".caption") && !holder.closest("#i-visual") && !holder.closest(".look")) holder.insertAdjacentHTML("beforeend", '<p class="caption"></p>');
 });
-const phoneIn = (section) => section.querySelector(".phone");
-function screen(section, name) { $$(".v", section).forEach((v) => v.classList.toggle("on", v.dataset.v === name)); }
+// The big practice phone beside the words. The cards that ask the person to
+// look at their phone have small phones of their own.
+const phoneIn = (section) => section.querySelector(".visual .phone");
+function screen(section, name) { $$(".visual .v", section).forEach((v) => v.classList.toggle("on", v.dataset.v === name)); }
+// The same, for a card's small phone, or for every phone in a section.
+function screenIn(root, name) { $$(".v", root).forEach((v) => v.classList.toggle("on", v.dataset.v === name)); }
+function press(root, which, push) {
+  $$(".phone", root).forEach((p) => {
+    p.querySelector(".f-" + which).classList.toggle("on", push !== null);
+    p.querySelector(".f-" + which).classList.toggle("push", !!push);
+    p.querySelector(".key." + which).classList.toggle("press", !!push);
+  });
+}
 function caption(section, html) { const c = section.querySelector(".caption"); if (c) c.innerHTML = html; }
 function finger(section, which, push) {
   const p = phoneIn(section);
+  if (!p) return;
   p.querySelector(".f-" + which).classList.toggle("on", push !== null);
   p.querySelector(".f-" + which).classList.toggle("push", !!push);
   p.querySelector(".key." + which).classList.toggle("press", !!push);
@@ -661,6 +827,7 @@ function go(i) {
   const section = steps[i];
   section.querySelector(".count").textContent = `Step ${i + 1} of ${steps.length}`;
   drawTrail();
+  log(`Step ${i + 1}: ${section.dataset.label}`, "step");
   enter[section.dataset.step]?.(section);
   section.querySelector("h1").focus({ preventScroll: true });
   window.scrollTo({ top: 0 });
@@ -785,6 +952,7 @@ const ua = navigator.userAgent;
 const hostOs = /Android/.test(ua) ? "Android" : /Windows/.test(ua) ? "Windows" : /CrOS/.test(ua) ? "ChromeOS" : /Mac/.test(ua) ? "Mac" : /Linux/.test(ua) ? "Linux" : "";
 const hostNoun = hostOs === "Android" ? "phone" : "computer";
 $("host-word").textContent = hostNoun;
+$$(".host-noun").forEach((e) => { e.textContent = hostNoun; });
 const canDownloadHere = () => !!DOWNLOAD_RELAY && !!navigator.storage?.getDirectory;
 
 function setCheck(id, state, title, note = "") {
@@ -818,6 +986,7 @@ enter.computer = async (s) => {
     setCheck("chk-space", "done", "There's room for the download", need ? `It needs ${gb(need)}.` : "");
   }
   $("chk-cable").dataset.s = "done";
+  log(`Browser ${usb ? "has" : "has no"} WebUSB. System: ${hostOs || "unknown"}. Free space: ${free === null ? "unknown" : gb(free)}, needs ${need ? gb(need) : "unknown"}.`);
   next.disabled = !usb;
 };
 
@@ -899,9 +1068,11 @@ async function downloadBuild() {
   const keep = new Set(build.files.map((f) => f.name));
   for await (const name of dir.keys()) if (name.startsWith("tome-os-") && !keep.has(name)) await dir.removeEntry(name).catch(() => {});
   let got = 0;
+  log(`Downloading Tome OS ${build.version} for ${code}: ${build.files.map((f) => f.name).join(", ")}, ${gb(build.size)}`);
   const show = (n) => {
     got += n;
     const p = Math.min(1, got / build.size);
+    log(`Downloaded ${gb(got)} of ${gb(build.size)}`, "dl");
     $("dl-bar").style.width = $("dl-mini").style.width = (p * 100).toFixed(1) + "%";
     $("dl-count").textContent = `${gb(got)} of ${gb(build.size)}`;
     $("dl-mini-text").textContent = `${Math.round(p * 100)}%`;
@@ -916,6 +1087,7 @@ async function downloadBuild() {
         files.push(await fetchInto(dir, asset, show));
         break;
       } catch (e) {
+        log(`Download of ${asset.name} stopped: ${e.message || e}. Try ${attempt + 2} of 5.`);
         if (attempt >= 4) throw e;
         got = before;
         $("dl-status").textContent = "Connection dropped. Trying again…";
@@ -924,11 +1096,13 @@ async function downloadBuild() {
     }
   }
   $("dl-status").textContent = "Checking the download…";
+  log("Download finished. Checking its SHA-256…");
   $("dl-meter").classList.add("busy");
   const joined = files.length === 1 ? files[0] : joinParts(files);
   if (build.sum) {
     const want = (await (await fetch(`${DOWNLOAD_RELAY}/${build.tag}/${build.sum.name}`)).text()).trim().split(/\s+/)[0];
     const have = await sha256(joined, (p) => { $("dl-mini-text").textContent = `Checking ${Math.round(p * 100)}%`; });
+    log(`SHA-256 ${have}${want ? (have === want ? " matches" : ` doesn't match ${want}`) : ", nothing to check it against"}`);
     if (want && have !== want) {
       for (const f of build.files) await dir.removeEntry(f.name).catch(() => {});
       throw new Error("The download didn't arrive intact, so it was thrown away. Press Download to fetch it again.");
@@ -959,6 +1133,7 @@ $("dl-start").addEventListener("click", () => {
     $("dl-start-row").hidden = false;
     $("dl-other-row").hidden = false;
     $("dl-start").textContent = "Carry on downloading";
+    log(`Download stopped: ${e.message || e}`);
     $("dl-error").textContent = `${e.message || e} If it keeps stopping, choose "I already have the file" to download it yourself.`;
     $("dl-error").hidden = false;
     if (at === 6) go(3);
@@ -1096,6 +1271,7 @@ $("file").addEventListener("change", async () => {
     if (code && p.codename !== code) throw new Error(`That file is for the ${phoneName(p.codename)}, but you picked the ${phoneName(code)}. Download the file for your phone.`);
     pack = p;
     downloading = null;
+    log(`Chosen file ${file.name}: Tome OS ${p.version} for ${p.codename}, ${gb(file.size)}${p.fastbootd ? ", installs through fastbootd" : ""}`);
     $("file-name").textContent = `Tome OS ${p.version} for the ${phoneName(p.codename)}. Ready.`;
     $("file-label").textContent = "Choose a different file";
     $("manual-next").disabled = false;
@@ -1155,15 +1331,17 @@ enter.fastboot = (s) => {
   screen(s, "tome");
   finger(s, "power", null); finger(s, "down", null);
   cable.classList.remove("in");
-  caption(s, "Turn the phone <b>off</b>.");
-  later(() => finger(s, "power", true), 700);
-  later(() => { finger(s, "power", null); screen(s, "off"); }, 1600);
-  later(() => { tick(list, 1); caption(s, "Hold <b>Volume Down</b>…"); finger(s, "down", true); }, 2400);
-  later(() => { caption(s, "…and while holding it, hold <b>Power</b>."); finger(s, "power", true); }, 3300);
-  later(() => { tick(list, 2); screen(s, "fb"); caption(s, "When this screen shows, <b>let go</b>."); }, 5000);
-  later(() => { finger(s, "power", null); finger(s, "down", null); }, 5800);
-  later(() => { tick(list, 3); caption(s, `Plug the cable into this ${hostNoun}.`); cable.classList.add("in"); }, 6600);
-  later(() => { tick(list, 4); caption(s, "Ready. <b>Leave it on this screen.</b>"); nextIn(s).disabled = false; }, 7600);
+  finger(s, "up", null);
+  caption(s, "Turn the phone <b>off</b>: hold <b>Power</b> and <b>Volume Up</b>…");
+  later(() => { finger(s, "power", true); finger(s, "up", true); }, 700);
+  later(() => { finger(s, "power", null); finger(s, "up", null); screen(s, "pmenu"); caption(s, "…then tap <b>Power off</b>."); }, 1700);
+  later(() => screen(s, "off"), 2900);
+  later(() => { tick(list, 1); caption(s, "Hold <b>Volume Down</b>…"); finger(s, "down", true); }, 3700);
+  later(() => { caption(s, "…and while holding it, hold <b>Power</b>."); finger(s, "power", true); }, 4600);
+  later(() => { tick(list, 2); screen(s, "fb"); caption(s, "When this screen shows, <b>let go</b>."); }, 6300);
+  later(() => { finger(s, "power", null); finger(s, "down", null); }, 7100);
+  later(() => { tick(list, 3); caption(s, `Plug the cable into this ${hostNoun}.`); cable.classList.add("in"); }, 7900);
+  later(() => { tick(list, 4); caption(s, "Ready. <b>Leave it on this screen.</b>"); nextIn(s).disabled = false; }, 8900);
 };
 $("fb-replay").addEventListener("click", () => enter.fastboot(steps[5]));
 
@@ -1197,27 +1375,37 @@ function setStep(name, state = "now", note = "") {
   if (note) items[index].insertAdjacentHTML("beforeend", `<small>${note}</small>`);
 }
 function setStatus(text, progress = null) {
+  if ($("i-status").textContent !== text) log(text);
   $("i-status").textContent = text;
   $("i-meter").classList.toggle("busy", progress === null);
   $("i-pct").textContent = progress === null ? "" : `${Math.round(progress * 100)}%`;
   if (progress !== null) $("i-bar").style.width = progress * 100 + "%";
 }
 
-// The phone's own confirm screen, mirrored on the practice phone: the volume
-// key glows until the right choice would be highlighted, then Power does.
+// The phone's own confirm screen, mirrored on the practice phone and on the
+// "look at your phone" card: the volume key glows until the right choice
+// shows at the top, then Power does.
 function showPrompt(choice, verb) {
-  $("i-prompt-text").textContent = ` Press a volume button until "${choice}" is highlighted, then press Power.`;
+  const not = `Do not ${verb.toLowerCase()} the bootloader`;
+  $$(".ask-q").forEach((e) => { e.textContent = `${verb} the bootloader?`; });
+  $$(".ask-p").forEach((e) => { e.textContent = ASK_SAYS[verb]; });
+  $$(".ask-want").forEach((e) => { e.textContent = `"${choice}"`; });
+  $("i-prompt-h").textContent = `${verb} the bootloader on the phone`;
   $("i-prompt").hidden = false;
-  $("ask-q").textContent = `${verb} the bootloader?`;
-  $("ask-no").textContent = `Do not ${verb.toLowerCase()} the bootloader`;
-  $("ask-yes").textContent = choice;
+  screenIn($("i-prompt"), "ask");
+  showLook($("i-prompt"));
+  log(`Asking the person to choose "${choice}" on the phone.`);
   screen(iSection, "ask");
-  const p = phoneIn(iSection), down = p.querySelector(".key.down"), power = p.querySelector(".key.power");
+  const downs = $$(".key.down", iSection), powers = $$(".key.power", iSection), picks = $$(".ask-pick", iSection);
   const loop = () => {
-    $("ask-no").classList.add("hl"); $("ask-yes").classList.remove("hl");
-    down.classList.add("hint"); power.classList.remove("hint");
+    picks.forEach((e) => { e.textContent = not; e.className = "fb-pick ask-pick grn"; });
+    downs.forEach((k) => k.classList.add("hint")); powers.forEach((k) => k.classList.remove("hint"));
     $("i-caption").innerHTML = "Press <b>Volume Down</b>…";
-    later(() => { $("ask-no").classList.remove("hl"); $("ask-yes").classList.add("hl"); down.classList.remove("hint"); power.classList.add("hint"); $("i-caption").innerHTML = "…then press <b>Power</b>."; }, 1800);
+    later(() => {
+      picks.forEach((e) => { e.textContent = choice; e.className = "fb-pick ask-pick red"; });
+      downs.forEach((k) => k.classList.remove("hint")); powers.forEach((k) => k.classList.add("hint"));
+      $("i-caption").innerHTML = "…then press <b>Power</b>.";
+    }, 1800);
     later(loop, 3800);
   };
   loop();
@@ -1230,28 +1418,111 @@ function hidePrompt() {
   $("i-caption").innerHTML = "Keep the phone plugged in.";
 }
 
-// After a restart the phone usually reconnects by itself. Android, and
-// sometimes desktops, need the person to pick it again, which must start
-// from a click.
+// Tome OS's first start, on every phone in the install step: the orange
+// unlocked warning, then the welcome screen.
+function playFirstStart() {
+  const loop = () => {
+    screenIn(iSection, "unl");
+    $("i-caption").innerHTML = "First an <b>orange warning</b>. That's normal.";
+    later(() => { screenIn(iSection, "welcome"); $("i-caption").innerHTML = "Then the <b>Tome welcome screen</b>."; }, 3000);
+    later(loop, 7000);
+  };
+  loop();
+}
+// Back to install mode from Tome OS: hold Power to turn it off first, then
+// Volume Down and Power.
+function playBackToFastboot() {
+  const loop = () => {
+    screenIn(iSection, "welcome");
+    ["power", "up", "down"].forEach((k) => press(iSection, k, null));
+    $("i-caption").innerHTML = "Hold <b>Power</b>…";
+    later(() => press(iSection, "power", true), 600);
+    later(() => { screenIn(iSection, "pmenu"); $("i-caption").innerHTML = "…then tap <b>Power off</b>."; }, 1900);
+    later(() => press(iSection, "power", null), 2500);
+    later(() => { screenIn(iSection, "off"); $("i-caption").innerHTML = "Once it's dark, hold <b>Volume Down</b>…"; }, 3500);
+    later(() => press(iSection, "down", true), 4300);
+    later(() => { press(iSection, "power", true); $("i-caption").innerHTML = "…and <b>Power</b> together."; }, 5000);
+    later(() => { screenIn(iSection, "fb"); $("i-caption").innerHTML = "Let go when this screen shows."; }, 6600);
+    later(() => { press(iSection, "power", null); press(iSection, "down", null); }, 7400);
+    later(loop, 9600);
+  };
+  loop();
+}
+
+// After a restart the phone usually reconnects by itself. But it can come
+// back as a different USB device (after locking, or from the second install
+// screen), and a browser only talks to a device the person has allowed, so
+// it never even hears about the new one. So when the phone has been gone a
+// little while, the page says so plainly and offers a button that asks for
+// the new permission (which must start from a click). Whatever was waiting
+// for the phone then carries on where it was.
+const isFastboot = (d) => d.configurations.some((c) => c.interfaces.some((i) => i.alternates.some((a) => a.interfaceClass === 0xff && a.interfaceSubclass === 0x42 && a.interfaceProtocol === 0x03)));
+const usbName = (d) => `${d.productName || "USB device"} (${d.vendorId.toString(16).padStart(4, "0")}:${d.productId.toString(16).padStart(4, "0")}${isFastboot(d) ? ", fastboot" : ""})`;
+const RECONNECT_AFTER = 15000;
 let reconnectTimer = null;
-const offerReconnect = () => { $("i-reconnect").hidden = false; $("i-reconnect-win").hidden = hostOs !== "Windows"; };
-function waitingForPhone() { clearTimeout(reconnectTimer); reconnectTimer = setTimeout(offerReconnect, 30000); }
+function offerReconnect() {
+  if (device.isConnected) return;
+  if ($("i-reconnect").hidden) log("The phone hasn't come back by itself. Asking for it to be reconnected.");
+  $("i-reconnect").hidden = false;
+  $("i-reconnect-win").hidden = hostOs !== "Windows";
+  screenIn($("i-reconnect"), "fb");
+  showLook($("i-reconnect"));
+}
+// Brings a "look at the phone" card into view, above everything else on
+// small screens.
+function showLook(card) {
+  const small = matchMedia("(max-width: 760px)").matches;
+  requestAnimationFrame(() => card.scrollIntoView({ block: small ? "start" : "nearest", behavior: "smooth" }));
+}
+function waitingForPhone(ms = RECONNECT_AFTER) { clearTimeout(reconnectTimer); reconnectTimer = setTimeout(offerReconnect, ms); }
 function phoneBack() { clearTimeout(reconnectTimer); reconnectTimer = null; $("i-reconnect").hidden = true; }
-$("i-reconnect-btn").addEventListener("click", async () => {
-  try { await device.connect(); phoneBack(); } catch (e) { /* the list was closed; the button stays */ }
-});
+async function reconnect() {
+  log("Asking the browser for the phone again…");
+  try {
+    await device.connect();
+    log(`Reconnected: ${usbName(device.device)}`);
+    phoneBack();
+  } catch (e) {
+    // The list was closed, or nothing was picked: the button stays.
+    log(`Not reconnected: ${e.message || e}`);
+  }
+}
+$("i-reconnect-btn").addEventListener("click", reconnect);
+$("i-back-stuck").addEventListener("click", reconnect);
+if ("usb" in navigator) {
+  navigator.usb.addEventListener("connect", (e) => {
+    log(`USB: ${usbName(e.device)} plugged in`);
+    if (running && isFastboot(e.device)) phoneBack();
+  });
+  navigator.usb.addEventListener("disconnect", (e) => {
+    log(`USB: ${usbName(e.device)} gone`);
+    if (running && e.device === device.device) waitingForPhone();
+  });
+}
+// A phone that came back as a device this page is already allowed to use,
+// but whose connect event was missed or came too early to open it.
+async function pickUpPhone() {
+  if (device.isConnected || !("usb" in navigator)) return;
+  const here = (await navigator.usb.getDevices()).filter(isFastboot);
+  if (here.length !== 1) return;
+  try { await device.connect(); log(`Picked the phone up again: ${usbName(device.device)}`); } catch (e) { /* not ready yet */ }
+}
 
 // Waits until the phone is connected and answering, after it may have
 // dropped off USB (unlocking and locking can reset the connection).
-async function waitForPhone(seconds = 120) {
+async function waitForPhone(seconds = 120, offerAfter = RECONNECT_AFTER) {
   for (let attempt = 0; attempt < seconds; attempt++) {
     if (device.isConnected) {
-      try { await device.getVariable("product"); phoneBack(); return; } catch (e) { /* not ready yet */ }
+      try { await device.getVariable("product"); phoneBack(); log("The phone is back in fastboot.", "wait"); return; } catch (e) { /* not ready yet */ }
     }
-    if (attempt === 0) waitingForPhone();
-    await Promise.race([device.waitForConnect(offerReconnect), sleep(1000)]);
+    if (attempt === 0) waitingForPhone(offerAfter);
+    log(`Waiting for fastboot… ${attempt} s`, "wait");
+    await pickUpPhone();
+    // A device that showed up but couldn't be opened rejects this; the loop
+    // simply tries again.
+    await Promise.race([device.waitForConnect(offerReconnect).catch(() => {}), sleep(1000)]);
   }
-  throw new Error("The phone didn't come back. Check it shows the fastboot screen and is plugged in, then press Try again.");
+  throw new Error("The phone didn't come back. Check it shows the fastboot screen and is plugged in, then press Try again. The install carries on from where it stopped.");
 }
 
 // Runs "flashing unlock" or "flashing lock", which the phone asks the person
@@ -1268,13 +1539,18 @@ async function confirmOnPhone(command, choice, verb, wantUnlocked) {
       }
       throw new Error(`"${choice}" wasn't chosen on the phone, so nothing was changed. Press Try again.`);
     }
-    throw e;
+    if (e instanceof fastboot.FastbootError) throw e;
+    // The phone dropped off USB while it was confirming, which some do as
+    // they lock or unlock. Whether it did is checked once it's back.
+    log(`The phone left USB during "${command}" (${e.message || e}). Checking what it did once it's back.`);
   }
   hidePrompt();
-  setStatus("Waiting for the phone…");
+  setStatus("Waiting for the phone to come back…");
   await sleep(3000);
-  await waitForPhone();
+  await waitForPhone(900);
   const unlocked = await device.getVariable("unlocked");
+  log(`The phone says unlocked = ${unlocked}`);
+  setDeviceState(unlocked === "yes");
   if ((unlocked === "yes") !== wantUnlocked) throw new Error(`The phone didn't ${verb.toLowerCase()}. Press Try again.`);
 }
 
@@ -1295,7 +1571,48 @@ function phoneRestarts(target) {
 }
 {
   const reboot = device.reboot.bind(device);
-  device.reboot = (target = "", ...rest) => { phoneRestarts(target); return reboot(target, ...rest); };
+  device.reboot = (target = "", ...rest) => { log(`Restarting the phone${target ? ` into ${target}` : ""}`); phoneRestarts(target); return reboot(target, ...rest); };
+}
+// Every fastboot command and answer goes in the log, and each partition's
+// progress counts up in megabytes.
+const vars = {};
+{
+  const run = device.runCommand.bind(device);
+  device.runCommand = async (command) => {
+    const quiet = /^(getvar|download):/.test(command);
+    if (!quiet) log(`> ${command}`);
+    try {
+      const r = await run(command);
+      if (!quiet) log(`< OKAY${r.text ? " " + r.text.trim().replace(/\s+/g, " ") : ""}`);
+      return r;
+    } catch (e) {
+      log(`< ${command}: ${e.message || e}`);
+      throw e;
+    }
+  };
+  const getvar = device.getVariable.bind(device);
+  device.getVariable = async (name) => {
+    const v = await getvar(name);
+    vars[name] = v;
+    log(`getvar ${name} = ${v ?? "(none)"}`);
+    if (name === "unlocked") setDeviceState(v === "yes");
+    return v;
+  };
+  const flashBlob = device.flashBlob.bind(device);
+  device.flashBlob = (partition, blob, onProgress = () => {}) => {
+    const mb = Math.max(1, Math.round(blob.size / 1048576));
+    let shown = -1;
+    return flashBlob(partition, blob, (progress) => {
+      const slot = vars[`has-slot:${partition}`] === "yes" && vars["current-slot"] ? "_" + vars["current-slot"].replace(/^_/, "") : "";
+      const now = Math.min(mb, Math.round(progress * mb));
+      if (now !== shown) { shown = now; log(`Flashing ${partition}${slot}, ${now} of ${mb} MB`, "flash:" + partition); }
+      onProgress(progress);
+    });
+  };
+}
+// The practice phone's fastboot screens say whether the bootloader is locked.
+function setDeviceState(unlocked) {
+  $$(".fb-state").forEach((e) => { e.textContent = unlocked ? "unlocked" : "locked"; e.classList.toggle("red", unlocked); e.classList.toggle("grn", !unlocked); });
 }
 
 function onFlashProgress(action, item, progress) {
@@ -1418,15 +1735,20 @@ async function testThenLock() {
   setStatus("Starting Tome OS for a check…");
   saved.set({ ...saved.get(), phase: "testing" });
   try { await device.reboot(); } catch (e) { /* it restarts anyway */ }
-  screen(iSection, "tome");
-  $("i-caption").innerHTML = "An orange warning, then the Tome welcome screen.";
   $("i-test").hidden = false;
+  showLook($("i-test"));
+  playFirstStart();
   const result = await ask();
+  clearTimers();
   $("i-test").hidden = true;
+  log(result === "ok" ? "The person sees the Tome welcome screen." : "The person says Tome OS didn't start.");
   if (result === "bad") {
     saved.set({ ...saved.get(), phase: "flashing" });
     throw new Error("Tome OS didn't start, so the phone was left unlocked. That keeps it safe to fix: hold Power and Volume Down for about 15 seconds until the fastboot screen shows, then press Try again to install once more.");
   }
+  // Tome OS was seen to start: from here on, trying again goes straight to
+  // locking.
+  saved.set({ ...saved.get(), phase: "tested" });
   await lock();
 }
 
@@ -1434,10 +1756,15 @@ async function lock() {
   setStep("test", "done");
   setStep("lock");
   $("i-back").hidden = false;
-  screen(iSection, "fb");
-  $("i-caption").innerHTML = "Hold <b>Power</b> and <b>Volume Down</b> until this screen shows.";
+  showLook($("i-back"));
+  playBackToFastboot();
   setStatus("Waiting for the fastboot screen…");
-  await waitForPhone(900);
+  // The person is turning the phone off and back on, so the reconnect
+  // button only comes up if that takes a while.
+  await waitForPhone(1800, 90000);
+  clearTimers();
+  ["power", "up", "down"].forEach((k) => press(iSection, k, null));
+  screenIn(iSection, "fb");
   $("i-back").hidden = true;
   await checkPhone(saved.get().code);
   if (await device.getVariable("unlocked") !== "yes") {
@@ -1499,7 +1826,8 @@ async function install(connecting) {
   });
 }
 
-// Finishing an install whose phone was left unlocked after its test.
+// Finishing an install whose phone was left unlocked after its test, or
+// that stopped while locking.
 function startLock() {
   lockOnly = true;
   const connecting = device.isConnected ? Promise.resolve() : device.connect();
@@ -1509,7 +1837,13 @@ function startLock() {
     try { await connecting; } catch (e) { throw new Error("No phone was chosen. Check it shows the fastboot screen and is plugged in, then press Try again."); }
     showPhone();
     ["unlock", "install", "key"].forEach((n) => setStep(n, "done"));
-    await testThenLock();
+    if (saved.get().phase === "tested") {
+      log("Tome OS already started fine, so carrying on with locking.");
+      setStep("test", "done");
+      await lock();
+    } else {
+      await testThenLock();
+    }
   });
 }
 
@@ -1518,8 +1852,8 @@ function startLock() {
   const last = saved.get();
   if (last.phase) {
     $("unfinished").hidden = false;
-    if (last.phase === "testing") {
-      $("unfinished-text").textContent = "Tome OS is installed but the phone isn't locked yet. Put it in fastboot mode (hold Power and Volume Down), plug it in, and finish here.";
+    if (last.phase === "testing" || last.phase === "tested") {
+      $("unfinished-text").textContent = "Tome OS is installed but the phone isn't locked yet. Hold Power to turn the phone off first, then hold Volume Down and Power until the fastboot screen shows. Plug it in and finish here.";
       $("unfinished-go").textContent = "Finish: check and lock";
       $("unfinished-go").addEventListener("click", () => { $("unfinished").hidden = true; code = last.code; reached = 6; go(6); startLock(); });
     } else {
