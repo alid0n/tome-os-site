@@ -74,11 +74,6 @@ h1 { font-family: var(--display); font-weight: 700; font-size: clamp(28px, 4.5vw
 h1:focus { outline: none; }
 .say { color: var(--muted); max-width: 56ch; margin: 0 0 22px; }
 .say strong { color: var(--text); }
-/* The setup wizard (a green crystal ball in a blue hat) says each step's guide line. */
-.words > .say { position: relative; min-height: 84px; margin-left: 92px; padding: 12px 16px; background: rgba(95,240,160,.06); border: 1px solid rgba(95,240,160,.28); border-radius: 16px 16px 16px 4px; }
-.words > .say::before { content: ""; position: absolute; left: -92px; bottom: -8px; width: 78px; height: 94px; background: url(../assets/wizard.svg) center bottom / contain no-repeat; animation: wz-hop .6s ease-out; }
-@keyframes wz-hop { 0% { transform: translateY(10px) scale(.9); opacity: 0; } 60% { transform: translateY(-3px); opacity: 1; } 100% { transform: none; } }
-@media (max-width: 480px) { .words > .say { margin-left: 64px; min-height: 70px; } .words > .say::before { left: -64px; width: 54px; height: 66px; } }
 .words { min-width: 0; }
 
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 24px; font-weight: 600; text-decoration: none; border: 1px solid rgba(181,123,255,.45); background: rgba(181,123,255,.1); cursor: pointer; }
