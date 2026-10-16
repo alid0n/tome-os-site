@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy and Legal · Tome OS</title>
+<meta name="description" content="Tome OS has no statistics server and sends no usage statistics anywhere. What the system does connect to, and why.">
+<link rel="canonical" href="https://tome-os.com/legal">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="/"><img src="/assets/mark.svg" alt="">TOME OS</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/telemancer/">Telemancer</a></li>
+        <li><a href="/">Tome OS</a></li>
+        <li><a href="/install/">Install</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main class="wrap legal">
+
+<h1>Privacy and Legal</h1>
+<p class="updated">Tome OS, the operating system. Effective October 16, 2026</p>
+<p>This page covers Tome OS itself: the system on the phone and the installer on this site. The setup wizard on the phone links here. Telemancer, the messaging app, has its own <a href="/privacy">privacy policy</a>.</p>
+
+<h2>The short version</h2>
+<ul>
+<li><strong>Tome OS has no statistics server.</strong> It sends no usage statistics, analytics or crash reports anywhere, not to us and not to anyone else.</li>
+<li>There are no ads, no advertising ID and no tracking in the system.</li>
+<li>We have no account system for Tome OS. We don't know who uses it, how many people do, or how.</li>
+</ul>
+
+<h2>What the phone connects to</h2>
+<p>A phone needs the internet for some things. These are the connections Tome OS makes on its own, and none of them carries statistics about you or how you use the phone:</p>
+<ul>
+<li><strong>Updates.</strong> The phone checks for a new version of Tome OS by reading a small file from this site's releases on GitHub, and downloads the update from there. Like any download, GitHub sees the phone's internet address and which phone model the file is for.</li>
+<li><strong>Standard Android services.</strong> Like any Android phone, it checks that a Wi-Fi network really reaches the internet and sets its clock from a time server. These are the same requests every Android phone makes, and they carry nothing about you beyond the internet address any connection shows.</li>
+<li><strong>Apps you choose.</strong> Apps you install, including Google apps if you add them, connect to their own services under their own policies.</li>
+</ul>
+
+<h2>Google apps</h2>
+<p>Tome OS comes without Google's apps and services. If you choose to add them (with microG), the phone connects to Google for things like notifications and app downloads, under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>. That's your choice, and you can remove them again.</p>
+
+<h2>The installer on this site</h2>
+<ul>
+<li>The installer runs in your browser. It talks to your phone over the USB cable, not over the internet.</li>
+<li>It downloads Tome OS from this site's releases on GitHub, through a small relay on Cloudflare that only adds the permission the browser needs to read the file. The relay keeps nothing. GitHub and Cloudflare see your internet address, as they do for any download.</li>
+<li>Files you save from your phone before installing go only to your computer, and come back from there. They never leave your computer.</li>
+<li>Your answer to "Add Google apps?" is kept in your browser and passed to your phone over the USB cable.</li>
+<li>Phone logs collected with the <a href="/logs/">Collect phone logs</a> page are saved as a file on your computer. Nothing is uploaded. If you send them to us to report a problem, we use them only to fix it.</li>
+<li>This site uses no cookies, no analytics and no tracking. It is hosted on GitHub Pages, which keeps its own server logs.</li>
+</ul>
+
+<h2>Software licences</h2>
+<p>Tome OS is built on the Android Open Source Project and LineageOS. Their licence notices are on the phone in Settings › About phone › Legal information. The installer uses <a href="https://github.com/kdrag0n/fastboot.js">fastboot.js</a>, <a href="https://github.com/yume-chan/ya-webadb">Tango ADB</a> and <a href="https://github.com/gildas-lormeau/zip.js">zip.js</a>, whose licences are in the installer's <code>vendor</code> folder.</p>
+<p>Tome OS is not affiliated with or endorsed by Google. Android and Pixel are trademarks of Google LLC.</p>
+
+<h2>No warranty</h2>
+<p>Tome OS and the installer are provided as they are, without warranty of any kind. Installing a different operating system erases the phone. Back up what you want to keep first.</p>
+
+<h2>Changes</h2>
+<p>If this page changes in a way that matters, we will update the date above.</p>
+
+<h2>Contact</h2>
+<p>Questions: <a href="mailto:alid0ndev@gmail.com">alid0ndev@gmail.com</a>.</p>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span><a href="/">Tome OS</a> · <a href="/legal">Privacy and Legal</a> · <a href="/install/">Install</a> · <a href="/logs/">Collect phone logs</a></span>
+    <span>Not affiliated with Google. Android is a trademark of Google LLC.</span>
+  </div>
+</footer>
+</body>
+</html>
