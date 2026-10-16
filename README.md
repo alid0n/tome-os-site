@@ -12,6 +12,8 @@ Releases page is where public downloads go.
 | --- | --- |
 | `index.html` | Home page: Tome OS (features, the per-phone download table, install steps) |
 | `install/` | The Tome OS web installer (WebUSB, Chrome or Edge). It flashes a `tome-os-<version>-<codename>-factory.zip` the visitor chooses; fastboot.js is vendored in `install/vendor/` |
+| `logs/` | Collect phone logs: saves `logcat -d` and basic phone details to a file over USB debugging (Tango ADB, from `install/vendor/`) |
+| `legal.html` | Privacy and legal for Tome OS itself (`/legal`): no statistics server, no usage statistics. The setup wizard links here |
 | `telemancer/` | Telemancer: features, plans, download, install, questions |
 | `os/` | Forwards old `/os/` links to the home page |
 | `t.html` | Telemancer invite links (`tome-os.com/t#...`). The invite rides after the `#`, which browsers never send to the server |
@@ -19,6 +21,17 @@ Releases page is where public downloads go.
 | `telemancer/version.json` | The newest Telemancer version; the app reads it to offer updates |
 | `.well-known/assetlinks.json` | Lets `tome-os.com/t` invite links open Telemancer directly. Holds the signing certificate's SHA-256, so it must change if the signing key ever does |
 | `assets/site.css` | The theme and the parts every page shares |
+
+## The installer's answer to "Add Google apps?"
+
+The installer asks it while Tome OS downloads and keeps the answer in the
+browser (`localStorage["tome-choices"]`). Nothing written to the phone
+before it's locked survives the wipe locking does, so the answer goes to
+the phone over USB debugging in the installer's last step (Move files back),
+as `adb shell settings put global tome_google_apps 1` (yes) or `0` (no).
+Tome OS reads `Settings.Global` `tome_google_apps` and installs microG when
+it's `1`; with no value, nobody was asked. The name and values live in
+`HANDOFF` in `install/index.html`.
 
 ## Publishing a new Telemancer build
 
