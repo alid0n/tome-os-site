@@ -83,7 +83,7 @@ main img { width: 96px; height: auto; margin-bottom: 8px; }
 </footer>
 <script>
 (function () {
-  var NAMES = { plus: "Telemancer Plus", family: "Telemancer Family", team: "Telemancer Team", team_large: "Telemancer Team Large" };
+  var NAMES = { plus: "Telemancer Plus", family: "Telemancer Family", crew: "Telemancer Crew", team: "Telemancer Team", team_large: "Telemancer Team Large" };
   var session = new URLSearchParams(location.search).get("session");
   var fromEmail = /^#key=([A-Za-z0-9-]{10,40})$/.exec(location.hash);
   if (!session && !fromEmail) return;
