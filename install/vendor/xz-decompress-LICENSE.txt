@@ -1,0 +1,4 @@
+xz-decompress 0.2.3 (https://github.com/httptoolkit/xz-decompress), MIT License.
+Based on xzwasm (c) Steve Sanderson, MIT. Contains xz-embedded by Lasse Collin
+and Igor Pavlov (public domain) and walloc (c) 2020 Igalia, S.L. (MIT).
+The npm package ships no LICENSE file; its package.json declares MIT.
