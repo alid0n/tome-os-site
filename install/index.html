@@ -324,12 +324,12 @@ h1:focus { outline: none; }
 .cant { margin: 0 0 18px; padding: 0 0 0 18px; color: var(--muted); font-size: 15px; }
 .cant li + li { margin-top: 4px; }
 .cant strong { color: var(--text); }
-:is(.v-allow, .v-ask) .ask-box { position: absolute; left: 8px; right: 8px; top: 30%; background: #2b2930; border-radius: 14px; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.6); display: flex; flex-direction: column; gap: 6px; }
-:is(.v-allow, .v-ask) .ask-box b { font-size: 1.15em; font-weight: 500; }
-:is(.v-allow, .v-ask) .ask-box .always { display: flex; gap: 6px; align-items: center; }
-:is(.v-allow, .v-ask) .ask-box .always i { width: 10px; height: 10px; border-radius: 2px; background: #a68bff; flex: none; }
-:is(.v-allow, .v-ask) .ask-box .btns { display: flex; justify-content: flex-end; gap: 12px; color: #c9b8ff; }
-:is(.v-allow, .v-ask) .ask-box .go { padding: 2px 8px; border-radius: 8px; box-shadow: 0 0 0 1px var(--talk); animation: hit 1.2s ease-in-out infinite; }
+:is(.v-allow, .v-dialog) .ask-box { position: absolute; left: 8px; right: 8px; top: 30%; background: #2b2930; border-radius: 14px; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.6); display: flex; flex-direction: column; gap: 6px; }
+:is(.v-allow, .v-dialog) .ask-box b { font-size: 1.15em; font-weight: 500; }
+:is(.v-allow, .v-dialog) .ask-box .always { display: flex; gap: 6px; align-items: center; }
+:is(.v-allow, .v-dialog) .ask-box .always i { width: 10px; height: 10px; border-radius: 2px; background: #a68bff; flex: none; }
+:is(.v-allow, .v-dialog) .ask-box .btns { display: flex; justify-content: flex-end; gap: 12px; color: #c9b8ff; }
+:is(.v-allow, .v-dialog) .ask-box .go { padding: 2px 8px; border-radius: 8px; box-shadow: 0 0 0 1px var(--talk); animation: hit 1.2s ease-in-out infinite; }
 /* Add Google apps? */
 .choice { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 10px; }
 .choice .tile b { font-size: 16px; }
@@ -437,7 +437,7 @@ h1:focus { outline: none; }
           <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Tap Allow</b><p>It asks <strong>"Allow USB debugging?"</strong>. Tick <strong>Always allow from this computer</strong>, then tap <strong>Allow</strong>. If nothing shows, unlock the phone's screen.</p></div>
         </div>
         <div class="look" id="bk-helper" role="alert" hidden>
-          <div class="look-pic" data-phone><div class="v v-set v-ask v-perm on" data-v="perm"></div></div>
+          <div class="look-pic" data-phone><div class="v v-set v-dialog v-perm on" data-v="perm"></div></div>
           <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Tap Allow</b><p>A small helper app, <strong>Tome Transfer</strong>, saves your texts, contacts and calendar. If the phone asks about installing it, tap <strong>Install</strong>. If it asks to let it see your messages, contacts or calendar, tap <strong>Allow</strong>. It's removed again when it's done, and it can't use the internet.</p></div>
         </div>
         <div class="row" id="bk-connect-row"><button class="btn" id="bk-connect">Connect to the phone</button></div>
@@ -736,7 +736,7 @@ h1:focus { outline: none; }
         <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Tap Allow</b><p>It asks <strong>"Allow USB debugging?"</strong>. Tap <strong>Allow</strong>. If nothing shows, unlock the phone's screen.</p></div>
       </div>
       <div class="look" id="rs-texting" role="alert" hidden>
-        <div class="look-pic" data-phone><div class="v v-set v-ask v-sms on" data-v="sms"></div></div>
+        <div class="look-pic" data-phone><div class="v v-set v-dialog v-sms on" data-v="sms"></div></div>
         <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Bringing in your texts, contacts and calendar</b><p>If it asks, make <strong>Telemancer</strong> your texting app: tap <strong>Telemancer</strong>, then <strong>Set as default</strong>. Tap <strong>Allow</strong> for anything else it asks. If nothing shows, unlock the phone's screen.</p></div>
       </div>
       <div class="row" id="rs-go-row"><button class="btn primary" id="rs-go">Connect and move files back</button></div>
