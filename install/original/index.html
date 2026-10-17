@@ -216,6 +216,10 @@ $("connect").addEventListener("click", async () => {
     if (maker.includes("google")) throw new Error("This is a Pixel: you don't need a restore file. Google's Android Flash Tool (flash.android.com) puts the original software back on any Pixel.");
     if (!maker.includes("oneplus")) throw new Error(`Saving the original software works on OnePlus phones for now. This phone is a ${phone.manufacturer} ${phone.model}.`);
     if (!phone.ota || !phone.fingerprint) throw new Error("This phone didn't report its exact build, which this page needs to find the right update.");
+    // Tome OS on the OnePlus Open needs OxygenOS 16. Saving an older version
+    // and updating afterwards would leave a restore file the phone can't go
+    // back to (OnePlus blocks older software), so update first.
+    if (/^CPH2551$/i.test(phone.model) && Number(phone.android) < 16) throw new Error(`Tome OS on the OnePlus Open needs OxygenOS 16, and this phone runs Android ${phone.android}. Install OnePlus's updates first (Settings › About device › Software update), then save your original software.`);
     status("s1-status", "Your phone is read. Carry on below.", "ok");
     facts($("want"), [["Version", phone.display], ["Build", phone.ota], ["Model", phone.model]]);
     step(2);

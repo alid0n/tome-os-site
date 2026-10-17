@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install Tome OS on the OnePlus Open · Tome OS</title>
+<meta name="description" content="Install Tome OS's generic system image on a OnePlus Open, step by step, and how to go back to OxygenOS.">
+<link rel="canonical" href="https://tome-os.com/install/oneplus-open/">
+<!-- Linked from the download table only once a release has the OnePlus Open's files. -->
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+[hidden] { display: none !important; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+main.gsi { max-width: 46em; padding-top: 48px; padding-bottom: 64px; }
+main.gsi h1 { font-size: clamp(30px, 6vw, 46px); }
+.go { background: linear-gradient(160deg, rgba(181,123,255,.12), transparent 60%), var(--page); border: 1px solid rgba(181,123,255,.3); border-radius: 18px; padding: 22px; margin: 0 0 20px; }
+.go h2 { font-size: 22px; margin: 0 0 8px; display: flex; gap: 10px; align-items: baseline; }
+.go h2 .n { flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--raised); color: var(--glow); font-size: 15px; display: inline-flex; align-items: center; justify-content: center; font-family: var(--body); }
+.go > p, .go li { color: var(--muted); }
+.go strong, .go b { color: var(--text); }
+.go ul, .go ol { margin: 0 0 14px; padding-left: 22px; display: grid; gap: 6px; }
+.warn { padding: 14px 16px; border-radius: 14px; background: #3a2c14; color: #fbe2b0; margin: 0 0 20px; }
+.warn strong { color: #fff3d6; }
+.cmd-box { position: relative; margin: 8px 0 14px; }
+.cmd-box pre { margin: 0; padding: 12px 84px 12px 14px; border-radius: 12px; background: #000; color: #d8f7e2; font-family: var(--mono); font-size: 13px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cmd-box button { position: absolute; top: 8px; right: 8px; min-height: 30px; padding: 0 12px; font-size: 13px; }
+.files { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+.status { margin: 14px 0 0; font-weight: 600; white-space: pre-line; }
+.status[data-s="bad"] { color: #ffd0dd; }
+.status[data-s="ok"] { color: #6fe3a4; }
+.meter { height: 10px; border-radius: 5px; background: var(--raised); overflow: hidden; margin: 14px 0 6px; }
+.meter i { display: block; height: 100%; width: 0; background: var(--glow); transition: width .3s; }
+.fine { color: var(--faint); font-size: 14px; }
+code { overflow-wrap: anywhere; }
+</style>
+<script src="../vendor/xz-decompress-0.2.3.min.js"></script>
+<script src="../vendor/hash-wasm-4.12.0-sha256.umd.min.js"></script>
+</head>
+<body>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="/"><img src="/assets/mark.svg" alt="">TOME OS</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/telemancer/">Telemancer</a></li>
+        <li><a href="/">Tome OS</a></li>
+        <li><a href="/install/">Install</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main class="wrap gsi">
+  <h1>Install Tome OS on the OnePlus Open</h1>
+  <p class="lede">The OnePlus Open runs Tome OS's generic system image: one system that works on many phones, on top of the Open's own OxygenOS kernel, drivers and firmware. It's installed with a few commands from a computer.</p>
+
+  <p class="warn"><strong>Experimental.</strong> Nobody has run Tome OS on a OnePlus Open yet. Install it on a phone you can do without for a while, and save your original software first.</p>
+
+  <section class="go" aria-labelledby="know-h">
+    <h2 id="know-h">Before you start</h2>
+    <ul>
+      <li><strong>It needs OxygenOS 16.</strong> Check Settings › About device › Version starts with 16. If not, install OnePlus's updates first.</li>
+      <li><strong>It erases the phone.</strong> Back up your photos, messages and anything else on it.</li>
+      <li><strong>Calls and texts may not work</strong> where networks only have 4G and 5G, like most of the US: the parts that make calls over 4G and Wi-Fi are in OxygenOS, not the drivers Tome OS uses. Check this first if the Open is your everyday phone.</li>
+      <li><strong>Other things may be missing at first:</strong> switching between the two screens when folding, the telephoto and OnePlus's camera modes, the Alert Slider, the fingerprint sensor, and higher refresh rates.</li>
+      <li><strong>The bootloader stays unlocked</strong>, so the phone shows a warning as it starts, and new versions are installed the same way, by hand.</li>
+    </ul>
+    <p>You need a computer with Google's <a href="https://developer.android.com/tools/releases/platform-tools">Platform Tools</a> (<code>adb</code> and <code>fastboot</code>), and a good USB cable.</p>
+  </section>
+
+  <section class="go" aria-labelledby="s0-h">
+    <h2 id="s0-h"><span class="n">0</span>Save your original software</h2>
+    <p>OnePlus doesn't offer a one-click way back, so make your own restore file while OxygenOS still runs. It's the only way back to OxygenOS later.</p>
+    <p><a class="btn primary" href="../original/">Save your original software</a></p>
+  </section>
+
+  <section class="go" aria-labelledby="files-h">
+    <h2 id="files-h"><span class="n">1</span>Download Tome OS</h2>
+    <p id="files-none">The OnePlus Open's files aren't out yet. They'll be here as soon as they are.</p>
+    <div id="files-got" hidden>
+      <p>Tome OS <span class="ver"></span> for the OnePlus Open:</p>
+      <div class="files" id="files"></div>
+      <p class="fine" id="files-other"></p>
+    </div>
+    <h3 style="margin:18px 0 6px">Unpack the system image</h3>
+    <p>The system image comes compressed (<code>.img.xz</code>). Unpack it here and it's checked against its checksum, or use <code>xz -dk</code> on a Mac or Linux, or 7-Zip on Windows.</p>
+    <div class="actions"><label class="btn" for="xz" id="xz-label" tabindex="0">Choose the downloaded .img.xz</label><input type="file" id="xz" accept=".xz" class="visually-hidden"></div>
+    <div id="unpacking" hidden><div class="meter"><i id="bar"></i></div><p class="fine" id="unpack-text">Unpacking…</p></div>
+    <p class="status" id="unpack-status" aria-live="polite"></p>
+  </section>
+
+  <section class="go" aria-labelledby="s2-h">
+    <h2 id="s2-h"><span class="n">2</span>Unlock the bootloader</h2>
+    <p>This erases the phone. On the phone: Settings › About device › tap <strong>Version</strong> seven times, then Settings › System › Developer options › turn on <strong>OEM unlocking</strong> and <strong>USB debugging</strong>. Plug it in, then on the computer:</p>
+    <div class="cmd-box"><pre>adb reboot bootloader
+fastboot flashing unlock</pre></div>
+    <p>Confirm on the phone with the volume keys and Power. It erases itself and starts OxygenOS again. Skip through setup and turn USB debugging back on.</p>
+  </section>
+
+  <section class="go" aria-labelledby="s3-h">
+    <h2 id="s3-h"><span class="n">3</span>Switch verification off</h2>
+    <p>From the folder with Tome OS's files:</p>
+    <div class="cmd-box"><pre>adb reboot bootloader
+fastboot flash vbmeta <span class="f-vbmeta">tome-os-&lt;version&gt;-gsi_arm64-vbmeta-disabled.img</span></pre></div>
+    <p class="fine">Or use OxygenOS's own vbmeta from your restore file with <code>fastboot --disable-verity --disable-verification flash vbmeta vbmeta.img</code>. If the phone later stops at start with a verification error, do the same for <code>vbmeta_system</code>.</p>
+  </section>
+
+  <section class="go" aria-labelledby="s4-h">
+    <h2 id="s4-h"><span class="n">4</span>Install Tome OS's system</h2>
+    <p>Switch to fastbootd, the second fastboot screen, where the system can be written:</p>
+    <div class="cmd-box"><pre>fastboot reboot fastboot
+fastboot getvar is-userspace
+fastboot getvar current-slot
+fastboot snapshot-update cancel
+fastboot flash system <span class="f-system">tome-os-&lt;version&gt;-gsi_arm64-system.img</span></pre></div>
+    <p><code>is-userspace</code> should say <strong>yes</strong>. If flashing says there isn't enough space, remove OxygenOS's product partition for the slot <code>current-slot</code> showed (Tome OS never uses it, and your restore file puts it back), then flash again:</p>
+    <div class="cmd-box"><pre>fastboot delete-logical-partition product_a
+fastboot flash system <span class="f-system">tome-os-&lt;version&gt;-gsi_arm64-system.img</span></pre></div>
+    <p class="fine">Use <code>product_b</code> if the slot is b.</p>
+  </section>
+
+  <section class="go" aria-labelledby="s5-h">
+    <h2 id="s5-h"><span class="n">5</span>Wipe and start</h2>
+    <div class="cmd-box"><pre>fastboot -w
+fastboot reboot</pre></div>
+    <p>The first start takes several minutes. If it keeps going back to the OnePlus logo, start the recovery (<code>fastboot reboot recovery</code> from fastbootd, or Power + Volume Down from off), choose <strong>Format data</strong>, and restart.</p>
+    <p>For a newer Tome OS later, repeat step 4. Your data usually stays; if the phone doesn't start, wipe it (step 5).</p>
+  </section>
+
+  <section class="go" aria-labelledby="back-h">
+    <h2 id="back-h">Going back to OxygenOS</h2>
+    <p>Unzip your restore file. Then, with the phone in fastbootd (<code>adb reboot fastboot</code>):</p>
+    <div class="cmd-box"><pre>fastboot snapshot-update cancel
+fastboot flash system system.img
+fastboot flash system_ext system_ext.img
+fastboot flash product product.img</pre></div>
+    <p>If you removed the product partition, make it again first with <code>fastboot create-logical-partition product_a 1</code> (<code>product_b</code> for slot b). Then put verification back from the bootloader, wipe, and start:</p>
+    <div class="cmd-box"><pre>fastboot reboot bootloader
+fastboot flash vbmeta vbmeta.img
+fastboot flash vbmeta_system vbmeta_system.img
+fastboot flash vbmeta_vendor vbmeta_vendor.img
+fastboot -w
+fastboot reboot</pre></div>
+    <p>Lock the bootloader again (<code>fastboot flashing lock</code>, which erases the phone) only once OxygenOS has started and works, and has installed an update from the phone, so both of its system copies hold OnePlus's software. Never install an OxygenOS older than the one the phone had.</p>
+  </section>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span><a href="/">Tome OS</a> · <a href="/install/">Install</a> · <a href="/legal">Privacy and Legal</a></span>
+    <span>Not affiliated with Google or OnePlus. Android is a trademark of Google LLC.</span>
+  </div>
+</footer>
+
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const RELAY = "https://tome-download.alid0ndev.workers.dev";
+const size = (n) => n >= 1073741824 ? (n / 1073741824).toFixed(1) + " GB" : Math.round(n / 1048576) + " MB";
+
+// A copy button on every command box.
+document.querySelectorAll(".cmd-box").forEach((box) => {
+  const b = document.createElement("button");
+  b.className = "btn"; b.type = "button"; b.textContent = "Copy";
+  b.addEventListener("click", () => navigator.clipboard.writeText(box.querySelector("pre").textContent).then(() => { b.textContent = "Copied"; setTimeout(() => { b.textContent = "Copy"; }, 1500); }));
+  box.append(b);
+});
+
+// The newest Tome OS version whose release has the generic system image.
+let release = null, assets = {};
+fetch("https://api.github.com/repos/alid0n/tome-os-site/releases?per_page=100")
+  .then((r) => r.ok ? r.json() : [])
+  .then((list) => {
+    const versions = list.filter((r) => /^v\d+\.\d+(\.\d+)?$/.test(r.tag_name) && !r.draft)
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    release = versions.find((r) => (r.assets || []).some((a) => /-gsi_arm64-system\.img(\.xz)?$/.test(a.name)));
+    if (!release) return;
+    for (const a of release.assets) assets[a.name] = a;
+    const v = release.tag_name.replace(/^v/, "");
+    const name = (end) => `tome-os-${v}-gsi_arm64-${end}`;
+    document.querySelectorAll(".ver").forEach((e) => { e.textContent = v; });
+    document.querySelectorAll(".f-system").forEach((e) => { e.textContent = name("system.img"); });
+    document.querySelectorAll(".f-vbmeta").forEach((e) => { e.textContent = name("vbmeta-disabled.img"); });
+    const link = (file, label, primary) => {
+      const a = assets[file];
+      if (!a) return null;
+      const el = document.createElement("a");
+      el.className = primary ? "btn primary" : "btn"; el.href = a.browser_download_url;
+      el.textContent = `${label} · ${size(a.size)}`;
+      return el;
+    };
+    for (const el of [link(name("system.img.xz"), "System image", true), link(name("vbmeta-disabled.img"), "vbmeta (verification off)")]) if (el) $("files").append(el);
+    const other = [[name("system.img"), "unpacked system image"], [name("system.img.sha256"), "system checksum"], [name("system.img.xz.sha256"), "compressed checksum"], [name("vbmeta-disabled.img.sha256"), "vbmeta checksum"]]
+      .filter(([f]) => assets[f]);
+    const manifest = release.assets.find((a) => /-source-manifest\.xml$/.test(a.name));
+    if (manifest) other.push([manifest.name, "source manifest"]);
+    $("files-other").textContent = "";
+    if (other.length) {
+      $("files-other").append("Also: ");
+      other.forEach(([f, label], i) => {
+        const a = document.createElement("a"); a.href = (assets[f] || manifest).browser_download_url; a.textContent = label;
+        $("files-other").append(a, i < other.length - 1 ? ", " : ".");
+      });
+    }
+    $("files-none").hidden = true;
+    $("files-got").hidden = false;
+  })
+  .catch(() => {});
+
+// Unpacks the .img.xz in the browser and saves system.img, checking it
+// against the release's system.img.sha256 (read through the download relay,
+// since GitHub's own files can't be read by a page).
+$("xz-label").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("xz").click(); } });
+$("xz").addEventListener("change", async () => {
+  const file = $("xz").files[0];
+  if (!file) return;
+  const st = (t, s = "") => { $("unpack-status").textContent = t; $("unpack-status").dataset.s = s; };
+  if (!("showSaveFilePicker" in window)) { st("Unpacking here needs Chrome or Edge on a computer. Use xz or 7-Zip instead.", "bad"); return; }
+  const outName = file.name.replace(/\.xz$/, "");
+  let handle;
+  try { handle = await window.showSaveFilePicker({ suggestedName: outName }); } catch (e) { return; }
+  $("unpacking").hidden = false; st("");
+  const hash = await window.hashwasm.createSHA256(); hash.init();
+  let read = 0, written = 0;
+  const counted = file.stream().pipeThrough(new TransformStream({ transform(chunk, c) { read += chunk.length; $("bar").style.width = `${Math.round(read / file.size * 100)}%`; c.enqueue(chunk); } }));
+  const hashed = new window["xz-decompress"].XzReadableStream(counted).pipeThrough(new TransformStream({ transform(chunk, c) { hash.update(chunk); written += chunk.length; $("unpack-text").textContent = `Unpacking… ${size(written)}`; c.enqueue(chunk); } }));
+  try {
+    await hashed.pipeTo(await handle.createWritable());
+    const got = hash.digest("hex");
+    let want = null;
+    const sumFile = `${outName}.sha256`;
+    if (release && assets[sumFile]) {
+      try { want = (await (await fetch(`${RELAY}/${release.tag_name}/${sumFile}`)).text()).trim().split(/\s+/)[0] || null; } catch (e) { want = null; }
+    }
+    $("unpacking").hidden = true;
+    if (want && got === want) st(`Unpacked ${outName} (${size(written)}) and it matches its checksum. ✓`, "ok");
+    else if (want) st(`Unpacked, but it doesn't match its checksum, so don't flash it. Download the .xz again.\nIts SHA-256: ${got}`, "bad");
+    else st(`Unpacked ${outName} (${size(written)}). Its SHA-256 is ${got}: compare it with the release's ${sumFile}.`);
+  } catch (e) {
+    $("unpacking").hidden = true;
+    st(`Couldn't unpack it (${e.message || e}). Download the .xz again, or use xz or 7-Zip.`, "bad");
+  }
+});
+</script>
+</body>
+</html>
