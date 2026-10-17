@@ -312,7 +312,7 @@ h1 { text-shadow: 0 0 30px rgba(181,123,255,.22); }
           <tr data-codename="rango"><td>Google Pixel 10 Pro Fold</td><td><span class="pill soon">Coming soon</span></td><td class="dl">Not yet</td></tr>
           <tr><td>Unihertz Titan 2 Elite</td><td><span class="pill planned">Planned</span></td><td>Not yet</td></tr>
           <tr><td>Clicks Communicator</td><td><span class="pill planned">Planned</span></td><td>Not yet</td></tr>
-          <tr><td>OnePlus Open</td><td><span class="pill planned">Planned</span></td><td>Not yet</td></tr>
+          <tr data-gsi="gsi_arm64" data-install="install/oneplus-open/"><td>OnePlus Open</td><td><span class="pill planned">Planned</span></td><td>Not yet</td></tr>
           <tr><td>Other Android phones</td><td><span class="pill planned">Later</span></td><td>Not yet</td></tr>
         </tbody>
       </table>
@@ -422,6 +422,48 @@ h1 { text-shadow: 0 0 30px rgba(181,123,255,.22); }
           var pill = row.querySelector(".pill");
           pill.className = "pill ready";
           pill.textContent = "Ready · " + releases[i].tag_name;
+          break;
+        }
+      });
+      // Phones that run the generic system image (the OnePlus Open): no factory
+      // zip, so they get its files and a link to their own install steps, once
+      // a version's release has the image. Until then the row stays "Planned".
+      document.querySelectorAll("tr[data-gsi]").forEach(function (row) {
+        var target = row.getAttribute("data-gsi");
+        for (var i = 0; i < releases.length; i++) {
+          var assets = releases[i].assets || [];
+          var named = function (end) { return assets.find(function (a) { return a.name.endsWith("-" + target + "-" + end); }); };
+          var xz = named("system.img.xz"), img = named("system.img");
+          if (!xz && !img) continue;
+          var cell = row.querySelector("td:last-child");
+          cell.className = "dl";
+          cell.textContent = "";
+          var get = document.createElement("div");
+          get.className = "get";
+          var how = document.createElement("a");
+          how.className = "part all"; how.href = row.getAttribute("data-install"); how.textContent = "How to install";
+          get.appendChild(how);
+          var sys = document.createElement("a");
+          sys.className = "part"; sys.href = (xz || img).browser_download_url;
+          sys.textContent = "System image · " + ((xz || img).size >= 1073741824 ? ((xz || img).size / 1073741824).toFixed(1) + " GB" : Math.round((xz || img).size / 1048576) + " MB");
+          get.appendChild(sys);
+          cell.appendChild(get);
+          var more = document.createElement("details");
+          more.className = "more";
+          more.innerHTML = "<summary>Other files</summary>";
+          var list = document.createElement("div");
+          [[named("vbmeta-disabled.img"), "vbmeta (verification off)"], [xz && img, "Unpacked system image"], [named("system.img.sha256"), "System checksum"], [named("system.img.xz.sha256"), "Compressed checksum"], [named("vbmeta-disabled.img.sha256"), "vbmeta checksum"],
+            [assets.find(function (a) { return /-source-manifest\.xml$/.test(a.name); }), "Source manifest"]].forEach(function (pair) {
+            if (!pair[0]) return;
+            var a = document.createElement("a"); a.href = pair[0].browser_download_url; a.textContent = pair[1];
+            list.appendChild(a);
+          });
+          more.appendChild(list);
+          cell.appendChild(more);
+          row.classList.add("has-dl");
+          var pill = row.querySelector(".pill");
+          pill.className = "pill soon";
+          pill.textContent = "Experimental · " + releases[i].tag_name;
           break;
         }
       });
