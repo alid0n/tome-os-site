@@ -33,6 +33,25 @@ Tome OS reads `Settings.Global` `tome_google_apps` and installs microG when
 it's `1`; with no value, nobody was asked. The name and values live in
 `HANDOFF` in `install/index.html`.
 
+## Messages, contacts and calendar (Tome Transfer)
+
+A browser can't read texts, contacts or calendars, so the installer's Back up
+step puts a small helper app, Tome Transfer (`apps/tome-transfer` in
+`alid0n/tome-os`), on the old phone over USB debugging. It saves them to
+`tome-transfer.zip`, which goes into the backup beside the files; then the
+helper deletes it and is removed. It runs on Android 4.4 and newer and has no
+internet permission. In the last step Telemancer, on the Tome phone, takes the
+file back over USB debugging and brings everything in (texts into Messages,
+contacts into Contacts, events into a calendar called "From your old phone").
+Both sides' commands are in `TRANSFER` in `install/index.html`.
+
+The installer fetches the helper from the release `transfer-1` on this repo
+(`tome-os-transfer-1.apk` and its `.sha256`), through the download relay.
+Until that release exists, Messages, Contacts and Calendar can't be ticked and
+the page says to export them by hand. The `tome-transfer` workflow in
+`alid0n/tome-os`, run by hand with *publish*, uploads it. A new helper version
+gets a new tag: change `TRANSFER` to match.
+
 ## Publishing a new Telemancer build
 
 1. Replace `downloads/Telemancer.apk`. Sign it with the same key as every

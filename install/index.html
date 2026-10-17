@@ -324,12 +324,12 @@ h1:focus { outline: none; }
 .cant { margin: 0 0 18px; padding: 0 0 0 18px; color: var(--muted); font-size: 15px; }
 .cant li + li { margin-top: 4px; }
 .cant strong { color: var(--text); }
-.v-allow .ask-box { position: absolute; left: 8px; right: 8px; top: 30%; background: #2b2930; border-radius: 14px; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.6); display: flex; flex-direction: column; gap: 6px; }
-.v-allow .ask-box b { font-size: 1.15em; font-weight: 500; }
-.v-allow .ask-box .always { display: flex; gap: 6px; align-items: center; }
-.v-allow .ask-box .always i { width: 10px; height: 10px; border-radius: 2px; background: #a68bff; flex: none; }
-.v-allow .ask-box .btns { display: flex; justify-content: flex-end; gap: 12px; color: #c9b8ff; }
-.v-allow .ask-box .go { padding: 2px 8px; border-radius: 8px; box-shadow: 0 0 0 1px var(--talk); animation: hit 1.2s ease-in-out infinite; }
+:is(.v-allow, .v-ask) .ask-box { position: absolute; left: 8px; right: 8px; top: 30%; background: #2b2930; border-radius: 14px; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.6); display: flex; flex-direction: column; gap: 6px; }
+:is(.v-allow, .v-ask) .ask-box b { font-size: 1.15em; font-weight: 500; }
+:is(.v-allow, .v-ask) .ask-box .always { display: flex; gap: 6px; align-items: center; }
+:is(.v-allow, .v-ask) .ask-box .always i { width: 10px; height: 10px; border-radius: 2px; background: #a68bff; flex: none; }
+:is(.v-allow, .v-ask) .ask-box .btns { display: flex; justify-content: flex-end; gap: 12px; color: #c9b8ff; }
+:is(.v-allow, .v-ask) .ask-box .go { padding: 2px 8px; border-radius: 8px; box-shadow: 0 0 0 1px var(--talk); animation: hit 1.2s ease-in-out infinite; }
 /* Add Google apps? */
 .choice { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 10px; }
 .choice .tile b { font-size: 16px; }
@@ -436,6 +436,10 @@ h1:focus { outline: none; }
           <div class="look-pic" data-phone><div class="v v-set v-allow on" data-v="allow"></div></div>
           <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Tap Allow</b><p>It asks <strong>"Allow USB debugging?"</strong>. Tick <strong>Always allow from this computer</strong>, then tap <strong>Allow</strong>. If nothing shows, unlock the phone's screen.</p></div>
         </div>
+        <div class="look" id="bk-helper" role="alert" hidden>
+          <div class="look-pic" data-phone><div class="v v-set v-ask v-perm on" data-v="perm"></div></div>
+          <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Tap Allow</b><p>A small helper app, <strong>Tome Transfer</strong>, saves your texts, contacts and calendar. If the phone asks about installing it, tap <strong>Install</strong>. If it asks to let it see your messages, contacts or calendar, tap <strong>Allow</strong>. It's removed again when it's done, and it can't use the internet.</p></div>
+        </div>
         <div class="row" id="bk-connect-row"><button class="btn" id="bk-connect">Connect to the phone</button></div>
         <div class="row" id="bk-save-row" hidden><button class="btn primary" id="bk-folder">Save to a folder</button><button class="btn" id="bk-zip">Save as a zip file</button><button class="link" id="bk-rescan">Look again</button></div>
         <div id="bk-progress" hidden>
@@ -449,14 +453,14 @@ h1:focus { outline: none; }
 
       <p class="say" style="margin-bottom:10px"><strong>What this page doesn't copy.</strong> Do these on the phone yourself:</p>
       <ul class="cant">
-        <li><strong>Messages, contacts and calendar</strong> aren't moved by this version of the installer. Contacts and calendars kept in an online account come back when you sign in to it. Otherwise export them to a file in the phone's Downloads folder, and that file is saved with your downloads.</li>
+        <li id="bk-cant-helper" hidden><strong>Messages, contacts and calendar</strong> aren't moved by this version of the installer. Contacts and calendars kept in an online account come back when you sign in to it. Otherwise export them to a file in the phone's Downloads folder, and that file is saved with your downloads.</li>
         <li><strong>Chats in WhatsApp, Signal and others.</strong> Each has a backup option in its own settings.</li>
         <li><strong>Apps and what's inside them,</strong> like game progress and logins. Reinstall them on Tome OS and sign in again.</li>
         <li><strong>Sign-in codes</strong> in authenticator apps. Move them to another device first, or you could get locked out of your accounts.</li>
       </ul>
       <ul class="checks" id="backup">
         <li><label><input type="checkbox" id="bk-saved-ok"><span>My photos and files are saved<small id="bk-saved-note">With this page above, or another way: Google Photos, another cloud, or copied to a computer.</small></span></label></li>
-        <li><label><input type="checkbox"><span>I've backed up my messages and chats, and moved my sign-in codes<small>Using each app's own backup, as above.</small></span></label></li>
+        <li><label><input type="checkbox"><span>I've backed up my chats and moved my sign-in codes<small>Using each app's own backup, as above.</small></span></label></li>
         <li><label><input type="checkbox"><span>I understand everything on this phone will be erased<small>It can't be undone.</small></span></label></li>
       </ul>
       <div class="row"><button class="btn primary" data-next disabled>I've backed everything up</button></div>
@@ -464,6 +468,7 @@ h1:focus { outline: none; }
         <p><strong>Phone not in the list?</strong> Check USB debugging is on and the phone is unlocked. Unplug it and plug it back in.</p>
         <p><strong>Says the phone is in use?</strong> Another program has it, like Android Studio or <code>adb</code>. Close it, or run <code>adb kill-server</code>, then press Connect again.</p>
         <p><strong>"Allow USB debugging?" never shows?</strong> Unlock the phone. If it still doesn't show, go to Developer options, tap <strong>Revoke USB debugging authorizations</strong>, then connect again.</p>
+        <p id="bk-help-helper"><strong>The helper app won't go on?</strong> Some phones block apps put on over USB. On Xiaomi phones, turn on <strong>Install via USB</strong> in Developer options. If Play Protect asks, choose <strong>Install anyway</strong>. Or untick Messages, Contacts and Calendar, and export them yourself to the Downloads folder: that file is saved with your downloads.</p>
         <p><strong>Rather copy files yourself?</strong> Plug the phone in, pull down from the top of its screen, tap the USB notification and choose <strong>File transfer</strong>. Then copy the DCIM, Pictures, Download, Documents and Music folders to this <span class="host-noun">computer</span>.</p>
       </div></details>
     </div>
@@ -712,7 +717,7 @@ h1:focus { outline: none; }
     <div class="words">
       <div class="count"></div>
       <h1 tabindex="-1" id="rs-h">Move your files back</h1>
-      <p class="say" id="rs-say">Once Tome OS is set up, this page copies what you saved back to where it was: photos back in the gallery, downloads back in Downloads.</p>
+      <p class="say" id="rs-say">Once Tome OS is set up, this page copies what you saved back to where it was: photos back in the gallery, downloads back in Downloads, texts back in Messages.</p>
       <ol class="ticks plain" id="rs-steps">
         <li data-s="now">Set up Tome OS on the phone<small>Go through the welcome screens until you reach the home screen.</small></li>
         <li data-s="todo">Turn on USB debugging<small>Like before: Settings › About phone, tap <strong>Build number</strong> 7 times. Then Settings › System › Developer options, turn on <strong>USB debugging</strong>.</small></li>
@@ -730,6 +735,10 @@ h1:focus { outline: none; }
         <div class="look-pic" data-phone><div class="v v-set v-allow on" data-v="allow"></div></div>
         <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Tap Allow</b><p>It asks <strong>"Allow USB debugging?"</strong>. Tap <strong>Allow</strong>. If nothing shows, unlock the phone's screen.</p></div>
       </div>
+      <div class="look" id="rs-texting" role="alert" hidden>
+        <div class="look-pic" data-phone><div class="v v-set v-ask v-sms on" data-v="sms"></div></div>
+        <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Bringing in your texts, contacts and calendar</b><p>If it asks, make <strong>Telemancer</strong> your texting app: tap <strong>Telemancer</strong>, then <strong>Set as default</strong>. Tap <strong>Allow</strong> for anything else it asks. If nothing shows, unlock the phone's screen.</p></div>
+      </div>
       <div class="row" id="rs-go-row"><button class="btn primary" id="rs-go">Connect and move files back</button></div>
       <div id="rs-progress" hidden>
         <div class="meter-label"><span id="rs-status" aria-live="polite">Starting…</span><span id="rs-count"></span></div>
@@ -744,6 +753,7 @@ h1:focus { outline: none; }
       <details class="help"><summary>Stuck? Get help with this step</summary><div>
         <p><strong>Photos not in the gallery yet?</strong> Restart the phone. It finds new photos as it starts.</p>
         <p><strong>Phone not in the list?</strong> Check USB debugging is on and the phone is unlocked. Unplug it and plug it back in.</p>
+        <p><strong>Texts didn't come in?</strong> Telemancer has to be the texting app to keep them. Open Settings › Apps › Default apps › SMS app, choose Telemancer, then press the button again. Nothing comes in twice.</p>
         <p><strong>Rather copy them yourself?</strong> Plug the phone in, pull down from the top of its screen, tap the USB notification and choose <strong>File transfer</strong>. Then copy the folders from your backup into the phone, each into the folder of the same name. On a Mac this needs an app such as OpenMTP.</p>
       </div></details>
     </div>
@@ -882,6 +892,8 @@ const SCREENS = {
   tome: '<img src="../assets/mark.svg" alt="">',
   welcome: '<img src="../assets/mark.svg" alt=""><div class="wl-h">Welcome to Tome OS</div><div class="wl-lang">English (United States)</div><div class="wl-go">Start</div>',
   allow: '<div class="ttl">Developer options</div><div class="it"><div>USB debugging</div><span class="sw on"></span></div><div class="ask-box"><b>Allow USB debugging?</b><div class="dim">The computer\'s RSA key fingerprint is: 5C:1E:…</div><div class="always"><i></i>Always allow from this computer</div><div class="btns"><span>Cancel</span><span class="go">Allow</span></div></div>',
+  perm: '<div class="ttl">Tome Transfer</div><div class="ask-box"><b>Allow Tome Transfer to access your SMS messages?</b><div class="btns"><span>Don\'t allow</span><span class="go">Allow</span></div></div>',
+  sms: '<div class="ttl">Telemancer</div><div class="ask-box"><b>Set Telemancer as your default SMS app?</b><div class="btns"><span>Cancel</span><span class="go">Set as default</span></div></div>',
   pmenu: '<div class="pm"><div class="hit"><i>⏻</i>Power off</div><div><i>↻</i>Restart</div></div>',
 };
 const ASK_SAYS = {
@@ -1119,7 +1131,8 @@ enter.computer = async (s) => {
 // folder the person picks or a zip file, and after the install copies the
 // ones they choose back to where they were. tome-backup.json beside them
 // lists each file's place and date, so photos keep their order. Messages,
-// contacts and calendar aren't in this version.
+// contacts and calendar go through Tome Transfer (below) as one more file,
+// tome-transfer.zip.
 const MANIFEST = "tome-backup.json";
 let lib = null;
 const loadLib = () => (lib ??= import("./vendor/adb-zip-tome.mjs").then((m) => { m.configureZip({ useWebWorkers: false }); return m; }, (e) => { lib = null; throw e; }));
@@ -1130,7 +1143,12 @@ const KINDS = [
   { id: "downloads", name: "Downloads", what: "Everything in the Downloads folder" },
   { id: "documents", name: "Documents", what: "The Documents folder" },
   { id: "music", name: "Music and recordings", what: "Music, voice recordings, audiobooks and ringtones" },
+  // Saved by Tome Transfer, not copied as files.
+  { id: "messages", name: "Messages", what: "Texts, picture messages and call history", helper: true },
+  { id: "contacts", name: "Contacts", what: "Everyone saved on the phone", helper: true },
+  { id: "calendar", name: "Calendar", what: "Events in the phone's calendars", helper: true },
 ];
+const HELPER_KINDS = KINDS.filter((k) => k.helper).map((k) => k.id);
 // The phone's shared storage folders that are saved, and what's in each.
 const ROOTS = { DCIM: "photos", Pictures: "photos", Movies: "videos", Download: "downloads", Documents: "documents", Music: "music", Recordings: "music", Audiobooks: "music", Podcasts: "music", Ringtones: "music", Notifications: "music", Alarms: "music" };
 const VIDEO = /\.(mp4|m4v|mov|3gp|3g2|mkv|webm|avi)$/i;
@@ -1153,7 +1171,15 @@ const sum = (files) => files.reduce((t, f) => t + f.size, 0);
 // connected. A kind with nothing found can't be ticked.
 function drawKinds(list, files, { restore = false } = {}) {
   const was = Object.fromEntries($$("input[data-kind]", list).map((i) => [i.dataset.kind, i.checked]));
-  list.innerHTML = KINDS.filter((k) => !restore || files.some((f) => f.kind === k.id)).map((k) => {
+  const saved = files && files.find((f) => f.kind === "transfer");
+  list.innerHTML = KINDS.filter((k) => !restore || (k.helper ? saved && transferHas(saved, k.id) : files.some((f) => f.kind === k.id))).map((k) => {
+    if (k.helper) {
+      // Not files: what Tome Transfer saves, or saved.
+      const none = !restore && TRANSFER.ready === false;
+      const note = restore ? transferNote(saved, k.id) : none ? "Not ready in the installer yet. Export them yourself, as below." : files ? "Saved by a small helper app on the phone." : escAttr(k.what);
+      const on = !none && (was[k.id] ?? true);
+      return `<li><label><input type="checkbox" data-kind="${k.id}"${on ? " checked" : ""}${none ? " disabled" : ""}><span>${k.name}<small>${note}</small></span></label></li>`;
+    }
     const mine = files ? files.filter((f) => f.kind === k.id) : null;
     const none = mine && !mine.length;
     const note = !mine ? escAttr(k.what) : none ? "None on the phone." : `<b>${count(mine.length, k.unit)} · ${size(sum(mine))}</b>`;
@@ -1271,7 +1297,7 @@ const keptHandle = () => handles("readonly", (st) => st.get("last")).catch(() =>
 
 // Copies files from the phone into a folder or zip, reading each straight
 // into its place, so even a large library never sits in memory.
-async function copyOut(adb, files, sink, show) {
+async function copyOut(adb, files, sink, show, extra = {}) {
   const sync = await adb.sync();
   const total = sum(files);
   let done = 0, inARow = 0;
@@ -1295,7 +1321,7 @@ async function copyOut(adb, files, sink, show) {
       }
       done += f.size;
     }
-    await sink.finish(JSON.stringify({ tome: 1, made: new Date().toISOString(), phone: code, files: files.filter((f) => !failed.includes(f.path)) }));
+    await sink.finish(JSON.stringify({ tome: 1, made: new Date().toISOString(), phone: code, files: files.filter((f) => !failed.includes(f.path)), ...extra }));
   } finally {
     await sync.dispose().catch(() => {});
   }
@@ -1309,6 +1335,210 @@ async function keepGoing(what, work) {
   try { return await work(); } finally { window.onbeforeunload = null; keepAwake?.release().catch(() => {}); }
 }
 
+// ----- Messages, contacts and calendar: Tome Transfer -----
+// A browser can't read texts, contacts or calendars, so before installing
+// this page puts a small helper app, Tome Transfer (apps/tome-transfer in the
+// Tome OS source), on the old phone over the same USB debugging connection.
+// It saves them to tome-transfer.zip in its own folder, this page copies that
+// into the backup, the helper deletes it, and the helper is removed. It runs
+// on Android 4.4 and newer and can't use the internet. After the install,
+// Telemancer (Tome OS's texting app) takes the file back over USB debugging
+// and brings everything in: texts into Messages, contacts into Contacts,
+// events into a calendar called "From your old phone".
+// The helper comes from the release TRANSFER.tag on this site's GitHub, with
+// a .sha256 beside it, through the download relay. Until it's published, the
+// three kinds can't be ticked and the page says to export them by hand.
+const TRANSFER = {
+  tag: "transfer-1",
+  apk: "tome-os-transfer-1.apk",
+  pkg: "com.tomeos.transfer",
+  folder: "/sdcard/Android/data/com.tomeos.transfer/files",
+  file: "tome-transfer.zip",
+  // Telemancer's side, on the Tome phone (TransferProvider, ImportActivity).
+  provider: "content://com.tomeos.telemancer.transfer",
+  importer: "com.tomeos.telemancer/.transfer.ImportActivity",
+  // Whether the helper is published: null until the page has looked.
+  ready: null,
+};
+const transferRelease = fetch(`https://api.github.com/repos/alid0n/tome-os-site/releases/tags/${TRANSFER.tag}`)
+  .then((r) => (r.ok ? r.json() : null)).catch(() => null)
+  .then((r) => {
+    TRANSFER.ready = !!r && (r.assets || []).some((a) => a.name === TRANSFER.apk) && (r.assets || []).some((a) => a.name === `${TRANSFER.apk}.sha256`);
+    log(`Tome Transfer ${TRANSFER.ready ? "is ready" : "isn't published yet"} (${TRANSFER.tag}).`);
+    $("bk-cant-helper").hidden = TRANSFER.ready;
+    $("bk-help-helper").hidden = !TRANSFER.ready;
+    drawKinds($("bk-kinds"), bkFiles);
+  });
+
+// A shell command on the phone, and what it printed. Android 4.4 has no
+// "exec" service, so it falls back to a plain shell there.
+async function sh(adb, command) {
+  try {
+    return await adb.subprocess.noneProtocol.spawnWaitText(command);
+  } catch (e) {
+    const p = await adb.subprocess.noneProtocol.pty(command);
+    const reader = p.output.getReader(), dec = new TextDecoder();
+    let text = "";
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      text += dec.decode(value, { stream: true });
+    }
+    return text + dec.decode();
+  }
+}
+async function readText(sync, path) {
+  return new Response(sync.read(path)).text();
+}
+
+let helperApk = null;
+async function getHelper() {
+  if (helperApk) return helperApk;
+  const res = await fetch(`${DOWNLOAD_RELAY}/${TRANSFER.tag}/${TRANSFER.apk}`);
+  if (!res.ok) throw new Error(`The helper app couldn't be downloaded (${res.status}). Check the internet connection, then save again.`);
+  const bytes = new Uint8Array(await res.arrayBuffer());
+  const want = (await (await fetch(`${DOWNLOAD_RELAY}/${TRANSFER.tag}/${TRANSFER.apk}.sha256`)).text()).trim().split(/\s+/)[0].toLowerCase();
+  const have = [...new Uint8Array(await crypto.subtle.digest("SHA-256", bytes))].map((b) => b.toString(16).padStart(2, "0")).join("");
+  if (want !== have) throw new Error("The helper app didn't download properly. Save again.");
+  log(`Tome Transfer downloaded: ${size(bytes.length)}, sha256 ${have}`);
+  return (helperApk = bytes);
+}
+
+// What a backup's tome-transfer.zip holds, from tome-backup.json's "transfer".
+function transferHas(file, kind) {
+  const c = file.counts;
+  if (!c) return true;
+  return kind === "messages" ? (c.sms || 0) + (c.mms || 0) + (c.calls || 0) > 0 : kind === "contacts" ? c.contacts > 0 : c.events > 0;
+}
+function transferNote(file, kind) {
+  const c = file?.counts;
+  if (!c) return "In the backup.";
+  if (kind === "messages") return `<b>${[c.sms || c.mms ? count((c.sms || 0) + (c.mms || 0), "text") : null, c.calls ? count(c.calls, "call") : null].filter(Boolean).join(" · ")}</b>`;
+  return `<b>${kind === "contacts" ? count(c.contacts, "contact") : count(c.events, "event")}</b>`;
+}
+// "1,234 texts, 300 calls, 210 contacts and 88 events".
+function transferWords(c) {
+  const parts = [
+    (c.sms || c.mms || c.texts) && count(c.texts ?? (c.sms || 0) + (c.mms || 0), "text"),
+    c.calls && count(c.calls, "call"),
+    c.contacts && count(c.contacts, "contact"),
+    c.events && count(c.events, "event"),
+  ].filter(Boolean);
+  return parts.length > 1 ? `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}` : parts[0] || "nothing";
+}
+
+// On the old phone: puts the helper on, saves, copies the file into the
+// backup with the sink, then has the helper delete it and removes the helper.
+async function saveTransfer(adb, kinds, sink, show) {
+  show("Getting the helper app…");
+  const apk = await getHelper();
+  const sdk = Number((await sh(adb, "getprop ro.build.version.sdk").catch(() => "")).trim()) || 0;
+  const sync = await adb.sync();
+  const tmp = "/data/local/tmp/tome-transfer.apk";
+  try {
+    show("Putting the helper app on the phone…");
+    await sync.write({ filename: tmp, file: new Blob([apk]).stream() });
+    await sh(adb, `pm uninstall ${TRANSFER.pkg}`).catch(() => {});
+    $("bk-helper").hidden = false;
+    showLook($("bk-helper"));
+    // -g grants its permissions (Android 6 and newer; older ones grant them at install).
+    const out = (await sh(adb, `pm install -r ${sdk >= 23 ? "-g " : ""}${tmp}`)).trim();
+    await sh(adb, `rm -f ${tmp}`).catch(() => {});
+    log(`pm install: ${out}`);
+    if (!/Success/.test(out)) throw new Error(`The phone wouldn't take the helper app (${out.split("\n").pop() || "no answer"}). See "The helper app won't go on?" below`);
+    const started = (await sh(adb, `am start -W -n ${TRANSFER.pkg}/.ExportActivity --es kinds ${kinds.join(",")}`)).trim();
+    log(`am start: ${started.replace(/\s+/g, " ")}`);
+    if (/Error|Exception/.test(started)) throw new Error("The helper app didn't open. Unlock the phone, then save again");
+    let status = null, last = "", changed = Date.now();
+    for (;;) {
+      await sleep(1000);
+      const text = await readText(sync, `${TRANSFER.folder}/status.json`).catch(() => "");
+      try { status = text ? JSON.parse(text) : null; } catch (e) { /* half written: read it again */ }
+      if (status?.state === "done" || status?.state === "failed") break;
+      if (text !== last) { last = text; changed = Date.now(); }
+      // Waiting for Allow is fine; nothing at all for several minutes isn't.
+      if (Date.now() - changed > 5 * 60 * 1000) throw new Error("The helper app stopped. Unlock the phone, then save again");
+      const step = { messages: "texts", calls: "call history", contacts: "contacts", calendar: "calendar" }[status?.step];
+      show(step ? `Saving your ${step}${status.of ? ` (${num(status.done)} of ${num(status.of)})` : ""}…` : "Waiting for the helper app. Tap Allow on the phone if it asks…");
+    }
+    $("bk-helper").hidden = true;
+    log(`Tome Transfer: ${JSON.stringify(status)}`);
+    if (status.state === "failed") throw new Error(`The helper app couldn't save them (${status.error})`);
+    show("Copying your texts, contacts and calendar…");
+    try {
+      await sink.put({ path: TRANSFER.file, size: status.bytes, mtime: Math.floor(Date.now() / 1000) }, sync.read(`${TRANSFER.folder}/${TRANSFER.file}`));
+    } catch (e) {
+      e.copying = true;
+      throw e;
+    }
+    return { counts: status.counts || {}, missing: status.missing || [], bytes: status.bytes || 0, kinds };
+  } finally {
+    $("bk-helper").hidden = true;
+    await sync.dispose().catch(() => {});
+    // The helper deletes its file; removing the helper deletes its folder too.
+    await sh(adb, `am start -n ${TRANSFER.pkg}/.ExportActivity --ez clear true`).catch(() => {});
+    await sleep(1500);
+    await sh(adb, `pm uninstall ${TRANSFER.pkg}`).then((t) => log(`pm uninstall: ${t.trim()}`)).catch(() => {});
+  }
+}
+
+// Telemancer's status row, as "content query" prints it.
+function statusRow(out) {
+  const row = out.match(/Row: \d+ (.*)/s);
+  if (!row) return null;
+  const s = {};
+  const body = row[1].trim();
+  const at = body.indexOf("error=");
+  for (const m of (at >= 0 ? body.slice(0, at) : body).matchAll(/(\w+)=([^,]*)(?:, |$)/g)) s[m[1]] = m[2] === "NULL" ? null : m[2];
+  if (at >= 0) s.error = body.slice(at + 6) === "NULL" ? null : body.slice(at + 6);
+  for (const k of ["done", "of", "texts", "calls", "contacts", "events"]) s[k] = Number(s[k]) || 0;
+  s.skipped = s.skipped ? s.skipped.split(/[\s,]+/).filter(Boolean) : [];
+  return s;
+}
+
+// On the Tome phone: hands the file to Telemancer and waits while it brings
+// everything in. Returns its status, or null when this Tome OS can't yet.
+async function bringIn(adb, file, kinds, show) {
+  const ask = () => sh(adb, `content query --uri ${TRANSFER.provider}/status`);
+  const first = await ask();
+  if (!statusRow(first)) { log(`No Telemancer transfer here: ${first.trim()}`); return null; }
+  const tmp = "/data/local/tmp/tome-transfer.zip";
+  const sync = await adb.sync();
+  try {
+    show("Handing your texts, contacts and calendar to the phone…");
+    await sync.write({ filename: tmp, file: file.open(), mtime: file.mtime });
+  } finally {
+    await sync.dispose().catch(() => {});
+  }
+  const wrote = (await sh(adb, `content write --uri ${TRANSFER.provider}/incoming < ${tmp}`)).trim();
+  await sh(adb, `rm -f ${tmp}`).catch(() => {});
+  if (wrote) log(`content write: ${wrote}`);
+  if (/Error|Exception/.test(wrote)) throw new Error("The phone didn't take your texts, contacts and calendar. Press the button again");
+  $("rs-texting").hidden = false;
+  showLook($("rs-texting"));
+  try {
+    const started = (await sh(adb, `am start -W -n ${TRANSFER.importer} --es kinds ${kinds.join(",")}`)).trim();
+    log(`am start: ${started.replace(/\s+/g, " ")}`);
+    if (/Error|Exception/.test(started)) throw new Error("Telemancer didn't open. Unlock the phone, then press the button again");
+    let status = null, last = "", changed = Date.now();
+    for (;;) {
+      await sleep(1000);
+      const out = await ask().catch(() => "");
+      status = statusRow(out) || status;
+      if (status && (status.state === "done" || status.state === "failed")) break;
+      if (out !== last) { last = out; changed = Date.now(); }
+      if (Date.now() - changed > 5 * 60 * 1000) throw new Error("Bringing them in stopped. Unlock the phone, then press the button again");
+      const step = { messages: "texts", calls: "call history", contacts: "contacts", calendar: "calendar" }[status?.step];
+      show(step ? `Bringing in your ${step}${status.of ? ` (${num(status.done)} of ${num(status.of)})` : ""}…` : "Waiting for the phone. If it asks, make Telemancer your texting app…");
+    }
+    log(`Telemancer: ${JSON.stringify(status)}`);
+    if (status.state === "failed") throw new Error(`The phone couldn't bring them in (${status.error})`);
+    return status;
+  } finally {
+    $("rs-texting").hidden = true;
+  }
+}
+
 const bkSection = steps[2];
 let bkAdb = null, bkFiles = null, bkBusy = false;
 const backups = $$("#backup input");
@@ -1318,8 +1548,11 @@ $("bk-folder").hidden = !window.showDirectoryPicker;
 
 function bkSay() {
   if (!bkFiles) return;
-  const chosen = bkFiles.filter((f) => pickedKinds($("bk-kinds")).has(f.kind));
-  $("bk-say").textContent = chosen.length ? `Saving ${count(chosen.length)}, ${size(sum(chosen))} in all.` : "Nothing is ticked yet.";
+  const picked = pickedKinds($("bk-kinds"));
+  const chosen = bkFiles.filter((f) => picked.has(f.kind));
+  const helper = KINDS.filter((k) => k.helper && picked.has(k.id)).map((k) => k.name.toLowerCase());
+  const also = helper.length ? `your ${helper.length > 1 ? `${helper.slice(0, -1).join(", ")} and ${helper[helper.length - 1]}` : helper[0]}` : "";
+  $("bk-say").textContent = chosen.length ? `Saving ${count(chosen.length)}, ${size(sum(chosen))} in all${also ? `, and ${also}` : ""}.` : also ? `Saving ${also}.` : "Nothing is ticked yet.";
 }
 $("bk-kinds").addEventListener("change", bkSay);
 function bkError(text) {
@@ -1385,9 +1618,11 @@ $("bk-rescan").addEventListener("click", async () => {
 
 async function bkSave(where) {
   if (bkBusy || !bkAdb || !bkFiles) return;
-  const chosen = bkFiles.filter((f) => pickedKinds($("bk-kinds")).has(f.kind));
+  const picked = pickedKinds($("bk-kinds"));
+  const chosen = bkFiles.filter((f) => picked.has(f.kind));
+  const helper = HELPER_KINDS.filter((k) => picked.has(k));
   $("bk-error").hidden = true;
-  if (!chosen.length) return bkError("Nothing is ticked. Tick what to keep, then save.");
+  if (!chosen.length && !helper.length) return bkError("Nothing is ticked. Tick what to keep, then save.");
   const name = `Phone backup ${today()}`;
   let sink, kept = null, opfsName = null;
   // Asking where to save has to come straight from the click.
@@ -1422,19 +1657,41 @@ async function bkSave(where) {
   screen(bkSection, "tome");
   caption(bkSection, "Copying your files. <b>Keep it plugged in.</b>");
   try {
+    // Texts, contacts and calendar first, while the person is still at the phone to tap Allow.
+    let transfer = null, transferError = null;
+    if (helper.length) {
+      $("bk-meter").classList.add("busy");
+      try {
+        transfer = await keepGoing("Your texts, contacts and calendar are still being saved.", () => saveTransfer(bkAdb, helper, sink, (t) => {
+          $("bk-status").textContent = t;
+          $("bk-count").textContent = "";
+        }));
+      } catch (e) {
+        log(`Tome Transfer: ${e.message || e}`);
+        // A zip can't skip a file half written.
+        if (sink.zip && e.copying) throw e;
+        transferError = e.message || String(e);
+      } finally {
+        $("bk-meter").classList.remove("busy");
+      }
+    }
     const failed = await keepGoing("Your files are still being saved.", () => copyOut(bkAdb, chosen, sink, (n, of, got, total) => {
       $("bk-status").textContent = `Saving ${num(n)} of ${count(of)}…`;
       $("bk-count").textContent = `${size(got)} of ${size(total)}`;
       $("bk-bar").style.width = (total ? got / total * 100 : 100).toFixed(1) + "%";
-    }));
+    }, { transfer: transfer && { counts: transfer.counts, missing: transfer.missing, kinds: transfer.kinds } }));
     const saved = chosen.filter((f) => !failed.includes(f.path));
     const kinds = {};
     saved.forEach((f) => { kinds[f.kind] = (kinds[f.kind] || 0) + 1; });
-    lastBackup.set({ name, where: opfsName ? "opfs" : where, opfs: opfsName, files: saved.length, bytes: sum(saved), kinds, phone: code, at: today() });
+    lastBackup.set({ name, where: opfsName ? "opfs" : where, opfs: opfsName, files: saved.length, bytes: sum(saved), kinds, transfer: transfer ? transfer.counts : null, phone: code, at: today() });
     if (kept) await keepHandle(kept);
-    log(`Saved ${count(saved.length)}, ${size(sum(saved))}.${failed.length ? ` ${count(failed.length)} couldn't be read.` : ""}`);
+    log(`Saved ${count(saved.length)}, ${size(sum(saved))}.${transfer ? ` Tome Transfer: ${transferWords(transfer.counts)}.` : ""}${failed.length ? ` ${count(failed.length)} couldn't be read.` : ""}`);
     $("bk-progress").hidden = true;
-    $("bk-done").innerHTML = `<p><strong>Saved ${count(saved.length)}, ${size(sum(saved))},</strong> ${where === "folder" ? `in the folder “${escAttr(name)}”` : `as “${escAttr(name)}.zip”`}. Keep it until your files are back on the phone. The last step of the install moves them back.</p>`
+    const missing = (transfer?.missing || []).map((m) => ({ messages: "texts", calls: "calls", contacts: "contacts", calendar: "calendar" })[m] || m);
+    $("bk-done").innerHTML = `<p><strong>Saved ${[saved.length ? `${count(saved.length)}, ${size(sum(saved))}` : null, transfer ? `your ${transferWords(transfer.counts)}` : null].filter(Boolean).join(", and ")},</strong> ${where === "folder" ? `in the folder “${escAttr(name)}”` : `as “${escAttr(name)}.zip”`}. Keep it until everything is back on the phone. The last step of the install moves it back.</p>`
+      + (transfer ? "<p>The helper app has deleted its copy and been removed from the phone.</p>" : "")
+      + (missing.length ? `<p>The phone didn't allow the helper app to read your ${escAttr(missing.join(" and "))}, so ${missing.length === 1 ? "it wasn't" : "they weren't"} saved. Save again and tap <strong>Allow</strong> to include ${missing.length === 1 ? "it" : "them"}.</p>` : "")
+      + (transferError ? `<p>Your texts, contacts and calendar weren't saved: ${escAttr(transferError)}. Save again to try once more${where === "folder" ? "; files already saved are kept" : ""}.</p>` : "")
       + (failed.length ? `<p>${count(failed.length)} couldn't be read and weren't saved, like ${escAttr(failed[0])}. Copy ${failed.length === 1 ? "it" : "them"} another way if needed.</p>` : "")
       + (opfsName ? '<p style="margin-top:10px"><button class="btn" id="bk-download">Download the zip file again</button></p>' : "");
     $("bk-done").hidden = false;
@@ -1451,7 +1708,7 @@ async function bkSave(where) {
     }
     $("bk-saved-ok").checked = true;
     $("bk-saved-ok").dispatchEvent(new Event("change"));
-    $("bk-saved-note").textContent = `Saved by this page: ${count(saved.length)}, ${size(sum(saved))}.`;
+    $("bk-saved-note").textContent = `Saved by this page: ${[saved.length ? `${count(saved.length)}, ${size(sum(saved))}` : null, transfer ? transferWords(transfer.counts) : null].filter(Boolean).join("; ")}.`;
     tick($("bk-steps"), 4);
     caption(bkSection, "Saved. Everything on the phone is replaced with Tome OS.");
     const adb = bkAdb;
@@ -2455,7 +2712,8 @@ enter.done = (s) => {
   $("done-restore").hidden = !last && !gapps;
   $("done-restore-link").hidden = !!last || gapps;
   if (last || gapps) {
-    $("done-restore-text").innerHTML = (last ? `<strong>You saved ${count(last.files)}, ${size(last.bytes)}, before installing.</strong> ` : "")
+    const what = last && [last.files ? `${count(last.files)}, ${size(last.bytes)}` : null, last.transfer ? `your ${transferWords(last.transfer)}` : null].filter(Boolean).join(", and ");
+    $("done-restore-text").innerHTML = (last ? `<strong>You saved ${what || "nothing"} before installing.</strong> ` : "")
       + (gapps ? `<strong>You asked for Google apps.</strong> ` : "")
       + `Set up Tome OS on the phone, then ${last ? "bring your files back" : "connect it once more"} ${last && gapps ? "and turn on Google apps " : gapps ? "to turn on Google apps " : ""}in the last step.`;
     $("done-restore-go").textContent = last ? "Move your files back" : "Turn on Google apps";
@@ -2481,8 +2739,11 @@ let rsFiles = null, rsFrom = null, rsBusy = false;
 
 // The files in a backup folder this page made, with their saved dates.
 async function folderFiles(dir) {
-  let dates = new Map();
-  try { dates = new Map(JSON.parse(await (await (await dir.getFileHandle(MANIFEST)).getFile()).text()).files.map((f) => [f.path, f.mtime])); } catch (e) { /* no list: the files' own dates */ }
+  let dates = new Map(), listed = null;
+  try {
+    listed = JSON.parse(await (await (await dir.getFileHandle(MANIFEST)).getFile()).text());
+    dates = new Map(listed.files.map((f) => [f.path, f.mtime]));
+  } catch (e) { /* no list: the files' own dates */ }
   const files = [], inside = [];
   const walk = async (d, prefix) => {
     for await (const [name, h] of d.entries()) {
@@ -2490,6 +2751,9 @@ async function folderFiles(dir) {
       if (h.kind === "directory") {
         if (prefix || name in ROOTS) await walk(h, path + "/");
         else if (name.startsWith("Phone backup")) inside.push(h);
+      } else if (path === TRANSFER.file) {
+        const file = await h.getFile();
+        files.push({ path, size: file.size, mtime: Math.floor(file.lastModified / 1000), kind: "transfer", counts: listed?.transfer?.counts, open: () => file.stream() });
       } else {
         const kind = kindOf(path);
         if (!kind) continue;
@@ -2511,11 +2775,17 @@ async function zipFiles(file) {
   // A zip of the backup folder, made by hand, has the folder's name in front.
   const firsts = unique(entries.map((e) => e.filename.split("/")[0]));
   const strip = firsts.length === 1 && !(firsts[0] in ROOTS) ? firsts[0].length + 1 : 0;
-  let dates = new Map();
+  let dates = new Map(), listed = null;
   const list = entries.find((e) => e.filename.slice(strip) === MANIFEST);
-  if (list) { try { dates = new Map(JSON.parse(await new Response(read(list)).text()).files.map((f) => [f.path, f.mtime])); } catch (e) { /* the entries' own dates */ } }
+  if (list) {
+    try {
+      listed = JSON.parse(await new Response(read(list)).text());
+      dates = new Map(listed.files.map((f) => [f.path, f.mtime]));
+    } catch (e) { /* the entries' own dates */ }
+  }
   return entries.map((e) => {
     const path = e.filename.slice(strip), kind = kindOf(path);
+    if (path === TRANSFER.file) return { path, size: e.uncompressedSize, mtime: Math.floor(e.lastModDate.getTime() / 1000), kind: "transfer", counts: listed?.transfer?.counts, open: () => read(e) };
     return kind && { path, size: e.uncompressedSize, mtime: dates.get(path) ?? Math.floor(e.lastModDate.getTime() / 1000), kind, open: () => read(e) };
   }).filter(Boolean);
 }
@@ -2529,9 +2799,11 @@ async function rsUse(label, getFiles) {
     if (!files.length) throw new Error(`There are no saved files in ${label}. Choose the “Phone backup” folder or zip file this page made.`);
     rsFiles = files;
     rsFrom = label;
-    log(`Backup chosen: ${label}, ${count(files.length)}, ${size(sum(files))}`);
+    const plain = files.filter((f) => f.kind !== "transfer"), saved = files.find((f) => f.kind === "transfer");
+    const what = [plain.length ? `${count(plain.length)}, ${size(sum(plain))}` : null, saved ? (saved.counts ? `your ${transferWords(saved.counts)}` : "your texts, contacts and calendar") : null].filter(Boolean).join(", and ");
+    log(`Backup chosen: ${label}, ${what}`);
     $("rs-src-note").textContent = `Using ${label}.`;
-    $("rs-from").textContent = `From ${label}: ${count(files.length)}, ${size(sum(files))}.`;
+    $("rs-from").textContent = `From ${label}: ${what}.`;
     drawKinds($("rs-kinds"), files, { restore: true });
     $("rs-pick").hidden = false;
     tick($("rs-steps"), 3);
@@ -2568,8 +2840,10 @@ $("rs-go").addEventListener("click", async () => {
   if (rsBusy) return;
   const kinds = pickedKinds($("rs-kinds"));
   const chosen = (rsFiles || []).filter((f) => kinds.has(f.kind));
+  const saved = (rsFiles || []).find((f) => f.kind === "transfer");
+  const helper = saved ? HELPER_KINDS.filter((k) => kinds.has(k)) : [];
   $("rs-error").hidden = true;
-  if (!chosen.length && !gappsAnswered()) {
+  if (!chosen.length && !helper.length && !gappsAnswered()) {
     $("rs-error").textContent = rsFiles ? "Nothing is ticked. Tick what to bring back." : "Choose your backup first.";
     $("rs-error").hidden = false;
     return;
@@ -2625,9 +2899,29 @@ $("rs-go").addEventListener("click", async () => {
       $("rs-progress").hidden = true;
       $("rs-pick").hidden = true;
     }
+    // Texts, contacts and calendar: Telemancer brings them in.
+    let brought = null, notYet = false;
+    if (helper.length) {
+      caption(rsSection, "Bringing in your texts, contacts and calendar. <b>Keep it plugged in.</b>");
+      $("rs-progress").hidden = false;
+      $("rs-meter").classList.add("busy");
+      $("rs-count").textContent = "";
+      try {
+        brought = await keepGoing("Your texts, contacts and calendar are still being brought in.", () => bringIn(adb, saved, helper, (t) => { $("rs-status").textContent = t; }));
+        notYet = brought === null;
+      } finally {
+        $("rs-meter").classList.remove("busy");
+        $("rs-progress").hidden = true;
+      }
+      $("rs-pick").hidden = true;
+    }
+    const skipped = (brought?.skipped || []).map((m) => ({ messages: "texts", calls: "calls", contacts: "contacts", calendar: "calendar" })[m] || m);
     const back = chosen.length - failed.length;
     log(`Finished: ${count(back)} moved back${failed.length ? `, ${failed.length} failed` : ""}.`);
     $("rs-done").innerHTML = (chosen.length ? `<p><strong>Moved back ${count(back)}, ${size(sum(chosen.filter((f) => !failed.includes(f.path))))}.</strong> They're where they were on your old phone.</p>` : "")
+      + (brought ? `<p><strong>Brought in ${transferWords(brought)}.</strong> Texts are in Messages and contacts in Contacts${brought.events ? ", and events are in the calendar “From your old phone”" : ""}.</p>` : "")
+      + (skipped.length ? `<p>Your ${escAttr(skipped.join(" and "))} ${skipped.length === 1 ? "wasn't" : "weren't"} brought in${skipped.includes("texts") ? ", because Telemancer isn't the texting app" : ""}. See “Texts didn't come in?” below, then press the button again. Nothing comes in twice.</p>` : "")
+      + (notYet ? "<p><strong>This version of Tome OS can't take texts, contacts and calendar yet.</strong> Update the phone in Settings › System › System updates, then come back to this step. They're kept in your backup.</p>" : "")
       + (gapps === true ? "<p><strong>Google apps are on their way.</strong> Tome OS installs microG in the background; it shows a notification when it's done.</p>" : gapps === false ? "<p>The phone knows you chose to keep it Google-free.</p>" : "")
       + (failed.length ? `<p>${count(failed.length)} couldn't be copied, like ${escAttr(failed[0])}. Copy ${failed.length === 1 ? "it" : "them"} by hand, as below.</p>` : "")
       + "<p>You can unplug the phone now.</p>";
@@ -2636,8 +2930,8 @@ $("rs-go").addEventListener("click", async () => {
       "<b>Turn USB debugging off again.</b> Settings › System › Developer options › USB debugging.",
     ].map((t) => `<li data-s="now">${t}</li>`).join("");
     $("rs-after").hidden = false;
-    caption(rsSection, chosen.length ? "Your files are back." : "All done.");
-    if (!failed.length && lastBackup.get()?.where === "opfs" && rsFrom === `“${lastBackup.get().name}”`) {
+    caption(rsSection, brought ? "Everything is back." : chosen.length ? "Your files are back." : "All done.");
+    if (!failed.length && !notYet && !skipped.length && lastBackup.get()?.where === "opfs" && rsFrom === `“${lastBackup.get().name}”`) {
       // The copy kept in this browser's storage isn't needed any more; the downloaded zip is the person's.
       navigator.storage.getDirectory().then((d) => d.removeEntry(lastBackup.get().opfs)).catch(() => {});
     }
