@@ -1,7 +1,7 @@
 {
-  "versionCode": 4,
-  "versionName": "0.2.2",
+  "versionCode": 5,
+  "versionName": "0.2.3",
   "page": "https://tome-os.com/telemancer/#get",
   "apk": "https://tome-os.com/downloads/Telemancer.apk",
-  "sha256": "1478986aef6b456b3f02eeb7e53b0940ceb088f645ae8d0115cdcdcf8bd22ab8"
+  "sha256": "2f4b11e25b5a9769c50c8d2efc924bd37be8b401da5e6061a841461c4751f230"
 }

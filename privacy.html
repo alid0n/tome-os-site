@@ -27,19 +27,20 @@
 <main class="wrap legal">
 
 <h1>Privacy Policy</h1>
-<p class="updated">Effective October 12, 2026</p>
+<p class="updated">Effective October 17, 2026</p>
 <p>Telemancer is an Android app for talking with the people you trust: live voice, voice messages (Scrolls), texts, photos and files, and voice and video calls. It is made by Tome OS ("we", "us"). This policy explains what information Telemancer uses, where it goes, and the choices you have.</p>
 
 <h2>The short version</h2>
 <ul>
 <li>Your conversations are encrypted end to end. Our servers pass them along but cannot read, hear or see them.</li>
-<li>Your contacts stay on your phone. We never upload your address book.</li>
+<li>Your contacts stay on your phone. We never upload your address book. To find which of your contacts use Telemancer, your phone sends scrambled versions of their numbers and email addresses, which we check and don't keep.</li>
 <li>We keep only what the service needs to work, such as your plan and how much free time you have used, and we delete it on a schedule.</li>
 <li>We do not sell your information, show ads, or use tracking or analytics tools.</li>
 </ul>
 
 <h2>What stays on your phone</h2>
 <p>Your contacts, your message history, recordings, photos and files you receive, your status settings, and the turning of voice messages into text all stay on your phone. Telemancer reads your contacts only to find which of them use Telemancer and to show their names.</p>
+<p><strong>Find friends.</strong> When you're signed in, Telemancer finds which of your contacts use Telemancer. Your phone turns each contact's phone number and email address into a one-way scramble and sends only those; our server checks them against people who are signed in and keeps none of them. You can turn Find friends off in Settings. People you find are only connected when you both have each other saved, or when you send a contact request and they approve it.</p>
 
 <h2>What passes through our servers, sealed</h2>
 <p>Messages, live voice, Scrolls, photos, files and call setup are encrypted on your phone before they leave it, with keys that only you and the people you talk with have.</p>
@@ -52,6 +53,7 @@
 <h2>What our servers keep</h2>
 <ul>
 <li><strong>Your Telemancer key and plan</strong>: an anonymous key created on your phone, when you joined, your plan (free, trial, Plus, Family, Crew or Team) and until when, family plan members you added, and invite rewards.</li>
+<li><strong>Your sign-in</strong>, if you sign in: your phone number and email address, kept only as a keyed scramble so friends who have them saved can find you; we don't keep them in readable form. To prevent spam we also keep when you added people recently and whom you blocked. Contact requests travel between phones encrypted, like messages.</li>
 <li><strong>A device check</strong>: when you first start Telemancer, Google Play Integrity confirms it is a genuine copy on a real phone. We keep a scrambled identifier for the phone so a free trial is given once per phone.</li>
 <li><strong>Free time used</strong>: on the free plan, how many minutes of live talk and calls you have used, so the daily allowance works on every phone.</li>
 <li><strong>Days you opened the app</strong>, kept for 60 days, used only to decide whether a returning subscriber is offered a discount.</li>
@@ -70,11 +72,13 @@
 <li><strong>Firebase Cloud Messaging</strong> (Google) wakes Telemancer when a call or message arrives while the app is closed. The wake-up carries no readable content.</li>
 <li><strong>Google Play Integrity</strong> checks the app and phone are genuine, as described above.</li>
 <li><strong>Hetzner</strong> hosts our servers in Germany.</li>
-<li><strong>Text messages (SMS)</strong>: in the version from tome-os.com, Telemancer may send a hidden setup text or an invite text from your phone to connect with a contact the first time. The Google Play version sends no texts itself; you can send an invite link from your own messaging app. Your carrier's usual rates may apply.</li>
+<li><strong>Twilio</strong> receives the one text your phone sends to Tome's sign-in number to confirm your phone number. Twilio sees your number and the one-time word in that text, and passes them to our server. We never send you texts through Twilio. Twilio's handling is described in the <a href="https://www.twilio.com/legal/privacy">Twilio Privacy Notice</a>.</li>
+<li><strong>Resend</strong> sends the 6-digit code when you sign in with an email address, so it sees that address and the code. Resend's handling is described in the <a href="https://resend.com/legal/privacy-policy">Resend Privacy Policy</a>.</li>
+<li><strong>Text messages (SMS)</strong>: in the version from tome-os.com, Telemancer may send a hidden setup text or an invite text from your phone to connect with a contact the first time, and one text to Tome's sign-in number when you sign in with your phone number. The Google Play version sends no texts itself; it opens your messaging app for you to send the sign-in text or an invite link. Your carrier's usual rates may apply.</li>
 </ul>
 
 <h2>How long we keep things</h2>
-<p>Sealed messages: up to 7 days. Sealed photos and files: 30 days. Days you opened the app: 60 days. Plan, account and payment records: while you use Telemancer, and as long as the law requires for payment records. Feedback, cancellation reasons and reports: up to 13 months. Crash reports: 90 days. An account nobody has used for 13 months is deleted, unless a paid plan is still running.</p>
+<p>Sealed messages: up to 7 days. Sealed photos and files: 30 days. Days you opened the app: 60 days. Plan, account and payment records: while you use Telemancer, and as long as the law requires for payment records. Feedback, cancellation reasons and reports: up to 13 months. Crash reports: 90 days. Sign-in codes: 10 minutes. Records of sign-in attempts, used only to limit them: 2 days. Your sign-in: until you delete your account; after you sign out, 13 months. An account nobody has used for 13 months is deleted, unless a paid plan is still running.</p>
 
 <h2>Your choices</h2>
 <ul>
