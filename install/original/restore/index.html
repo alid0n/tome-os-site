@@ -202,7 +202,12 @@ $("file").addEventListener("change", async () => {
 
 // ----- 2. Fastboot, then fastbootd -----
 const device = new fastboot.FastbootDevice();
-let offerReconnect = () => { $("reconnect").hidden = false; status("s2-status", "Press Pick the phone again, and choose the phone."); };
+let offerReconnect = () => {
+  $("reconnect").hidden = false;
+  status("s2-status", "Press Pick the phone again, and choose the phone.");
+  // During the restore it's step 3 the person is watching.
+  if (!$("writing").hidden) { status("s3-status", "The phone restarted. Press Pick the phone again in step 2 and choose it; then this carries on."); $("reconnect").scrollIntoView({ block: "center" }); }
+};
 $("reconnect").addEventListener("click", async () => { try { await device.connect(); $("reconnect").hidden = true; } catch (e) { log(`Not reconnected: ${e.message || e}`); } });
 async function waitForPhone(seconds = 120) {
   for (let i = 0; i < seconds; i++) {
@@ -281,11 +286,20 @@ $("restore").addEventListener("click", async () => {
       done += img.size;
       log(`Wrote ${img.name}`);
     };
-    // The system first, then the boot images (vbmeta last), so the phone
-    // never starts with new boot images over an old system.
+    // The system first, in fastbootd. Then the boot images and vbmeta (last)
+    // from the bootloader, as Tome OS's GSI guide (docs/gsi.md) puts
+    // verification back, so the phone never starts new boot images over an
+    // old system.
     for (const img of logical) await write(img);
-    for (const img of boot.filter((i) => !i.name.startsWith("vbmeta"))) await write(img);
-    for (const img of boot.filter((i) => i.name.startsWith("vbmeta"))) await write(img);
+    if (boot.length) {
+      $("progress-text").textContent = "Restarting into the bootloader…";
+      await device.reboot("bootloader", true, offerReconnect).catch(() => {});
+      await waitForPhone();
+      $("reconnect").hidden = true;
+      if ((await device.getVariable("is-userspace")) === "yes") throw new Error("The phone didn't leave fastbootd. Restart it into fastboot mode and press Restore again.");
+      for (const img of boot.filter((i) => !i.name.startsWith("vbmeta"))) await write(img);
+      for (const img of boot.filter((i) => i.name.startsWith("vbmeta"))) await write(img);
+    }
     $("progress-text").textContent = "Erasing the phone's data…";
     for (const p of ["userdata", "metadata"]) {
       await device.runCommand(`erase:${p}`).then(() => log(`Erased ${p}`), (e) => log(`Couldn't erase ${p} here (${e.message || e}); the phone offers to format it as it starts.`));
