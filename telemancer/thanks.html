@@ -5,17 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Thank you · Telemancer</title>
 <meta name="robots" content="noindex">
+<!-- The address can carry a checkout session or a key: never send it on to other sites. -->
+<meta name="referrer" content="no-referrer">
 <link rel="icon" href="/assets/telemancer-icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <style>
 main { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 64px 16px; }
 main img { width: 96px; height: auto; margin-bottom: 8px; }
+.keybox { width: 100%; max-width: 560px; margin: 0 0 28px; padding: 22px; border-radius: 18px; background: var(--page); border: 1px solid var(--talk); }
+.keybox .label { color: var(--muted); font-size: 15px; margin: 0 0 10px; }
+.key { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.key code { font-family: var(--mono); font-size: clamp(18px, 5vw, 24px); letter-spacing: 1px; color: var(--text); word-break: break-all; }
+.key .btn { min-height: 40px; padding: 0 16px; font-size: 15px; }
+.keybox ol { margin: 18px 0 0; padding-left: 22px; color: var(--muted); }
+.keybox ol li + li { margin-top: 6px; }
+.keybox ol strong { color: var(--text); }
+.waiting { color: var(--muted); }
+[hidden] { display: none !important; }
 </style>
 </head>
-<body>
+<body class="telemancer">
 <header class="site">
   <div class="wrap bar">
     <a class="brand" href="/"><img src="/assets/mark.svg" alt="">TOME OS</a>
@@ -30,10 +42,37 @@ main img { width: 96px; height: auto; margin-bottom: 8px; }
 <main class="wrap">
   <img src="/assets/telemancer-thanks.svg" alt="">
   <h1>Thank you.</h1>
-  <p class="lede">Your purchase is complete. Head back to Telemancer: your new plan shows up there within a minute, and a receipt is on its way to your email.</p>
-  <div class="actions">
-    <a class="btn primary" href="intent://t#Intent;scheme=telemancer;package=com.tomeos.telemancer;end">Open Telemancer</a>
-    <a class="btn" href="/telemancer/">About Telemancer</a>
+
+  <!-- Bought in the app: the plan is already on that phone. -->
+  <div id="in-app">
+    <p class="lede">Your purchase is complete. Head back to Telemancer: your new plan shows up there within a minute, and a receipt is on its way to your email.</p>
+    <div class="actions">
+      <a class="btn primary" href="intent://t#Intent;scheme=telemancer;package=com.tomeos.telemancer;end">Open Telemancer</a>
+      <a class="btn" href="/telemancer/">About Telemancer</a>
+    </div>
+  </div>
+
+  <!-- Bought here on the website: a key to enter in the app. -->
+  <div id="web" hidden>
+    <p class="lede" id="web-lede">Your purchase is complete. Here's your key: enter it in Telemancer and your plan starts on that phone.</p>
+    <div class="keybox" aria-live="polite">
+      <p class="label" id="key-label">Your Telemancer key</p>
+      <p class="waiting" id="waiting">Getting your key…</p>
+      <div class="key" id="key-row" hidden>
+        <code id="key"></code>
+        <button class="btn" type="button" id="copy">Copy</button>
+      </div>
+      <ol id="key-steps" hidden>
+        <li id="step-open" hidden><strong>On your Android phone</strong>, tap Open in Telemancer below, then Redeem. Or:</li>
+        <li>Open Telemancer, go to <strong>Settings › Your plan</strong>, tap <strong>Have a code?</strong> and enter the key.</li>
+        <li>No Telemancer yet? <a href="/telemancer/#get">Get it here</a>, then enter the key.</li>
+      </ol>
+    </div>
+    <div class="actions">
+      <a class="btn primary" id="open" href="#" hidden>Open in Telemancer</a>
+      <a class="btn" href="/telemancer/#get">Get Telemancer</a>
+    </div>
+    <p class="fine" id="web-fine">We've also emailed the key to you, and Stripe sends your receipt separately. Keep the key private: anyone who enters it gets the plan.</p>
   </div>
 </main>
 <footer class="site">
@@ -42,5 +81,73 @@ main img { width: 96px; height: auto; margin-bottom: 8px; }
     <span>Not affiliated with Google. Android is a trademark of Google LLC.</span>
   </div>
 </footer>
+<script>
+(function () {
+  var NAMES = { plus: "Telemancer Plus", family: "Telemancer Family", team: "Telemancer Team", team_large: "Telemancer Team Large" };
+  var session = new URLSearchParams(location.search).get("session");
+  var fromEmail = /^#key=([A-Za-z0-9-]{10,40})$/.exec(location.hash);
+  if (!session && !fromEmail) return;
+  document.getElementById("in-app").hidden = true;
+  document.getElementById("web").hidden = false;
+
+  function show(key, plan) {
+    document.getElementById("waiting").hidden = true;
+    document.getElementById("key").textContent = key;
+    document.getElementById("key-row").hidden = false;
+    document.getElementById("key-steps").hidden = false;
+    if (plan && NAMES[plan]) document.getElementById("key-label").textContent = "Your " + NAMES[plan] + " key";
+    var open = document.getElementById("open");
+    // An intent link opens Telemancer with the key filled in; without the app, Android shows the download.
+    open.href = "intent://key?code=" + encodeURIComponent(key) + "#Intent;scheme=telemancer;package=com.tomeos.telemancer;S.browser_fallback_url=" +
+      encodeURIComponent("https://tome-os.com/telemancer/#get") + ";end";
+    open.hidden = !/Android/i.test(navigator.userAgent);
+    document.getElementById("step-open").hidden = open.hidden;
+    document.getElementById("copy").onclick = function () {
+      var button = this;
+      navigator.clipboard.writeText(key).then(function () {
+        button.textContent = "Copied";
+        setTimeout(function () { button.textContent = "Copy"; }, 2000);
+      });
+    };
+  }
+
+  if (fromEmail) {
+    document.getElementById("web-lede").textContent = "Here's your Telemancer key: enter it in Telemancer and your plan starts on that phone.";
+    document.getElementById("web-fine").hidden = true;
+    show(fromEmail[1].toUpperCase());
+    return;
+  }
+
+  // Stripe can take a few seconds to confirm a payment, so ask again for up to a minute.
+  // (A preview on this computer can name a test server with ?api=.)
+  var api = "https://relay.tome-os.com/plans";
+  var local = new URLSearchParams(location.search).get("api");
+  if (local && location.hostname === "localhost" && /^http:\/\/localhost:\d+$/.test(local)) api = local;
+  var tries = 0;
+  function ask() {
+    fetch(api + "/v1/web/key?session=" + encodeURIComponent(session))
+      .then(function (r) { return r.json().then(function (body) { return { status: r.status, body: body }; }); })
+      .then(function (answer) {
+        if (answer.status === 200) return show(answer.body.key, answer.body.plan);
+        if (answer.status === 410) {
+          tries = 99;
+          document.getElementById("waiting").textContent = "This purchase was refunded, so its key no longer works.";
+          return;
+        }
+        if (answer.status === 402 && ++tries < 30) {
+          document.getElementById("waiting").textContent = "Waiting for the payment to confirm…";
+          return setTimeout(ask, 2000);
+        }
+        throw new Error(answer.status);
+      })
+      .catch(function () {
+        if (tries >= 99) return;
+        if (++tries < 30) return setTimeout(ask, 3000);
+        document.getElementById("waiting").textContent = "Your key couldn't be shown here. It's on its way to your email, or contact us and we'll send it.";
+      });
+  }
+  ask();
+})();
+</script>
 </body>
 </html>

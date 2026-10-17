@@ -201,31 +201,50 @@ h1:focus { outline: none; }
 .ripple { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; background: rgba(255,255,255,.45); animation: ripple .5s ease-out forwards; pointer-events: none; }
 @keyframes ripple { from { transform: scale(.2); opacity: 1; } to { transform: scale(2); opacity: 0; } }
 /* The phone's own screens, drawn like the real ones: the Pixel bootloader
-   (fastboot and its unlock/lock question), Tome OS's recovery in fastbootd,
-   Tome's start and welcome screens, and the power menu. */
+   (fastboot and its unlock/lock question), the warnings it shows as it
+   starts, Tome OS's boot animation and welcome screen, Tome OS's recovery in
+   fastbootd, and the power menu. */
 .v-fb, .v-ask, .v-unl { background: #000; color: #fff; font-family: Roboto, "Segoe UI", system-ui, sans-serif; padding: 56% 8px 8px; gap: 2px; }
 .fb-pick { position: absolute; right: 4px; top: 13%; max-width: 70%; text-align: right; font-size: 1.45em; font-weight: 700; line-height: 1.1; display: flex; align-items: center; gap: 3px; justify-content: flex-end; }
 .fb-pick::after { content: ""; flex: none; border: .35em solid transparent; border-left-color: currentColor; margin-right: -.4em; }
-.v-fb .bot { align-self: center; width: 52%; margin: 0 0 6px; }
+/* Current Pixel bootloaders show a red warning triangle, not an Android. */
+.tri { display: block; flex: none; width: 3.4em; height: 3.4em; }
+.v-fb .tri { color: #f44336; align-self: center; margin: 0 0 6px; }
 .fb-title { font-size: 1.35em; font-weight: 700; margin-bottom: 2px; }
 .fb-info { font-size: .82em; line-height: 1.45; color: #e8e8e8; }
-.grn { color: #3ddc84; } .red { color: #ff5a5a; } .dim { color: #9a9a9a; }
+.grn { color: #3ddc84; } .red { color: #f44336; } .dim { color: #9a9a9a; }
 .v-ask .ask-q { font-size: 1.25em; font-weight: 700; margin-bottom: 4px; }
 .v-ask p { margin: 0 0 5px; font-size: .78em; line-height: 1.35; color: #ddd; }
+/* The orange warning while the bootloader is unlocked. */
 .v-unl { align-items: center; justify-content: center; text-align: center; padding: 10px; gap: 6px; }
-.v-unl b { color: #ff8a00; font-size: 2em; line-height: 1; }
+.v-unl .tri { color: #ff8f00; width: 3.2em; height: 3.2em; }
 .v-unl p { margin: 0; font-size: .85em; color: #ddd; }
-.v-unl .o { color: #ff8a00; font-weight: 700; }
-.v-boot { background: #000; align-items: center; justify-content: center; gap: 10px; padding: 14px; text-align: center; color: #fff; }
-.v-boot b { color: #fbbc05; font-size: 1.4em; }
+.v-unl .o { color: #ff8f00; font-weight: 700; }
+/* The yellow notice once it's locked with Tome OS's key. */
+.v-boot { background: #000; color: #fff; padding: 30% 12px 12px; gap: 8px; font-size: .82em; }
+.v-boot .tri { width: 3.2em; height: 3.2em; margin-bottom: 4px; }
+.v-boot.yellow .tri { color: #fdd835; }
+.v-boot p { margin: 0; }
+.v-boot small { margin-top: auto; color: #bdbdbd; font-size: .9em; letter-spacing: .5px; text-transform: uppercase; }
 .v-off { background: #000; }
 .v-tome { align-items: center; justify-content: center; background: radial-gradient(circle at 50% 46%, rgba(157,123,255,.28), transparent 50%), #000; }
 .v-tome img { width: 62%; filter: drop-shadow(0 0 10px rgba(157,123,255,.7)); }
-.v-welcome { align-items: center; background: #000; color: #efeaff; padding: 30% 10px 10px; gap: 6px; text-align: center; }
-.v-welcome img { width: 52%; filter: drop-shadow(0 0 10px rgba(157,123,255,.6)); }
-.v-welcome .wl-h { font-size: 1.6em; line-height: 1.15; margin-top: 6px; }
-.v-welcome .wl-lang { color: #b9b0d0; font-size: .9em; }
-.v-welcome .wl-go { position: absolute; right: 10px; bottom: 14px; padding: 4px 12px; border-radius: 12px; background: #b57bff; color: #0c0a12; font-weight: 600; }
+/* Tome OS starting: its own boot animation, on black. */
+.v-anim { background: #000; align-items: center; justify-content: center; }
+.v-anim .boot { width: 62%; }
+/* Tome OS's first setup page (LineageOS's setup wizard, dark, in Tome's
+   colors), scaled from the phone's 412dp width to the practice phone. */
+.v-welcome { background: #141218; color: #e6e0e9; font-family: Roboto, system-ui, sans-serif; }
+.v-welcome .gap { flex: 2 1 0; }
+.v-welcome .gap.small { flex: .5 1 0; }
+.v-welcome .lottie { width: 100%; aspect-ratio: 512 / 260; display: grid; place-items: center; }
+.v-welcome .lottie img { height: 80%; }
+.v-welcome h2 { margin: 0; padding: 0 1em .65em; font-size: 1.97em; line-height: 1.16; font-weight: 400; letter-spacing: 0; }
+.v-welcome .foot { display: flex; align-items: center; gap: .65em; padding: .35em 1em 1.6em; }
+.v-welcome .a11y { flex: none; width: 3.9em; height: 3.9em; border-radius: 50%; border: 1px solid #938f99; display: grid; place-items: center; }
+.v-welcome .go { flex: 1; height: 3.9em; border-radius: 1.95em; background: #9d7bff; color: #1d0b4a; display: flex; align-items: center; justify-content: center; gap: .5em; font-size: 1em; }
+.v-welcome .go span { font-size: .9em; }
+.v-welcome svg { width: 1.3em; height: 1.3em; }
 .v-pmenu { background: rgba(0,0,0,.82); align-items: center; justify-content: center; }
 .v-pmenu .pm { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 86%; }
 .v-pmenu .pm div { aspect-ratio: 1; border-radius: 14px; background: #2b2633; color: #efeaff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: .95em; }
@@ -307,11 +326,30 @@ h1:focus { outline: none; }
 .walk .start span { background: #1a73e8; border-radius: 1px; }
 .walk .words p { margin: 0 0 8px; color: var(--muted); font-size: 15px; }
 .walk .words strong { color: var(--text); }
-.walk .cmd { display: flex; gap: 8px; align-items: stretch; margin: 0 0 8px; }
-.walk .cmd code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; background: #000; color: #e6e6e6; border-radius: 8px; padding: 8px 10px; font-size: 12px; }
-.walk .nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 4px; }
-.walk .nav span { color: var(--faint); font-size: 13px; font-variant-numeric: tabular-nums; }
-.walk .nav .btn { min-height: 38px; padding: 0 16px; font-size: 15px; }
+.cmd { display: flex; gap: 8px; align-items: stretch; margin: 0 0 8px; }
+.cmd code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; background: #000; color: #e6e6e6; border-radius: 8px; padding: 8px 10px; font-size: 12px; }
+.cmd .btn { min-height: 38px; padding: 0 16px; font-size: 15px; }
+.cmd.multi { flex-direction: column; align-items: flex-start; }
+.cmd.multi code { align-self: stretch; white-space: pre; line-height: 1.6; }
+.walk .nav, .card .nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 4px; }
+.walk .nav span, .card .nav span { color: var(--faint); font-size: 13px; font-variant-numeric: tabular-nums; }
+.walk .nav .btn, .card .nav .btn { min-height: 38px; padding: 0 16px; font-size: 15px; }
+
+/* The command-line install: one card per command, for the person's own
+   terminal. */
+.card { border: 1px solid rgba(181,123,255,.3); border-radius: 16px; background: rgba(24,19,31,.9); padding: 16px; margin: 0 0 16px; }
+.card h3 { margin: 0 0 10px; font-size: 17px; }
+.card > p, .card .words > p { margin: 0 0 10px; color: var(--muted); font-size: 15px; }
+.card strong { color: var(--text); }
+.card .see { color: var(--ok-text); }
+.card .walk { margin-top: 4px; }
+.shell { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 16px; color: var(--muted); font-size: 15px; }
+.shell select { padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--raised); color: inherit; font: inherit; }
+/* Only one way to install shows at a time. */
+body[data-way="cli"] .usb-only, body:not([data-way="cli"]) .cli-only { display: none !important; }
+/* Saving files, moving them back and the helper app talk to the phone over
+   USB debugging, which needs WebUSB whichever way Tome OS is installed. */
+body[data-webusb="no"] .webusb-only, body:not([data-webusb="no"]) .no-webusb-only { display: none !important; }
 
 /* Saving files before the install, and moving them back after */
 .panel { border: 1px solid var(--line); border-radius: 16px; background: rgba(24,19,31,.6); padding: 16px; margin: 0 0 18px; }
@@ -397,22 +435,22 @@ h1:focus { outline: none; }
     <div class="words">
       <div class="count"></div>
       <h1 tabindex="-1">Let's check this <span id="host-word">computer</span></h1>
-      <p class="say">Tome OS installs right from this page through a USB cable. This checks that everything here can do that.</p>
+      <p class="say">Tome OS installs through a USB cable. This checks that everything here is ready for it.</p>
       <ul class="ticks" id="host-checks">
         <li data-s="now" id="chk-browser">Checking your browser…<small></small></li>
         <li data-s="todo" id="chk-system">Checking your system…<small></small></li>
         <li data-s="todo" id="chk-space">Checking for space…<small></small></li>
         <li data-s="todo" id="chk-cable">A USB cable<small>The one that came with the phone works best. Plug it straight in, not through a hub.</small></li>
       </ul>
-      <div class="row"><button class="btn primary" data-next disabled>Continue</button></div>
+      <div class="row"><button class="btn primary" data-next disabled>Continue</button><button class="link" id="way-switch" hidden>Prefer a command line?</button></div>
       <details class="help"><summary>Stuck? Get help with this step</summary><div>
-        <p><strong>Using Safari or Firefox?</strong> They can't talk to phones over USB. Open <code>tome-os.com/install</code> in <strong>Chrome</strong> or <strong>Edge</strong>.</p>
+        <p><strong>Using Safari or Firefox?</strong> They can't talk to phones over USB, so this page shows you a few commands to copy and paste instead. For a one-click install, open this page in <strong>Chrome</strong>, <strong>Edge</strong>, <strong>Brave</strong> or <strong>Opera</strong>.</p>
         <p><strong>No computer?</strong> A second Android phone with Chrome works too, with a USB-C to USB-C cable.</p>
       </div></details>
     </div>
     <div class="visual">
       <div class="laptop"><div class="lid"><div class="dialog"><div class="q">tome-os.com</div><div class="d" id="host-mini">Checking…</div></div></div><div class="base"></div></div>
-      <p class="caption">Any computer with Chrome or Edge works.</p>
+      <p class="caption">Chrome, Edge and other Chromium browsers install in one click. Any other browser works with a few commands.</p>
     </div>
   </section>
 
@@ -421,9 +459,19 @@ h1:focus { outline: none; }
     <div class="words">
       <div class="count"></div>
       <h1 tabindex="-1">Back up your phone first</h1>
-      <p class="say">Installing wipes the phone clean, like a factory reset. Choose what to keep, and this page saves it to this <span class="host-noun">computer</span> now and moves it back to the phone once Tome OS is installed.</p>
+      <p class="say webusb-only">Installing wipes the phone clean, like a factory reset. Choose what to keep, and this page saves it to this <span class="host-noun">computer</span> now and moves it back to the phone once Tome OS is installed.</p>
+      <p class="say no-webusb-only">Installing wipes the phone clean, like a factory reset. Copy what you want to keep to this <span class="host-noun">computer</span> first, and copy it back once Tome OS is installed.</p>
 
-      <div class="panel" id="bk">
+      <div class="panel no-webusb-only" id="bk-manual">
+        <h2>Copy your photos and files</h2>
+        <p>Saving them from this page needs <strong>Chrome</strong>, <strong>Edge</strong> or another Chromium browser, which can talk to the phone over USB. In this browser, copy them yourself:</p>
+        <ol class="ticks plain">
+          <li data-s="now">Plug the phone in and choose File transfer<small>Pull down from the top of the phone's screen, tap the USB notification and choose <strong>File transfer</strong>.</small></li>
+          <li data-s="todo">Copy the folders<small>Copy the DCIM, Pictures, Download, Documents and Music folders to this <span class="host-noun">computer</span>. On a Mac this needs an app such as OpenMTP.</small></li>
+        </ol>
+      </div>
+
+      <div class="panel webusb-only" id="bk">
         <h2>What to keep</h2>
         <p id="bk-say">Untick anything you don't need. The numbers show once the phone is connected.</p>
         <ul class="checks kinds" id="bk-kinds"></ul>
@@ -465,10 +513,10 @@ h1:focus { outline: none; }
       </ul>
       <div class="row"><button class="btn primary" data-next disabled>I've backed everything up</button></div>
       <details class="help"><summary>Stuck? Get help with this step</summary><div>
-        <p><strong>Phone not in the list?</strong> Check USB debugging is on and the phone is unlocked. Unplug it and plug it back in.</p>
-        <p><strong>Says the phone is in use?</strong> Another program has it, like Android Studio or <code>adb</code>. Close it, or run <code>adb kill-server</code>, then press Connect again.</p>
-        <p><strong>"Allow USB debugging?" never shows?</strong> Unlock the phone. If it still doesn't show, go to Developer options, tap <strong>Revoke USB debugging authorizations</strong>, then connect again.</p>
-        <p id="bk-help-helper"><strong>The helper app won't go on?</strong> Some phones block apps put on over USB. On Xiaomi phones, turn on <strong>Install via USB</strong> in Developer options. If Play Protect asks, choose <strong>Install anyway</strong>. Or untick Messages, Contacts and Calendar, and export them yourself to the Downloads folder: that file is saved with your downloads.</p>
+        <p class="webusb-only"><strong>Phone not in the list?</strong> Check USB debugging is on and the phone is unlocked. Unplug it and plug it back in.</p>
+        <p class="webusb-only"><strong>Says the phone is in use?</strong> Another program has it, like Android Studio or <code>adb</code>. Close it, or run <code>adb kill-server</code>, then press Connect again.</p>
+        <p class="webusb-only"><strong>"Allow USB debugging?" never shows?</strong> Unlock the phone. If it still doesn't show, go to Developer options, tap <strong>Revoke USB debugging authorizations</strong>, then connect again.</p>
+        <p id="bk-help-helper" class="webusb-only"><strong>The helper app won't go on?</strong> Some phones block apps put on over USB. On Xiaomi phones, turn on <strong>Install via USB</strong> in Developer options. If Play Protect asks, choose <strong>Install anyway</strong>. Or untick Messages, Contacts and Calendar, and export them yourself to the Downloads folder: that file is saved with your downloads.</p>
         <p><strong>Rather copy files yourself?</strong> Plug the phone in, pull down from the top of its screen, tap the USB notification and choose <strong>File transfer</strong>. Then copy the DCIM, Pictures, Download, Documents and Music folders to this <span class="host-noun">computer</span>.</p>
       </div></details>
     </div>
@@ -487,7 +535,17 @@ h1:focus { outline: none; }
       <h1 tabindex="-1">Download Tome OS</h1>
       <p class="say" id="dl-say">It's a big download, so it can take a while on slow internet. You can carry on with the next steps while it downloads.</p>
 
-      <div id="dl-direct">
+      <div id="dl-cli" class="cli-only">
+        <ol class="ticks plain" id="dl-cli-list">
+          <li data-s="now">Google's platform tools<small>Google's own tool for installing on phones. It's small and quick.</small></li>
+          <li data-s="todo">Tome OS<small id="dl-cli-what">The install file for your phone.</small></li>
+        </ol>
+        <div class="row" style="margin-bottom:14px"><a class="btn primary" id="dl-pt" href="https://dl.google.com/android/repository/platform-tools-latest-windows.zip">Download platform tools</a><button class="btn" id="dl-cli-get">Download Tome OS</button></div>
+        <p class="fine" style="margin-bottom:18px">Leave both in your <strong>Downloads</strong> folder, still zipped. The install step unzips them. Platform tools for another system: <a href="https://dl.google.com/android/repository/platform-tools-latest-windows.zip">Windows</a> · <a href="https://dl.google.com/android/repository/platform-tools-latest-darwin.zip">macOS</a> · <a href="https://dl.google.com/android/repository/platform-tools-latest-linux.zip">Linux</a></p>
+        <div class="row"><button class="btn" data-next id="dl-cli-next">Continue while it downloads</button></div>
+      </div>
+
+      <div id="dl-direct" class="usb-only">
         <div class="row" id="dl-start-row"><button class="btn primary" id="dl-start">Download Tome OS</button></div>
         <div id="dl-progress" hidden>
           <div class="meter-label"><span id="dl-status">Starting…</span><span id="dl-count"></span></div>
@@ -498,7 +556,7 @@ h1:focus { outline: none; }
         <p class="fine" id="dl-other-row"><button class="link" id="dl-use-file">I already have the file</button></p>
       </div>
 
-      <div id="dl-manual" hidden>
+      <div id="dl-manual" class="usb-only" hidden>
         <ol class="ticks plain">
           <li data-s="now">Download the file<small id="dl-manual-what">Press the button below. If your browser asks, allow it to download several files.</small></li>
           <li data-s="todo">Choose it here<small>It's in your Downloads folder. Don't unzip it. If it came in parts, choose all of them together.</small></li>
@@ -524,9 +582,14 @@ h1:focus { outline: none; }
         <div class="notice" id="gapps-need" hidden style="margin:10px 0 0"><p>Choose an answer to carry on.</p></div>
       </div>
 
-      <details class="help"><summary>Stuck? Get help with this step</summary><div>
+      <details class="help usb-only"><summary>Stuck? Get help with this step</summary><div>
         <p><strong>Download stopped?</strong> Press the button again. It carries on from where it stopped.</p>
         <p><strong>Where does it go?</strong> This page keeps it in the browser's own storage and uses it in the install step, so there's no file to find. It's deleted once Tome OS is installed.</p>
+      </div></details>
+      <details class="help cli-only"><summary>Stuck? Get help with this step</summary><div>
+        <p><strong>Where do they go?</strong> Into your <strong>Downloads</strong> folder. If your browser saved them somewhere else, move them there.</p>
+        <p><strong>Your browser unzipped them already?</strong> That's fine. The install step uses the folders instead.</p>
+        <p><strong>Tome OS came in parts?</strong> It's over 2 GB, so it's split. Download every part. The install step joins them.</p>
       </div></details>
     </div>
     <div class="visual">
@@ -571,13 +634,13 @@ h1:focus { outline: none; }
       <ol class="ticks plain" id="fb-list">
         <li data-s="now">Turn the phone off<small>Hold Power and Volume Up together, then tap Power off.</small></li>
         <li data-s="todo">Hold Volume Down, then also hold Power</li>
-        <li data-s="todo">Let go when you see an Android lying on its back</li>
+        <li data-s="todo">Let go when you see a red triangle and the words Fastboot Mode</li>
         <li data-s="todo">Plug it in with the USB cable</li>
       </ol>
       <div class="row"><button class="btn primary" data-next disabled>My phone shows this screen</button><button class="link" id="fb-replay">Play it again</button></div>
       <details class="help"><summary>Stuck? Get help with this step</summary><div>
-        <p><strong>Phone started normally instead?</strong> You let go too early. Turn it off and try again, holding both buttons until the Android appears.</p>
-        <p><strong>Screen says "Fastboot Mode" in red?</strong> That's exactly right.</p>
+        <p><strong>Phone started normally instead?</strong> You let go too early. Turn it off and try again, holding both buttons until the red triangle appears.</p>
+        <p><strong>A red warning triangle and "Fastboot Mode" in red?</strong> That's exactly right. It looks alarming, but it's just how the phone shows this mode.</p>
         <p><strong>On Windows,</strong> if the next step can't find the phone, install <a href="https://developer.android.com/studio/run/win-usb">Google's USB driver</a>, then unplug the phone and plug it back in.</p>
       </div></details>
     </div>
@@ -596,18 +659,30 @@ h1:focus { outline: none; }
       <h1 tabindex="-1" id="install-h">Install Tome OS</h1>
       <p class="say" id="install-say">Press the button, then choose your phone in the box your browser shows. After that it runs by itself. It only needs you twice, to press buttons on the phone, and this page shows you which.</p>
 
-      <div id="i-ready">
+      <div id="c-run" class="cli-only">
+        <label class="shell">Commands for <select id="c-shell">
+          <option value="ps">Windows: Terminal or PowerShell</option>
+          <option value="cmd">Windows: Command Prompt</option>
+          <option value="mac">macOS: Terminal</option>
+          <option value="linux">Linux: Terminal</option>
+        </select></label>
+        <ol class="ticks plain" id="c-list"></ol>
+        <div class="card" id="c-card" aria-live="polite"></div>
+        <p class="fine" id="c-usb" hidden><button class="link" id="c-to-usb">Use the one-click install instead</button></p>
+      </div>
+
+      <div id="i-ready" class="usb-only">
         <div class="notice" id="i-wait-dl" hidden><p>Waiting for the download to finish: <span id="i-wait-pct"></span></p></div>
         <div id="i-driver" hidden>
           <p class="say" style="margin-bottom:14px"><strong>One thing first on Windows.</strong> Part way through, the phone switches to a second install screen, and Windows can't see it there without Google's USB driver. It takes about two minutes.</p>
           <div class="walk" data-walk="before"></div>
           <ul class="checks"><li><label><input type="checkbox" id="i-driver-ok"><span>I've installed the driver</span></label></li></ul>
         </div>
-        <div class="row"><button class="btn primary" id="i-connect">Erase the phone and install</button></div>
+        <div class="row"><button class="btn primary" id="i-connect">Erase the phone and install</button><button class="link" id="i-to-cli">Prefer a command line?</button></div>
         <p class="fine">Everything on the phone is erased and replaced with Tome OS. This can't be undone.</p>
       </div>
 
-      <div id="i-run" hidden>
+      <div id="i-run" class="usb-only" hidden>
         <ol class="ticks" id="i-list">
           <li data-step="connect" data-s="todo">Connect to the phone</li>
           <li data-step="unlock" data-s="todo">Unlock it to accept Tome OS</li>
@@ -617,7 +692,7 @@ h1:focus { outline: none; }
           <li data-step="lock" data-s="todo">Lock it again so it stays secure</li>
         </ol>
         <div class="look" id="i-test" role="alert" hidden>
-          <div class="look-pic" data-phone><div class="v v-unl on" data-v="unl"></div><div class="v v-welcome" data-v="welcome"></div></div>
+          <div class="look-pic" data-phone><div class="v v-unl on" data-v="unl"></div><div class="v v-anim" data-v="anim"></div><div class="v v-welcome" data-v="welcome"></div></div>
           <div class="look-words">
             <span class="look-tag">Watch your phone</span>
             <b class="look-h">Wait for the Tome welcome screen</b>
@@ -633,7 +708,7 @@ h1:focus { outline: none; }
             <ol class="look-steps">
               <li>Hold <b>Power</b> to turn the phone off first. When a menu shows, tap <b>Power off</b>.</li>
               <li>Once the screen is dark, hold <b>Volume Down</b> and <b>Power</b> together.</li>
-              <li>Let go when the fastboot screen shows. Keep it plugged in.</li>
+              <li>Let go when the red triangle and <b>Fastboot Mode</b> show. Keep it plugged in.</li>
             </ol>
             <p>This page carries on by itself. <button class="link" id="i-back-stuck">It's on the fastboot screen, but this page hasn't moved on</button></p>
           </div>
@@ -670,7 +745,13 @@ h1:focus { outline: none; }
         <div class="notice bad" id="i-error" role="alert" hidden style="margin-top:16px"></div>
         <div class="row" id="i-retry-row" hidden><button class="btn primary" id="i-retry">Try again</button></div>
       </div>
-      <details class="help"><summary>Stuck? Get help with this step</summary><div>
+      <details class="help cli-only"><summary>Stuck? Get help with this step</summary><div>
+        <p><strong>"fastboot devices" shows nothing?</strong> Check the phone shows Fastboot Mode and the cable is plugged straight in. On Windows, install Google's USB driver (the first step above). On Linux, install your system's Android USB rules (on Ubuntu and Debian: <code>sudo apt install android-sdk-platform-tools-common</code>), then unplug the phone and plug it back in.</p>
+        <p><strong>"fastboot" or "unzip" not found?</strong> Run the first step's commands again in the same window. Each new window needs them once. On Linux, install unzip if it's missing.</p>
+        <p><strong>It says "No … in fastboot mode found"?</strong> The phone isn't on the Fastboot Mode screen, or it's a different model from the one you picked. Nothing was changed.</p>
+        <p><strong>Something stopped half way?</strong> Nothing is broken. Put the phone back in Fastboot Mode and run the install command again.</p>
+      </div></details>
+      <details class="help usb-only"><summary>Stuck? Get help with this step</summary><div>
         <p><strong>Your phone isn't in the list?</strong> Check it shows the fastboot screen and the cable is plugged straight in. On Windows, install <a href="https://developer.android.com/studio/run/win-usb">Google's USB driver</a>.</p>
         <p><strong>Something stopped half way?</strong> Nothing is broken. Put the phone back in install mode and press Try again.</p>
       </div></details>
@@ -681,6 +762,8 @@ h1:focus { outline: none; }
         <div class="v v-fb on" data-v="fb"></div>
         <div class="v v-ask" data-v="ask"></div>
         <div class="v v-unl" data-v="unl"></div>
+        <div class="v v-boot yellow" data-v="yellow"></div>
+        <div class="v v-anim" data-v="anim"></div>
         <div class="v v-welcome" data-v="welcome"></div>
         <div class="v v-pmenu" data-v="pmenu"></div>
         <div class="v v-tome" data-v="tome"><img src="../assets/mark.svg" alt=""></div>
@@ -707,8 +790,9 @@ h1:focus { outline: none; }
       <p class="fine">To go back to stock Android any time, use Google's <a href="https://flash.android.com">Android Flash Tool</a> and choose <strong>Lock bootloader</strong> and <strong>Wipe device</strong>.</p>
     </div>
     <div class="visual" data-phone>
-      <div class="v v-boot on" data-v="boot"><b>!</b><div>Your device is loading a different operating system.</div></div>
-      <div class="v v-tome" data-v="tome"><img src="../assets/mark.svg" alt=""></div>
+      <div class="v v-boot yellow on" data-v="yellow"></div>
+      <div class="v v-anim" data-v="anim"></div>
+      <div class="v v-welcome" data-v="welcome"></div>
     </div>
   </section>
 
@@ -717,20 +801,28 @@ h1:focus { outline: none; }
     <div class="words">
       <div class="count"></div>
       <h1 tabindex="-1" id="rs-h">Move your files back</h1>
-      <p class="say" id="rs-say">Once Tome OS is set up, this page copies what you saved back to where it was: photos back in the gallery, downloads back in Downloads, texts back in Messages.</p>
-      <ol class="ticks plain" id="rs-steps">
+      <p class="say webusb-only" id="rs-say">Once Tome OS is set up, this page copies what you saved back to where it was: photos back in the gallery, downloads back in Downloads, texts back in Messages.</p>
+      <div class="no-webusb-only">
+        <p class="say">Once Tome OS is set up, copy what you saved back to the phone. Doing it from this page needs <strong>Chrome</strong>, <strong>Edge</strong> or another Chromium browser, so in this browser it's done by hand.</p>
+        <ol class="ticks plain" id="rs-manual">
+          <li data-s="now">Set up Tome OS on the phone<small>Go through the welcome screens until you reach the home screen.</small></li>
+          <li data-s="todo">Copy your files back<small>Plug the phone in, pull down from the top of its screen, tap the USB notification and choose <strong>File transfer</strong>. Then copy the folders from your backup into the phone, each into the folder of the same name. On a Mac this needs an app such as OpenMTP.</small></li>
+          <li data-s="todo" id="rs-cli-gapps" hidden>Turn on Google apps<small>On the phone, turn on USB debugging: Settings › About phone, tap <strong>Build number</strong> 7 times, then Settings › System › Developer options, turn on <strong>USB debugging</strong>. Plug it in, then paste these into a terminal window and press <strong>Enter</strong>. Tap <strong>Allow</strong> on the phone when it asks. Tome OS then installs microG in the background.</small><div id="rs-cli-gapps-cmd" style="grid-column:2;margin-top:8px;font-weight:400"></div></li>
+        </ol>
+      </div>
+      <ol class="ticks plain webusb-only" id="rs-steps">
         <li data-s="now">Set up Tome OS on the phone<small>Go through the welcome screens until you reach the home screen.</small></li>
         <li data-s="todo">Turn on USB debugging<small>Like before: Settings › About phone, tap <strong>Build number</strong> 7 times. Then Settings › System › Developer options, turn on <strong>USB debugging</strong>.</small></li>
         <li data-s="todo">Choose your backup<small id="rs-src-note">The folder or zip file this page saved. Skip this if you didn't save any.</small></li>
         <li data-s="todo"><span>Plug it in, connect, and tap <strong>Allow</strong> on the phone</span></li>
       </ol>
-      <div class="row" id="rs-src-row" style="margin-bottom:18px"><button class="btn" id="rs-last" hidden></button><button class="btn" id="rs-folder">Choose the backup folder</button><button class="btn" id="rs-zip-btn">Choose a backup zip file</button><input type="file" id="rs-zip" class="visually-hidden" accept=".zip,application/zip" tabindex="-1"></div>
+      <div class="row webusb-only" id="rs-src-row" style="margin-bottom:18px"><button class="btn" id="rs-last" hidden></button><button class="btn" id="rs-folder">Choose the backup folder</button><button class="btn" id="rs-zip-btn">Choose a backup zip file</button><input type="file" id="rs-zip" class="visually-hidden" accept=".zip,application/zip" tabindex="-1"></div>
       <div class="panel" id="rs-pick" hidden>
         <h2>What to bring back</h2>
         <p id="rs-from"></p>
         <ul class="checks kinds" id="rs-kinds"></ul>
       </div>
-      <p class="say" id="rs-gapps" hidden></p>
+      <p class="say webusb-only" id="rs-gapps" hidden></p>
       <div class="look" id="rs-allow" role="alert" hidden>
         <div class="look-pic" data-phone><div class="v v-set v-allow on" data-v="allow"></div></div>
         <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Tap Allow</b><p>It asks <strong>"Allow USB debugging?"</strong>. Tap <strong>Allow</strong>. If nothing shows, unlock the phone's screen.</p></div>
@@ -739,7 +831,7 @@ h1:focus { outline: none; }
         <div class="look-pic" data-phone><div class="v v-set v-dialog v-sms on" data-v="sms"></div></div>
         <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Bringing in your texts, contacts and calendar</b><p>If it asks, make <strong>Telemancer</strong> your texting app: tap <strong>Telemancer</strong>, then <strong>Set as default</strong>. Tap <strong>Allow</strong> for anything else it asks. If nothing shows, unlock the phone's screen.</p></div>
       </div>
-      <div class="row" id="rs-go-row"><button class="btn primary" id="rs-go">Connect and move files back</button></div>
+      <div class="row webusb-only" id="rs-go-row"><button class="btn primary" id="rs-go">Connect and move files back</button></div>
       <div id="rs-progress" hidden>
         <div class="meter-label"><span id="rs-status" aria-live="polite">Starting…</span><span id="rs-count"></span></div>
         <div class="meter" id="rs-meter"><i id="rs-bar"></i></div>
@@ -752,8 +844,8 @@ h1:focus { outline: none; }
       </div>
       <details class="help"><summary>Stuck? Get help with this step</summary><div>
         <p><strong>Photos not in the gallery yet?</strong> Restart the phone. It finds new photos as it starts.</p>
-        <p><strong>Phone not in the list?</strong> Check USB debugging is on and the phone is unlocked. Unplug it and plug it back in.</p>
-        <p><strong>Texts didn't come in?</strong> Telemancer has to be the texting app to keep them. Open Settings › Apps › Default apps › SMS app, choose Telemancer, then press the button again. Nothing comes in twice.</p>
+        <p class="webusb-only"><strong>Phone not in the list?</strong> Check USB debugging is on and the phone is unlocked. Unplug it and plug it back in.</p>
+        <p class="webusb-only"><strong>Texts didn't come in?</strong> Telemancer has to be the texting app to keep them. Open Settings › Apps › Default apps › SMS app, choose Telemancer, then press the button again. Nothing comes in twice.</p>
         <p><strong>Rather copy them yourself?</strong> Plug the phone in, pull down from the top of its screen, tap the USB notification and choose <strong>File transfer</strong>. Then copy the folders from your backup into the phone, each into the folder of the same name. On a Mac this needs an app such as OpenMTP.</p>
       </div></details>
     </div>
@@ -883,14 +975,21 @@ const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
 // The screens a phone can show, drawn like the real ones. The Pixel
 // bootloader shows the choice the volume keys move through at the top right,
 // next to the power key, which selects it.
-const ROBOT = '<svg class="bot" viewBox="0 0 120 62" aria-hidden="true"><g fill="#3ddc84"><path d="M31 11a20 20 0 0 0 0 40z"/><rect x="34" y="11" width="58" height="40" rx="6"/><rect x="44" y="1" width="26" height="7" rx="3.5"/><rect x="44" y="54" width="26" height="7" rx="3.5"/><rect x="95" y="17" width="16" height="9" rx="4.5"/><rect x="95" y="36" width="16" height="9" rx="4.5"/><path d="M13 19 4 12M13 43 4 50" stroke="#3ddc84" stroke-width="3" stroke-linecap="round"/></g><circle cx="21" cy="24" r="2.6"/><circle cx="21" cy="38" r="2.6"/><rect x="50" y="20" width="30" height="22" rx="2" fill="#111"/><path d="M50 20 38 9h30l12 11z" fill="#2fb36c"/><circle cx="65" cy="31" r="6" fill="none" stroke="#3ddc84" stroke-width="2"/></svg>';
+// The warning triangle Pixels show on their fastboot and start-up screens
+// (current bootloaders have no Android robot), colored by the screen it's on:
+// red in Fastboot Mode, orange while unlocked, yellow once locked with Tome
+// OS's key.
+const TRIANGLE = '<svg class="tri" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>';
 const SCREENS = {
-  fb: `<div class="fb-pick grn">Start</div>${ROBOT}<div class="fb-title red">Fastboot Mode</div><div class="fb-info">Product revision: <span class="code-name">oriole</span> MP1.0(ROW)<br>Bootloader version: slider-1.3-…<br>Baseband version: g5123b-…<br>Serial number: ••••••••••<br>Secure boot: PRODUCTION<br>NOS production: yes<br>DRAM: 8GB<br>UFS: 128GB<br>Device state: <span class="fb-state grn">locked</span><br>Boot slot: a</div>`,
+  fb: `<div class="fb-pick grn">Start</div>${TRIANGLE}<div class="fb-title red">Fastboot Mode</div><div class="fb-info">Product revision: <span class="code-name">oriole</span> MP1.0(ROW)<br>Bootloader version: slider-1.3-…<br>Baseband version: g5123b-…<br>Serial number: ••••••••••<br>Secure boot: PRODUCTION<br>NOS production: yes<br>DRAM: 8GB<br>UFS: 128GB<br>Device state: <span class="fb-state grn">locked</span><br>Boot slot: a</div>`,
   ask: '<div class="fb-pick ask-pick grn">Do not unlock the bootloader</div><div class="ask-q">Unlock the bootloader?</div><p class="ask-p"></p><p>Press the Volume Up/Down buttons to select, then the Power button to continue.</p>',
-  unl: '<b>!</b><p class="o">The bootloader is unlocked and software integrity cannot be guaranteed.</p><p>Any data stored on the device may be available to attackers. Do not store any sensitive data on the device.</p><p class="dim">Press the power button to pause boot.</p>',
+  unl: `${TRIANGLE}<p class="o">The bootloader is unlocked and software integrity cannot be guaranteed.</p><p>Any data stored on the device may be available to attackers. Do not store any sensitive data on the device.</p><p class="dim">Press the power button to pause boot.</p>`,
+  yellow: `${TRIANGLE}<p>Your device is loading a different operating system.</p><p>Visit this link on another device:<br>g.co/ABH</p><p class="dim">ID: ········</p><small>Press power button to pause boot</small>`,
+  anim: '<div class="boot"></div>',
   fbd: '<img src="../assets/mark.svg" alt=""><div class="h">fastbootd</div><div class="h">Product name - <span class="code-name">oriole</span></div><div class="dim">Tome OS</div><div class="menu"><div class="sel">Reboot system now</div><div>Enter recovery</div><div>Reboot to bootloader</div><div>Power off</div></div>',
   tome: '<img src="../assets/mark.svg" alt="">',
-  welcome: '<img src="../assets/mark.svg" alt=""><div class="wl-h">Welcome to Tome OS</div><div class="wl-lang">English (United States)</div><div class="wl-go">Start</div>',
+  // LineageOS's welcome_activity.xml, with Tome OS's name and accent.
+  welcome: '<div class="gap"></div><div class="lottie"></div><div class="gap small"></div><h2>Welcome to Tome OS</h2><div class="foot"><span class="a11y"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#e6e0e9" d="M12,2c1.1,0 2,0.9 2,2s-0.9,2 -2,2 -2,-0.9 -2,-2 0.9,-2 2,-2zM21,9h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg></span><span class="go"><svg viewBox="0 0 960 960" aria-hidden="true"><path fill="currentColor" d="M647,520H160V440H647L423,216l57,-56L800,480L480,800l-57,-56L647,520Z"/></svg><span>Start</span></span></div>',
   allow: '<div class="ttl">Developer options</div><div class="it"><div>USB debugging</div><span class="sw on"></span></div><div class="ask-box"><b>Allow USB debugging?</b><div class="dim">The computer\'s RSA key fingerprint is: 5C:1E:…</div><div class="always"><i></i>Always allow from this computer</div><div class="btns"><span>Cancel</span><span class="go">Allow</span></div></div>',
   perm: '<div class="ttl">Tome Transfer</div><div class="ask-box"><b>Allow Tome Transfer to access your SMS messages?</b><div class="btns"><span>Don\'t allow</span><span class="go">Allow</span></div></div>',
   sms: '<div class="ttl">Telemancer</div><div class="ask-box"><b>Set Telemancer as your default SMS app?</b><div class="btns"><span>Cancel</span><span class="go">Set as default</span></div></div>',
@@ -900,7 +999,8 @@ const ASK_SAYS = {
   Unlock: "If you unlock the bootloader, you will be able to install custom operating system software on this phone. A custom OS is not subject to the same testing as the original OS. To prevent unauthorized access to your personal data, unlocking the bootloader will also delete all personal data on your phone.",
   Lock: "If you lock the bootloader, you will not be able to install custom operating system software on this phone. To prevent unauthorized access to your personal data, locking the bootloader will also delete all personal data on your phone.",
 };
-for (const [name, html] of Object.entries(SCREENS)) $$(`.v-${name}`).forEach((v) => { if (!v.children.length) v.innerHTML = html; });
+// Each screen left empty in the page is filled from its template.
+$$(".v").forEach((v) => { if (!v.children.length && SCREENS[v.dataset.v]) v.innerHTML = SCREENS[v.dataset.v]; });
 $$(".ask-p").forEach((e) => { e.textContent = ASK_SAYS.Unlock; });
 // Every [data-phone] holds its screens; this wraps them in the phone's body,
 // keys, fingers and cable.
@@ -913,15 +1013,72 @@ $$("[data-phone]").forEach((holder) => {
 // The big practice phone beside the words. The cards that ask the person to
 // look at their phone have small phones of their own.
 const phoneIn = (section) => section.querySelector(".visual .phone");
-function screen(section, name) { $$(".visual .v", section).forEach((v) => v.classList.toggle("on", v.dataset.v === name)); }
+function screen(section, name) { show($$(".visual .v", section), name); }
 // The same, for a card's small phone, or for every phone in a section.
-function screenIn(root, name) { $$(".v", root).forEach((v) => v.classList.toggle("on", v.dataset.v === name)); }
+function screenIn(root, name) { show($$(".v", root), name); }
+function show(vs, name) {
+  vs.forEach((v) => {
+    v.classList.toggle("on", v.dataset.v === name);
+    if (v.dataset.v !== name) return;
+    if (name === "anim") playBoot(v);
+    if (name === "welcome") playWelcome(v);
+  });
+}
 function press(root, which, push) {
   $$(".phone", root).forEach((p) => {
     p.querySelector(".f-" + which).classList.toggle("on", push !== null);
     p.querySelector(".f-" + which).classList.toggle("push", !!push);
     p.querySelector(".key." + which).classList.toggle("press", !!push);
   });
+}
+const stillOnly = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Tome OS's own boot animation (branding/animations/os/boot.svg), played from
+// its start each time it shows. It's put in a shadow root so its styles stay
+// its own.
+let bootSvg = null;
+function playBoot(v) {
+  const box = v.querySelector(".boot");
+  if (!box) return;
+  bootSvg ||= fetch("../assets/tome-boot.svg").then((r) => r.ok ? r.text() : null).catch(() => null);
+  bootSvg.then((svg) => {
+    const root = box.shadowRoot || box.attachShadow({ mode: "open" });
+    root.innerHTML = '<style>svg, img { display: block; width: 100%; height: auto; }</style>' + (svg || '<img src="../assets/mark.svg" alt="">');
+  });
+}
+
+// Tome OS's welcome screen plays the setup wizard's own Lottie animation
+// (lottie_welcome.json), with lottie-web loaded only when it's first needed.
+// Without it, or for anyone who'd rather not see motion, it shows the logo.
+const LOTTIE = { src: "https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie_light.min.js", integrity: "sha512-Pe5arL9TnWlLgXT1VY0d50tfo6J9bh0qM7irYJuACQcGz7mbIahBXZmNeav+46mTQBtPY170Vi89KDa4kd4QVg==" };
+let lottieLoad = null;
+const loadLottie = () => lottieLoad ||= new Promise((resolve, reject) => {
+  const s = document.createElement("script");
+  Object.assign(s, LOTTIE, { crossOrigin: "anonymous", onerror: reject, onload: () => window.lottie ? resolve(window.lottie) : reject() });
+  document.head.append(s);
+});
+function playWelcome(v) {
+  const box = v.querySelector(".lottie");
+  if (!box) return;
+  if (box.anim) { box.anim.goToAndPlay(0, true); return; }
+  if (box.dataset.started) return;
+  box.dataset.started = "yes";
+  const still = () => { box.anim = null; box.innerHTML = '<img src="../assets/mark.svg" alt="">'; };
+  if (stillOnly()) return still();
+  loadLottie().then((lottie) => {
+    box.anim = lottie.loadAnimation({ container: box, renderer: "svg", loop: true, autoplay: true, path: "../assets/tome-welcome.json" });
+    box.anim.addEventListener("data_failed", still);
+  }).catch(still);
+}
+
+// What the phone shows as it starts: Google's warning (orange while it's
+// unlocked, yellow once it's locked with Tome OS's key), then Tome OS's boot
+// animation, then the welcome screen, on every phone in root. say(name)
+// captions each one.
+function startsUp(root, warning, say = () => {}) {
+  screenIn(root, warning); say(warning);
+  later(() => { screenIn(root, "anim"); say("anim"); }, 3500);
+  later(() => { screenIn(root, "welcome"); say("welcome"); }, 10000);
 }
 function caption(section, html) { const c = section.querySelector(".caption"); if (c) c.innerHTML = html; }
 function finger(section, which, push) {
@@ -1096,34 +1253,78 @@ function setCheck(id, state, title, note = "") {
   li.firstChild.textContent = title;
   li.querySelector("small").innerHTML = note;
 }
+// Two ways to install. "usb": this page talks to the phone itself (WebUSB,
+// which only Chromium browsers have). "cli": the person runs Google's
+// platform tools in a terminal, with commands this page writes for them.
+// Firefox and Safari can only take the second.
+const hasUsb = "usb" in navigator;
+let way = hasUsb ? "usb" : "cli";
+// Phones and tablets, which have no terminal to run commands in. (iPads say
+// they're Macs, but have touch screens.)
+const noTerminal = hostOs === "Android" || /iPhone|iPad|iPod/.test(ua) || (hostOs === "Mac" && navigator.maxTouchPoints > 1);
+function setWay(w) {
+  way = w;
+  document.body.dataset.way = w;
+  $("way-switch").hidden = !hasUsb || noTerminal;
+  $("i-to-cli").hidden = noTerminal;
+  $("way-switch").textContent = w === "cli" ? "Use the one-click install instead" : "Prefer a command line?";
+  $("c-usb").hidden = !hasUsb;
+}
+setWay(way);
+// Without WebUSB (Firefox, Safari) the steps that use USB debugging, saving
+// files, moving them back and the helper app, explain how to do it by hand.
+document.body.dataset.webusb = hasUsb ? "yes" : "no";
+if (!hasUsb) {
+  $("bk-saved-note").textContent = "Copied as above, or another way: Google Photos or another cloud.";
+  $("bk-cant-helper").hidden = false;
+  $("bk-cant-helper").innerHTML = "<strong>Messages, contacts and calendar</strong> need Chrome or Edge to be moved by this page. Contacts and calendars kept in an online account come back when you sign in to it. Otherwise export them to a file in the phone's Downloads folder, and copy it with the Download folder.";
+  $("gapps-said").textContent = "If you say yes, the last step shows you one command that passes it to the phone. Your answer is kept only in this browser.";
+  $("done-restore-link-btn").textContent = "Saved files before installing? Move them back";
+}
+const pageUrl = location.origin + location.pathname;
+
 enter.computer = async (s) => {
   const next = nextIn(s);
-  const usb = "usb" in navigator;
+  ["chk-browser", "chk-system", "chk-space"].forEach((id, i) => { $(id).dataset.s = i ? "todo" : "now"; });
   await sleep(500);
-  setCheck("chk-browser", usb ? "done" : "bad",
-    usb ? "Your browser can talk to phones" : "This browser can't talk to phones",
-    usb ? "" : "Open <code>tome-os.com/install</code> in <strong>Chrome</strong> or <strong>Edge</strong> to install.");
-  $("host-mini").textContent = usb ? "Ready to install" : "Use Chrome or Edge";
+  if (way === "usb") {
+    setCheck("chk-browser", "done", "Your browser can talk to phones", "");
+  } else if (noTerminal) {
+    // A phone or tablet has no terminal for the commands.
+    setCheck("chk-browser", "bad", "This browser can't talk to phones",
+      hostOs === "Android" ? "Open this page in <strong>Chrome</strong> on this phone, or on a computer, to install." : "An iPhone or iPad can't install Tome OS. Open this page on a computer.");
+  } else {
+    setCheck("chk-browser", "done", hasUsb ? "You'll install with a few commands" : "This browser can't talk to phones, so you'll install with a few commands",
+      `The next steps show you each one to copy and paste. For a one-click install instead, open this page in <strong>Chrome</strong>, <strong>Edge</strong>, <strong>Brave</strong>, <strong>Opera</strong> or another Chromium browser:<span class="cmd" style="margin-top:8px"><code>${esc(pageUrl)}</code><button class="btn" data-copy>Copy link</button></span>`);
+  }
+  $("host-mini").textContent = way === "usb" ? "Ready to install" : "Ready to install with commands";
   $("chk-system").dataset.s = "now";
   await sleep(500);
   setCheck("chk-system", "done", hostOs ? `${hostOs} is ready` : "Your system is ready",
-    hostOs === "Windows" ? 'One extra thing on Windows: install <a href="https://developer.android.com/studio/run/win-usb">Google\'s USB driver</a> so the browser can see the phone.' : "Nothing else to install.");
+    hostOs !== "Windows" ? "Nothing else to install."
+      : way === "usb" ? 'One extra thing on Windows: install <a href="https://developer.android.com/studio/run/win-usb">Google\'s USB driver</a> so the browser can see the phone.'
+      : "One extra thing on Windows: Google's USB driver. The install step shows you how.");
   $("chk-space").dataset.s = "now";
   await sleep(400);
   const need = build ? build.size : 0;
   let free = null;
-  if (canDownloadHere()) {
+  if (way === "usb" && canDownloadHere()) {
     try { const e = await navigator.storage.estimate(); free = e.quota - e.usage; } catch (e) { /* unknown */ }
   }
-  if (free !== null && need && free < need) {
+  if (way === "cli" && !noTerminal) {
+    // Parts are joined into one zip before it's unzipped: a third copy.
+    const parts = build && build.files.length > 1;
+    setCheck("chk-space", "done", "Space for the download", need ? `Tome OS needs about ${gb(need * (parts ? 3 : 2))} free on this ${hostNoun}: ${gb(need)} to download, and ${parts ? "twice as much again to join it up and unzip it" : "as much again once it's unzipped"}.` : "");
+  } else if (free !== null && need && free < need) {
     setCheck("chk-space", "bad", "Not quite enough space", `Tome OS needs ${gb(need)} free and this ${hostNoun} has ${gb(free)}. Free up some space, or download the file yourself in the next step.`);
   } else {
     setCheck("chk-space", "done", "There's room for the download", need ? `It needs ${gb(need)}.` : "");
   }
   $("chk-cable").dataset.s = "done";
-  log(`Browser ${usb ? "has" : "has no"} WebUSB. System: ${hostOs || "unknown"}. Free space: ${free === null ? "unknown" : gb(free)}, needs ${need ? gb(need) : "unknown"}.`);
-  next.disabled = !usb;
+  log(`Browser ${hasUsb ? "has" : "has no"} WebUSB, installing ${way === "usb" ? "from this page" : "with commands"}. System: ${hostOs || "unknown"}. Free space: ${free === null ? "unknown" : gb(free)}, needs ${need ? gb(need) : "unknown"}.`);
+  next.disabled = way === "cli" && noTerminal;
 };
+$("way-switch").addEventListener("click", () => { setWay(way === "cli" ? "usb" : "cli"); enter.computer(steps[1]); });
 
 // ----- 3. Back up, and 9. Move files back -----
 // With USB debugging on, this page copies the phone's files over adb
@@ -1365,7 +1566,7 @@ const transferRelease = fetch(`https://api.github.com/repos/alid0n/tome-os-site/
   .then((r) => {
     TRANSFER.ready = !!r && (r.assets || []).some((a) => a.name === TRANSFER.apk) && (r.assets || []).some((a) => a.name === `${TRANSFER.apk}.sha256`);
     log(`Tome Transfer ${TRANSFER.ready ? "is ready" : "isn't published yet"} (${TRANSFER.tag}).`);
-    $("bk-cant-helper").hidden = TRANSFER.ready;
+    $("bk-cant-helper").hidden = hasUsb && TRANSFER.ready;
     $("bk-help-helper").hidden = !TRANSFER.ready;
     drawKinds($("bk-kinds"), bkFiles);
   });
@@ -1728,7 +1929,7 @@ $("bk-zip").addEventListener("click", () => bkSave("zip"));
 
 enter.backup = (s) => {
   if (bkBusy) return;
-  if (!bkFiles) {
+  if (hasUsb && !bkFiles) {
     screen(s, "dbg");
     caption(s, "In <b>Developer options</b>, turn on <b>USB debugging</b>.");
   } else {
@@ -1764,7 +1965,7 @@ $$("[data-gapps]").forEach((t) => t.addEventListener("click", () => {
 }));
 drawGapps();
 // Carrying on past the download needs an answer.
-["manual-next", null].forEach((id) => {
+["manual-next", "dl-cli-next", null].forEach((id) => {
   const b = id ? $(id) : $("dl-progress").querySelector("[data-next]");
   b.addEventListener("click", (e) => {
     if (gappsAnswered()) return;
@@ -1805,13 +2006,41 @@ function showManual() {
   const many = build && build.files.length > 1;
   $("dl-manual-get").textContent = many ? `Download all ${build.files.length} parts · ${gb(build.size)}` : `Download · ${build ? gb(build.size) : ""}`;
 }
+const DL_SAY = $("dl-say").textContent;
 enter.download = (s) => {
   if (!build) return;
   $("dl-mini-name").textContent = `Tome OS ${build.version} for ${PHONES[code]}`;
   $("dl-start").textContent = `Download Tome OS for ${PHONES[code]} · ${gb(build.size)}`;
+  if (way === "cli") {
+    $("dl-say").textContent = "Two downloads: Google's tool that talks to the phone, and Tome OS itself. Tome OS is big, so it can take a while on slow internet. You can carry on with the next steps while it downloads.";
+    caption(s, "Both go into your <b>Downloads</b> folder.");
+    const parts = build.files.length;
+    $("dl-cli-what").textContent = `For the ${PHONES[code]}, ${gb(build.size)}.` + (parts > 1 ? ` It comes in ${parts} parts. Download them all.` : "");
+    $("dl-cli-get").textContent = `Download Tome OS · ${gb(build.size)}`;
+    $("dl-pt").href = PLATFORM_TOOLS[shellOs()];
+    $("dl-pt").textContent = `Download platform tools for ${{ windows: "Windows", darwin: "macOS", linux: "Linux" }[shellOs()]}`;
+    return;
+  }
+  $("dl-say").textContent = DL_SAY;
+  caption(s, "No zip files to open, nothing to unpack.");
   if (!canDownloadHere() && !pack) showManual();
 };
 $("dl-use-file").addEventListener("click", showManual);
+
+// Downloads for the command-line install, straight to the Downloads folder.
+const PLATFORM_TOOLS = Object.fromEntries(["windows", "darwin", "linux"].map((os) => [os, `https://dl.google.com/android/repository/platform-tools-latest-${os}.zip`]));
+function cliDownloaded(i) {
+  const list = $("dl-cli-list");
+  $$("li", list)[i].dataset.s = "done";
+  const left = $$("li", list).findIndex((li) => li.dataset.s !== "done");
+  if (left !== -1) $$("li", list)[left].dataset.s = "now";
+  $("dl-pt").classList.toggle("primary", left === 0);
+  $("dl-cli-get").classList.toggle("primary", left === 1);
+  $("dl-cli-next").classList.toggle("primary", left === -1);
+  $("dl-mini-text").textContent = "In your browser's downloads";
+}
+$("dl-pt").addEventListener("click", () => cliDownloaded(0));
+$("dl-cli-get").addEventListener("click", () => { downloadFiles(); cliDownloaded(1); });
 
 // A rebuilt Tome OS keeps its file names, so a kept file is only carried on
 // from when GitHub's id for it is the one it was downloaded from.
@@ -2034,13 +2263,17 @@ function joinParts(files) {
 
 // Starts each file's download a moment apart; the browser may ask once to
 // allow several downloads.
-$("dl-manual-get").addEventListener("click", () => {
+function downloadFiles() {
   if (!build) return;
   build.files.forEach((f, n) => setTimeout(() => {
     const a = document.createElement("a");
     a.href = f.browser_download_url;
     document.body.append(a); a.click(); a.remove();
   }, n * 1500));
+}
+$("dl-manual-get").addEventListener("click", () => {
+  if (!build) return;
+  downloadFiles();
   tick($$("#dl-manual ol")[0], 1);
 });
 $("file-label").addEventListener("keydown", (e) => {
@@ -2126,7 +2359,7 @@ enter.fastboot = (s) => {
   later(() => screen(s, "off"), 2900);
   later(() => { tick(list, 1); caption(s, "Hold <b>Volume Down</b>…"); finger(s, "down", true); }, 3700);
   later(() => { caption(s, "…and while holding it, hold <b>Power</b>."); finger(s, "power", true); }, 4600);
-  later(() => { tick(list, 2); screen(s, "fb"); caption(s, "When this screen shows, <b>let go</b>."); }, 6300);
+  later(() => { tick(list, 2); screen(s, "fb"); caption(s, "When the red triangle and <b>Fastboot Mode</b> show, <b>let go</b>."); }, 6300);
   later(() => { finger(s, "power", null); finger(s, "down", null); }, 7100);
   later(() => { tick(list, 3); caption(s, `Plug the cable into this ${hostNoun}.`); cable.classList.add("in"); }, 7900);
   later(() => { tick(list, 4); caption(s, "Ready. <b>Leave it on this screen.</b>"); nextIn(s).disabled = false; }, 8900);
@@ -2135,8 +2368,11 @@ $("fb-replay").addEventListener("click", () => enter.fastboot(steps[5]));
 
 // ----- 7. Install -----
 const iSection = steps[6];
+const INSTALL_SAY = $("install-say").textContent;
 enter.install = () => {
   if (running) return;
+  if (way === "cli") { enterCli(); return; }
+  $("install-say").textContent = INSTALL_SAY;
   $("i-ready").hidden = false;
   $("i-run").hidden = true;
   $("i-laptop").hidden = false;
@@ -2173,15 +2409,17 @@ function setStatus(text, progress = null) {
 // The phone's own confirm screen, mirrored on the practice phone and on the
 // "look at your phone" card: the volume key glows until the right choice
 // shows at the top, then Power does.
-function showPrompt(choice, verb) {
+function showPrompt(choice, verb, card = true) {
   const not = `Do not ${verb.toLowerCase()} the bootloader`;
   $$(".ask-q").forEach((e) => { e.textContent = `${verb} the bootloader?`; });
   $$(".ask-p").forEach((e) => { e.textContent = ASK_SAYS[verb]; });
   $$(".ask-want").forEach((e) => { e.textContent = `"${choice}"`; });
   $("i-prompt-h").textContent = `${verb} the bootloader on the phone`;
-  $("i-prompt").hidden = false;
-  screenIn($("i-prompt"), "ask");
-  showLook($("i-prompt"));
+  if (card) {
+    $("i-prompt").hidden = false;
+    screenIn($("i-prompt"), "ask");
+    showLook($("i-prompt"));
+  }
   log(`Asking the person to choose "${choice}" on the phone.`);
   screen(iSection, "ask");
   const downs = $$(".key.down", iSection), powers = $$(".key.power", iSection), picks = $$(".ask-pick", iSection);
@@ -2207,14 +2445,9 @@ function hidePrompt() {
 }
 
 // Tome OS's first start, on every phone in the install step: the orange
-// unlocked warning, then the welcome screen.
+// unlocked warning, Tome OS's boot animation, then the welcome screen.
 function playFirstStart() {
-  const loop = () => {
-    screenIn(iSection, "unl");
-    $("i-caption").innerHTML = "First an <b>orange warning</b>. That's normal.";
-    later(() => { screenIn(iSection, "welcome"); $("i-caption").innerHTML = "Then the <b>Tome welcome screen</b>."; }, 3000);
-    later(loop, 7000);
-  };
+  const loop = () => { startsUp(iSection, "unl", (v) => { $("i-caption").innerHTML = STARTS_SAY[v]; }); later(loop, 16000); };
   loop();
 }
 // Back to install mode from Tome OS: hold Power to turn it off first, then
@@ -2540,7 +2773,15 @@ async function testThenLock() {
   await lock();
 }
 
+// The practice phone's captions as Tome OS starts for its check.
+const STARTS_SAY = {
+  unl: "First an <b>orange warning</b>. That's normal while the phone is unlocked.",
+  anim: "Then Tome OS starts. The first time takes up to 5 minutes.",
+  welcome: "Then the <b>welcome screen</b>. Don't set it up yet.",
+};
+
 async function lock() {
+  clearTimers();
   setStep("test", "done");
   setStep("lock");
   $("i-back").hidden = false;
@@ -2565,7 +2806,8 @@ async function lock() {
   setStatus("Finished.", 1);
   saved.set({});
   try { await device.reboot(); } catch (e) { /* the phone restarts by itself or on Power */ }
-  screen(iSection, "tome");
+  startsUp(iSection, "yellow");
+  $("i-caption").innerHTML = "A <b>yellow notice</b>, then Tome OS starts.";
   // The downloaded copy isn't needed any more.
   navigator.storage?.getDirectory?.().then(async (dir) => {
     for await (const name of dir.keys()) if (name.startsWith("tome-os-")) await dir.removeEntry(name).catch(() => {});
@@ -2684,16 +2926,27 @@ function walk(el, frames) {
     el.innerHTML = `<h3>${i + 1}. ${f.title}</h3><div class="shot" aria-hidden="true">${f.shot}</div><div class="words">${f.words}</div><div class="nav"><button class="btn" data-back${i ? "" : " disabled"}>Back</button><span>${i + 1} of ${frames.length}</span><button class="btn${i < frames.length - 1 ? " primary" : ""}" data-fwd${i < frames.length - 1 ? "" : " disabled"}>Next</button></div>`;
     el.querySelector("[data-back]").onclick = () => { i = Math.max(0, i - 1); draw(); };
     el.querySelector("[data-fwd]").onclick = () => { i = Math.min(frames.length - 1, i + 1); draw(); };
-    const copy = el.querySelector("[data-copy]");
-    if (copy) copy.onclick = () => {
-      navigator.clipboard.writeText(DRIVER_CMD).then(() => { copy.textContent = "Copied"; }, () => {
-        const r = document.createRange(); r.selectNodeContents(el.querySelector(".cmd code"));
-        getSelection().removeAllRanges(); getSelection().addRange(r);
-      });
-    };
   };
   draw();
 }
+// Every Copy button copies the command beside it. Where the clipboard can't
+// be reached, the command is selected for copying by hand.
+document.addEventListener("click", (e) => {
+  const button = e.target.closest("[data-copy]");
+  if (!button) return;
+  const code = button.parentElement.querySelector("code");
+  button.dataset.label ||= button.textContent;
+  const copied = () => {
+    button.textContent = "Copied";
+    setTimeout(() => { button.textContent = button.dataset.label; }, 2000);
+  };
+  const select = () => {
+    const r = document.createRange(); r.selectNodeContents(code);
+    getSelection().removeAllRanges(); getSelection().addRange(r);
+    try { if (document.execCommand("copy")) copied(); } catch (err) { /* left selected to copy by hand */ }
+  };
+  (navigator.clipboard ? navigator.clipboard.writeText(code.textContent) : Promise.reject()).then(copied, select);
+});
 const notFound = '<p style="font-size:14px">Still not working? Open <strong>Device Manager</strong> (right-click Start), right-click the phone (usually under Other devices, with a yellow mark), choose <strong>Update driver</strong>, <strong>Browse my computer</strong>, <strong>Let me pick</strong>, <strong>Have Disk</strong>, pick the unzipped <code>usb_driver</code> folder, then <strong>Android Bootloader Interface</strong>.</p>';
 walk(document.querySelector('[data-walk="before"]'), driverFrames({
   title: "That's it",
@@ -2706,7 +2959,196 @@ walk(document.querySelector('[data-walk="during"]'), driverFrames({
   words: "<p>Press <strong>Reconnect</strong> below, pick the phone and press <strong>Connect</strong>. The install carries on by itself.</p>" + notFound,
 }));
 
+// ----- 7. Install, with Google's platform tools -----
+// For browsers without WebUSB (Firefox, Safari), or anyone who'd rather: the
+// same install as above, as commands for the person's own terminal. It runs
+// the factory zip's own flash-all script (scripts/release.sh writes it),
+// which checks the phone's model, then installs Tome OS and its verified boot
+// key. Like the one-click install, it only locks once Tome OS has been seen
+// to start, since a locked phone that can't start can't be unlocked again.
+const SHELLS = { ps: "windows", cmd: "windows", mac: "darwin", linux: "linux" };
+let shell = hostOs === "Windows" ? "ps" : hostOs === "Mac" ? "mac" : "linux";
+const shellOs = () => SHELLS[shell];
+$("c-shell").value = shell;
+$("c-shell").addEventListener("change", () => { shell = $("c-shell").value; drawCli(); });
+
+// The commands, for the person's shell. Both downloads are expected in the
+// Downloads folder; anything already unzipped there (Safari unzips by
+// itself) is used as it is.
+// Goes to the Downloads folder, unzips platform tools there if needed, and
+// puts them on the window's PATH.
+function toolsPrep() {
+  const tools = `platform-tools-latest-${shellOs()}.zip`;
+  if (shell === "ps") return ["cd $HOME\\Downloads", `if (!(Test-Path platform-tools)) { tar -xf ${tools} }`, '$env:Path = "$PWD\\platform-tools;$env:Path"'];
+  if (shell === "cmd") return ["cd /d %USERPROFILE%\\Downloads", `if not exist platform-tools tar -xf ${tools}`, 'set "PATH=%CD%\\platform-tools;%PATH%"'];
+  return ["cd ~/Downloads", `[ -d platform-tools ] || unzip -q ${tools}`, 'export PATH="$PWD/platform-tools:$PATH"'];
+}
+// A command to copy, with its Copy button.
+function cmdCard(lines) {
+  const text = [].concat(lines).join("\n");
+  return `<div class="cmd${text.includes("\n") ? " multi" : ""}"><code>${esc(text)}</code><button class="btn" data-copy>Copy</button></div>`;
+}
+function cliCommands() {
+  const zip = build.files[0].name.replace(/\.part\d+$/, "");
+  const dir = zip.replace(/-factory\.zip$/, "");
+  const parts = build.files.length > 1 ? build.files.map((f) => f.name) : null;
+  if (shell === "ps") return {
+    prep: [
+      ...toolsPrep(),
+      parts ? `if (!(Test-Path ${dir})) { cmd /c copy /b ${parts.join("+")} ${zip}; tar -xf ${zip} }` : `if (!(Test-Path ${dir})) { tar -xf ${zip} }`,
+      `cd ${dir}`,
+      "fastboot devices",
+    ],
+    flash: ".\\flash-all.bat",
+  };
+  if (shell === "cmd") return {
+    prep: [
+      ...toolsPrep(),
+      parts ? `if not exist ${dir} (copy /b ${parts.join("+")} ${zip} && tar -xf ${zip})` : `if not exist ${dir} tar -xf ${zip}`,
+      `cd ${dir}`,
+      "fastboot devices",
+    ],
+    flash: "flash-all.bat",
+  };
+  return {
+    prep: [
+      ...toolsPrep(),
+      parts ? `[ -d ${dir} ] || { cat ${parts.join(" ")} > ${zip} && unzip -q ${zip}; }` : `[ -d ${dir} ] || unzip -q ${zip}`,
+      `cd ${dir}`,
+      "fastboot devices",
+    ],
+    // Run with sh, so it works even where unzipping lost the file's "can run"
+    // flag.
+    flash: "sh flash-all.sh",
+  };
+}
+
+// One card per thing to do, each with what the practice phone shows.
+function cliCards() {
+  const c = cliCommands();
+  const s = iSection;
+  const cmd = cmdCard;
+  const say = (html) => { $("i-caption").innerHTML = html; };
+  const onScreen = (name, html) => { screen(s, name); say(html); };
+  const windows = SHELLS[shell] === "windows";
+  const open = {
+    ps: "Right-click the <strong>Start</strong> button and choose <strong>Terminal</strong>. On Windows 10 it's <strong>Windows PowerShell</strong>.",
+    cmd: "Press the <strong>Windows</strong> key, type <strong>cmd</strong> and press <strong>Enter</strong>.",
+    mac: "Press <strong>Command</strong> and <strong>Space</strong>, type <strong>Terminal</strong> and press <strong>Return</strong>.",
+    linux: "On most systems, <strong>Ctrl</strong>, <strong>Alt</strong> and <strong>T</strong> opens one.",
+  }[shell];
+  const cards = [];
+  if (windows) cards.push({
+    title: "Install Google's USB driver",
+    words: '<p>Windows can\'t see the phone in Fastboot Mode without it. It takes about two minutes.</p><div class="walk" data-walk="cli"></div>',
+    next: "I've installed the driver",
+    phone: () => { setDeviceState(false); onScreen("fb", "Leave the phone on this screen, plugged in."); },
+  });
+  cards.push({
+    title: "Get the tools ready",
+    words: `<p>Open a terminal window. ${open} Then copy these, paste them in and press <strong>Enter</strong>.${windows ? " If it warns about pasting several lines, choose <strong>Paste anyway</strong>." : ""}</p>${cmd(c.prep)}<p>Unzipping Tome OS takes a minute or two. <strong>Keep this window open</strong> for the rest of the install.</p><p class="see">It ends with a line of letters and numbers, then the word <strong>fastboot</strong>. That's your phone.</p>`,
+    phone: () => { setDeviceState(false); onScreen("fb", "Leave the phone on this screen, plugged in."); },
+  });
+  cards.push({
+    title: "Unlock the phone",
+    words: `<p>Run this in the same window. The phone then asks you to confirm.</p>${cmd("fastboot flashing unlock")}<p>On the phone, press <strong>Volume Down</strong> until the top of the screen says <strong>Unlock the bootloader</strong>, then press <strong>Power</strong>. This erases the phone.</p><p class="see">The phone goes back to the Fastboot Mode screen, which now says <strong>unlocked</strong>. If the terminal says it's already unlocked, that's fine too.</p><p>If it says <strong>not allowed</strong>, OEM unlocking is off. Start the phone, switch it on (step 5), then come back here.</p>`,
+    phone: () => { setDeviceState(false); showPrompt("Unlock the bootloader", "Unlock", false); },
+  });
+  cards.push({
+    title: "Install Tome OS",
+    words: `<p>Run Tome OS's install script. It checks the phone is a ${esc(PHONES[code])} first.</p>${cmd(c.flash)}<p>It takes several minutes. The phone restarts a few times by itself and its screen goes dark now and then. <strong>Don't touch the phone or unplug it</strong> while it runs.</p><p class="see">It ends with <strong>Installed</strong>. Don't lock the phone yet: first check Tome OS starts.</p>`,
+    phone: () => {
+      setDeviceState(true);
+      let dark = false;
+      const loop = () => later(() => { dark = !dark; screen(s, dark ? "off" : "fb"); loop(); }, dark ? 1500 : 3500);
+      onScreen("fb", "It restarts a few times by itself. <b>Hands off the phone.</b>");
+      loop();
+    },
+  });
+  cards.push({
+    title: "Check Tome OS starts",
+    words: `<p>Start the phone:</p>${cmd("fastboot reboot")}<p>First an orange warning, which is normal while it's unlocked. Then Tome OS starts, which takes up to 5 minutes the first time. Wait for the welcome screen, but <strong>don't set it up yet</strong>: locking erases it once more.</p><p><button class="link" data-stuck>It's stuck on the Google logo, or keeps restarting</button></p><div class="notice bad" data-stuck-say hidden><p><strong>Don't lock it.</strong> Left unlocked, it's safe to fix. Hold <strong>Power</strong> and <strong>Volume Down</strong> for about 15 seconds until the Fastboot Mode screen shows, then go back a step and run the install script again.</p></div>`,
+    next: "I see the welcome screen",
+    phone: () => { setDeviceState(true); startsUp(s, "unl", (v) => say(STARTS_SAY[v])); },
+  });
+  cards.push({
+    title: "Lock it again",
+    words: `<p>Put the phone back in Fastboot Mode: hold <strong>Power</strong> and tap <strong>Power off</strong>. Once the screen is dark, hold <strong>Volume Down</strong> and <strong>Power</strong> together, and let go when the red triangle and <strong>Fastboot Mode</strong> show. Then run:</p>${cmd("fastboot flashing lock")}<p>On the phone, press <strong>Volume Down</strong> until the top of the screen says <strong>Lock the bootloader</strong>, then press <strong>Power</strong>. This erases the phone once more, and makes it as secure as the day it came out of the box.</p><p>When it's back on the Fastboot Mode screen, start it:</p>${cmd("fastboot reboot")}<p class="see">A yellow notice, then Tome OS starts and shows its welcome screen. Now you can set it up.</p>`,
+    next: "It's finished",
+    phone: () => {
+      setDeviceState(true);
+      onScreen("welcome", "Hold <b>Power</b>…");
+      later(() => finger(s, "power", true), 600);
+      later(() => { screen(s, "pmenu"); say("…then tap <b>Power off</b>."); }, 1900);
+      later(() => finger(s, "power", null), 2500);
+      later(() => { screen(s, "off"); say("Once it's dark, hold <b>Volume Down</b>…"); }, 3500);
+      later(() => finger(s, "down", true), 4300);
+      later(() => { finger(s, "power", true); say("…and <b>Power</b> together."); }, 5000);
+      later(() => { screen(s, "fb"); say("Let go when the red triangle and <b>Fastboot Mode</b> show."); }, 6600);
+      later(() => { finger(s, "power", null); finger(s, "down", null); }, 7400);
+      later(() => showPrompt("Lock the bootloader", "Lock", false), 8600);
+    },
+  });
+  return cards;
+}
+
+let cliAt = 0;
+function drawCli(move = 0) {
+  if (!build) return;
+  const before = $("c-card").querySelector("h3")?.dataset.title;
+  const cards = cliCards();
+  // Changing the shell keeps the person on the same card where it has one.
+  const same = cards.findIndex((c) => c.title === before);
+  cliAt = Math.max(0, Math.min(cards.length - 1, (same === -1 ? cliAt : same) + move));
+  const card = cards[cliAt];
+  $("c-list").innerHTML = cards.map((c) => `<li>${c.title}</li>`).join("");
+  tick($("c-list"), cliAt);
+  $("c-card").innerHTML = `<h3 tabindex="-1" data-title="${escAttr(card.title)}">${cliAt + 1}. ${card.title}</h3><div class="words">${card.words}</div><div class="nav"><button class="btn" data-card-back${cliAt ? "" : " disabled"}>Back</button><span>${cliAt + 1} of ${cards.length}</span><button class="btn primary" data-card-fwd>${card.next || "Done, next"}</button></div>`;
+  $("c-card").querySelector("[data-card-back]").onclick = () => drawCli(-1);
+  $("c-card").querySelector("[data-card-fwd]").onclick = () => {
+    if (cliAt < cards.length - 1) return drawCli(1);
+    clearTimers();
+    setDeviceState(false);
+    log("Command-line install finished.");
+    go(DONE);
+  };
+  const stuck = $("c-card").querySelector("[data-stuck]");
+  if (stuck) stuck.onclick = () => { $("c-card").querySelector("[data-stuck-say]").hidden = false; };
+  const driver = $("c-card").querySelector('[data-walk="cli"]');
+  if (driver) walk(driver, driverFrames({
+    title: "That's it",
+    shot: '<div class="win dark"><div class="tb">Administrator: Windows PowerShell</div><div class="body"><span class="ok" style="opacity:1">Driver package added successfully.</span></div></div>',
+    words: "<p>Close that window, then press <strong>I’ve installed the driver</strong> below.</p>",
+  }));
+  // The practice phone starts this card's part afresh.
+  clearTimers();
+  $$(".key", iSection).forEach((k) => k.classList.remove("hint"));
+  ["power", "up", "down"].forEach((k) => finger(iSection, k, null));
+  log(`Command card ${cliAt + 1} of ${cards.length}: ${card.title} (${$("c-shell").selectedOptions[0].textContent})`, "card");
+  card.phone();
+  if (move) {
+    $("c-card").querySelector("h3").focus({ preventScroll: true });
+    if ($("c-card").getBoundingClientRect().top < 0) $("c-card").scrollIntoView({ block: "start", behavior: "smooth" });
+  }
+}
+function enterCli() {
+  $("install-say").textContent = "You'll copy a few commands into a terminal window, one at a time. The practice phone shows what your phone does at each one.";
+  $("i-laptop").hidden = true;
+  $("i-phone").hidden = false;
+  phoneIn(iSection).querySelector(".cable").classList.add("in");
+  drawCli();
+}
+$("i-to-cli").addEventListener("click", () => { setWay("cli"); go(3); });
+$("c-to-usb").addEventListener("click", () => { setWay("usb"); hidePrompt(); enter.install(); });
+
 // ----- 8. Done -----
+// Every start from now on: the yellow notice, Tome OS's boot animation, and
+// the first time, its welcome screen.
+const DONE_SAY = {
+  yellow: "This <b>yellow notice</b> at every start is normal.",
+  anim: "Then Tome OS starts.",
+  welcome: "The first time, its welcome screen. Set it up from there.",
+};
 enter.done = (s) => {
   const last = lastBackup.get(), gapps = handOverPending() && choices.get().googleApps;
   $("done-restore").hidden = !last && !gapps;
@@ -2718,9 +3160,7 @@ enter.done = (s) => {
       + `Set up Tome OS on the phone, then ${last ? "bring your files back" : "connect it once more"} ${last && gapps ? "and turn on Google apps " : gapps ? "to turn on Google apps " : ""}in the last step.`;
     $("done-restore-go").textContent = last ? "Move your files back" : "Turn on Google apps";
   }
-  caption(s, "This yellow notice at start-up is normal.");
-  let tome = false;
-  const loop = () => later(() => { tome = !tome; screen(s, tome ? "tome" : "boot"); caption(s, tome ? "Then Tome OS starts." : "This yellow notice at start-up is normal."); loop(); }, 2400);
+  const loop = () => { startsUp(s, "yellow", (v) => caption(s, DONE_SAY[v])); later(loop, 15000); };
   loop();
   const box = $("confetti"), colors = ["#b57bff", "#c99bff", "#5cc8ff", "#f3eefc", "#6fe3a4"];
   for (let i = 0; i < 60; i++) {
@@ -2951,6 +3391,17 @@ $("rs-go").addEventListener("click", async () => {
 
 enter.restore = (s) => {
   if (rsBusy) return;
+  if (!hasUsb) {
+    // By hand, and Google apps with one adb command from platform tools.
+    const yes = gappsAnswered() && choices.get().googleApps;
+    $("rs-h").textContent = "Move your files back";
+    $("rs-cli-gapps").hidden = !yes;
+    $("rs-cli-gapps-cmd").innerHTML = yes ? cmdCard(toolsPrep().concat("adb wait-for-device", `adb shell settings put global ${HANDOFF.setting} ${HANDOFF.yes}`)) : "";
+    tick($("rs-manual"), 0);
+    screen(s, "tome");
+    caption(s, "Set it up, then copy your files back with <b>File transfer</b>.");
+    return;
+  }
   const last = lastBackup.get(), gapps = gappsAnswered() && choices.get().googleApps;
   $("rs-last").hidden = !last;
   if (last) $("rs-last").textContent = `Use “${last.name}”`;

@@ -41,6 +41,11 @@
 .plan ul { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; color: var(--muted); font-size: 15px; }
 .plan li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; }
 .plan li svg { margin-top: 4px; color: var(--talk); }
+.plan .buy { margin-top: auto; padding-top: 8px; display: grid; gap: 8px; }
+.plan .buy .btn { width: 100%; justify-content: space-between; min-height: 44px; font-size: 15px; }
+.plan .buy .btn.primary { min-height: 48px; font-size: 16px; }
+.plan .buy .btn span { font-weight: 500; opacity: .85; }
+#checkout-note { margin: 20px 0 0; }
 .plan .tag { align-self: flex-start; }
 .plans-note { color: var(--muted); font-size: 15px; margin: 20px 0 0; max-width: 46em; }
 
@@ -181,6 +186,7 @@
           <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Two weeks unlimited on a new phone, no card needed</span></li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Own a channel of up to 4 people</span></li>
         </ul>
+        <div class="buy"><a class="btn" href="#get">Download free</a></div>
       </div>
       <div class="card plan featured">
         <span class="pill ready tag">Best value</span>
@@ -193,6 +199,11 @@
           <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Talk live with anyone, including friends on Free</span></li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Unlimited channels of up to 8 people</span></li>
         </ul>
+        <form class="buy" method="post" action="https://relay.tome-os.com/plans/v1/web/checkout">
+          <button class="btn primary" name="price" value="plus_year">Buy yearly <span>$19.99</span></button>
+          <button class="btn" name="price" value="plus_month">Monthly <span>$2.99</span></button>
+          <button class="btn" name="price" value="plus_lifetime">Lifetime <span>$44.99</span></button>
+        </form>
       </div>
       <div class="card plan">
         <h3>Family</h3>
@@ -202,6 +213,11 @@
           <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Everything in Plus</span></li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>For up to 5 people, about $1 each a month</span></li>
         </ul>
+        <form class="buy" method="post" action="https://relay.tome-os.com/plans/v1/web/checkout">
+          <button class="btn primary" name="price" value="family_year">Buy yearly <span>$59.99</span></button>
+          <button class="btn" name="price" value="family_month">Monthly <span>$6.99</span></button>
+          <button class="btn" name="price" value="family_lifetime">Lifetime <span>$124.99</span></button>
+        </form>
       </div>
       <div class="card plan">
         <h3>Teams</h3>
@@ -213,9 +229,17 @@
           <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Invite links and announcements with read counts</span></li>
           <li><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 L10 17 L19 7"/></svg><span>Team Large: 15 channels of 75 people, $399.99 a year or $39.99 a month</span></li>
         </ul>
+        <form class="buy" method="post" action="https://relay.tome-os.com/plans/v1/web/checkout">
+          <button class="btn primary" name="price" value="team_year">Team, yearly <span>$149.99</span></button>
+          <button class="btn" name="price" value="team_month">Team, monthly <span>$14.99</span></button>
+          <button class="btn" name="price" value="team_large_year">Team Large, yearly <span>$399.99</span></button>
+          <button class="btn" name="price" value="team_large_month">Team Large, monthly <span>$39.99</span></button>
+        </form>
       </div>
     </div>
-    <p class="plans-note"><strong>Earn free weeks:</strong> every friend who joins Telemancer from your invite gives you both two weeks of unlimited live talk, up to six times a year. Plus opens in the app very soon.</p>
+    <p class="plans-note"><strong>Earn free weeks:</strong> every friend who joins Telemancer from your invite gives you both two weeks of unlimited live talk, up to six times a year.</p>
+    <p class="plans-note"><strong>Buying here:</strong> you pay through Stripe, then get a Telemancer key on the next page and by email. In Telemancer, open <strong>Settings › Your plan › Have a code?</strong> and enter it, and your plan starts on that phone. A key also makes a good gift.</p>
+    <p class="notice" id="checkout-note" role="status" hidden>Checkout couldn't open just now. Please try again in a minute.</p>
   </section>
 
   <section id="get" aria-labelledby="get-h">
@@ -231,7 +255,7 @@
             Download Telemancer
           </a>
         </div>
-        <p class="fine">SHA-256 checksum, to check the file arrived unchanged:<br><code class="sum">afd67c1a50733338b7c515c2cd80aae4982ebeff6f0d07a54e38b77c4573f831</code></p>
+        <p class="fine">SHA-256 checksum, to check the file arrived unchanged:<br><code class="sum">1478986aef6b456b3f02eeb7e53b0940ceb088f645ae8d0115cdcdcf8bd22ab8</code></p>
       </div>
       <ol class="steps" id="install">
         <li><div><h3>Download on your phone</h3><p>Open this page on your Android phone and tap Download.</p></div></li>
@@ -279,5 +303,9 @@
     <span>Not affiliated with Google. Android is a trademark of Google LLC.</span>
   </div>
 </footer>
+<script>
+// Back from a checkout that couldn't open (the plans server says so in the address).
+if (/[?&]checkout=unavailable/.test(location.search)) document.getElementById("checkout-note").hidden = false;
+</script>
 </body>
 </html>
