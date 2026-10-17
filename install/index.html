@@ -249,6 +249,7 @@ h1:focus { outline: none; }
 .v-pmenu .pm { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 86%; }
 .v-pmenu .pm div { aspect-ratio: 1; border-radius: 14px; background: #2b2633; color: #efeaff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: .95em; }
 .v-pmenu .pm i { font-style: normal; font-size: 1.8em; line-height: 1; }
+.v-pmenu .pm i svg { display: block; width: 1em; height: 1em; }
 .v-pmenu .pm .hit { background: #b57bff; color: #14102b; box-shadow: 0 0 0 2px var(--talk); }
 .v-fbd { background: #14102b; color: #efeaff; align-items: center; padding: 22% 8px 8px; gap: 3px; text-align: center; font-family: Roboto, system-ui, sans-serif; }
 .v-fbd img { width: 46%; margin-bottom: 6px; }
@@ -993,7 +994,7 @@ const SCREENS = {
   allow: '<div class="ttl">Developer options</div><div class="it"><div>USB debugging</div><span class="sw on"></span></div><div class="ask-box"><b>Allow USB debugging?</b><div class="dim">The computer\'s RSA key fingerprint is: 5C:1E:…</div><div class="always"><i></i>Always allow from this computer</div><div class="btns"><span>Cancel</span><span class="go">Allow</span></div></div>',
   perm: '<div class="ttl">Tome Transfer</div><div class="ask-box"><b>Allow Tome Transfer to access your SMS messages?</b><div class="btns"><span>Don\'t allow</span><span class="go">Allow</span></div></div>',
   sms: '<div class="ttl">Telemancer</div><div class="ask-box"><b>Set Telemancer as your default SMS app?</b><div class="btns"><span>Cancel</span><span class="go">Set as default</span></div></div>',
-  pmenu: '<div class="pm"><div class="hit"><i>⏻</i>Power off</div><div><i>↻</i>Restart</div></div>',
+  pmenu: '<div class="pm"><div class="hit"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13 3h-2v10h2V3zm4.83 2.17-1.42 1.42A6.92 6.92 0 0 1 19 12c0 3.87-3.13 7-7 7a7 7 0 0 1-4.42-12.42L6.17 5.17A8.93 8.93 0 0 0 3 12a9 9 0 0 0 18 0c0-2.74-1.23-5.18-3.17-6.83z"/></svg></i>Power off</div><div><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg></i>Restart</div></div>',
 };
 const ASK_SAYS = {
   Unlock: "If you unlock the bootloader, you will be able to install custom operating system software on this phone. A custom OS is not subject to the same testing as the original OS. To prevent unauthorized access to your personal data, unlocking the bootloader will also delete all personal data on your phone.",
@@ -2299,7 +2300,11 @@ $("file").addEventListener("change", async () => {
     tick($$("#dl-manual ol")[0], 2);
   } catch (e) {
     $("file-name").textContent = chosen.map((f) => f.name).join(", ");
-    $("file-error").textContent = e.message;
+    // One part on its own isn't a whole zip: say what to do, not "download it again".
+    const partsOnly = chosen.every((f) => /\.part\d+$/.test(f.name));
+    $("file-error").textContent = partsOnly && /isn't a zip file/.test(e.message)
+      ? "That's only part of the file. Choose every part together: the files ending in .part1, .part2 and so on."
+      : e.message;
     $("file-error").hidden = false;
   }
 });
