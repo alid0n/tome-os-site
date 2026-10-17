@@ -107,6 +107,11 @@ code, .cmd { font-family: var(--mono); font-size: 14px; }
 }
 .dl .more div { display: flex; flex-direction: column; gap: 2px; padding: 6px 0 2px; }
 .dl-note { color: var(--muted); font-size: 15px; margin: 16px 0 0; }
+.update-once { margin-top: 24px; }
+.update-once h3 { margin: 0 0 6px; }
+.update-once p, .update-once ol { color: var(--muted); font-size: 16px; }
+.update-once ol { margin: 10px 0 0; padding-left: 22px; display: grid; gap: 6px; }
+.update-once code { word-break: break-all; }
 
 ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 0; display: grid; gap: 14px; }
 ol.steps li { counter-increment: s; display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; background: var(--page); border: 1px solid var(--line); border-radius: 18px; padding: 18px; }
@@ -325,6 +330,16 @@ h1 { text-shadow: 0 0 30px rgba(181,123,255,.22); }
       <li><div><h3>Changed your mind?</h3><p>You can always go back to stock Android with Google's Android Flash Tool at flash.android.com.</p></div></li>
     </ol>
     <div class="actions" style="margin-top:24px"><a class="btn primary" href="install/">Open the web installer</a></div>
+    <div class="card update-once" id="update-once">
+      <h3>Already running an earlier Tome OS?</h3>
+      <p>Update to 0.4.0 by hand once. It keeps your apps and data. After that, new versions arrive in <strong>Settings &rsaquo; System updates</strong>.</p>
+      <ol>
+        <li>Download <strong>System (for updates)</strong> for your phone from the table above (<code>tome-os-0.4.0-oriole.zip</code> for the Pixel 6). Don't unzip it.</li>
+        <li>Install Google's <a href="https://developer.android.com/tools/releases/platform-tools">Platform Tools</a> on your computer, turn on <strong>USB debugging</strong> on the phone, and plug it in.</li>
+        <li>Run <code>adb reboot recovery</code>. On the phone, choose <strong>Apply update</strong>, then <strong>Apply from ADB</strong>.</li>
+        <li>Run <code>adb sideload tome-os-0.4.0-oriole.zip</code> from the folder the file is in. When it finishes, choose <strong>Reboot system now</strong>.</li>
+      </ol>
+    </div>
   </section>
 </main>
 
@@ -342,6 +357,8 @@ h1 { text-shadow: 0 0 30px rgba(181,123,255,.22); }
   fetch("https://api.github.com/repos/alid0n/tome-os-site/releases?per_page=10")
     .then(function (r) { return r.ok ? r.json() : []; })
     .then(function (releases) {
+      // Newest first, so each phone shows its latest build and older phones keep theirs.
+      releases.sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); });
       document.querySelectorAll("tr[data-codename]").forEach(function (row) {
         var code = row.getAttribute("data-codename");
         for (var i = 0; i < releases.length; i++) {
@@ -392,7 +409,8 @@ h1 { text-shadow: 0 0 30px rgba(181,123,255,.22); }
           more.className = "more";
           more.innerHTML = "<summary>Other files</summary>";
           var list = document.createElement("div");
-          [[factorySum, "Factory checksum"], [sys, "System (for updates)"], [boot, "Boot images"], [sum, "System checksum"], [bootSum, "Boot checksum"]].forEach(function (pair) {
+          var manifest = assets.find(function (a) { return /-source-manifest\.xml$/.test(a.name); });
+          [[factorySum, "Factory checksum"], [sys, "System (for updates)"], [boot, "Boot images"], [sum, "System checksum"], [bootSum, "Boot checksum"], [manifest, "Source manifest"]].forEach(function (pair) {
             if (pair[0]) list.appendChild(link(pair[0], pair[1]));
           });
           more.appendChild(list);
