@@ -1,0 +1,33 @@
+{
+  "tomeRune": 1,
+  "id": "cozy-autumn",
+  "name": "Cozy autumn",
+  "author": "Tome OS",
+  "version": "1.0",
+  "about": "Warm paper, pumpkin and cinnamon, with a bookish serif font.",
+  "theme": {
+    "base": "common",
+    "abyss": "#EADBC4",
+    "night": "#F6ECDD",
+    "page": "#FFF8EE",
+    "cover": "#F0DDC4",
+    "starlight": "#3A2416",
+    "blue": "#B4501A",
+    "purple": "#8E3B2E",
+    "onAccent": "#FFF8EE",
+    "muted": "#6E513C",
+    "font": "serif",
+    "corner": 20,
+    "backdrop": "plain"
+  },
+  "transition": {
+    "style": "rise",
+    "ms": 280,
+    "easing": [
+      0.2,
+      0,
+      0,
+      1
+    ]
+  }
+}

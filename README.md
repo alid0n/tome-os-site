@@ -13,6 +13,7 @@ Releases page is where public downloads go.
 | `index.html` | Home page: Tome OS (features, the per-phone download table, install steps) |
 | `install/` | The Tome OS web installer (WebUSB, Chrome or Edge). It flashes a `tome-os-<version>-<codename>-factory.zip` the visitor chooses; fastboot.js is vendored in `install/vendor/` |
 | `telemancer/` | Telemancer: features, plans, download, install, questions |
+| `runes/` | The Runes gallery for Tome Home. Rune files are in `runes/files/`, listed in `runes/index.json`. After adding one, run `python3 runes/build.py`: it checks each rune and writes the cards into `runes/index.html`, so the page works without JavaScript |
 | `os/` | Forwards old `/os/` links to the home page |
 | `t.html` | Telemancer invite links (`tome-os.com/t#...`). The invite rides after the `#`, which browsers never send to the server |
 | `downloads/Telemancer.apk` | The Telemancer app |

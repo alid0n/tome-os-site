@@ -1,0 +1,32 @@
+{
+  "tomeRune": 1,
+  "id": "ocean-calm",
+  "name": "Ocean calm",
+  "author": "Tome OS",
+  "version": "1.0",
+  "about": "Deep sea blues, softer corners and a slow fade between tabs.",
+  "theme": {
+    "base": "orb_midnight",
+    "abyss": "#03121B",
+    "night": "#06202D",
+    "page": "#0B2C3D",
+    "cover": "#123D52",
+    "starlight": "#E6F6FB",
+    "blue": "#4FD1E0",
+    "purple": "#7FB5FF",
+    "onAccent": "#03121B",
+    "muted": "#8DB3C2",
+    "corner": 16,
+    "backdrop": "plain"
+  },
+  "transition": {
+    "style": "fade",
+    "ms": 320,
+    "easing": [
+      0.4,
+      0,
+      0.2,
+      1
+    ]
+  }
+}

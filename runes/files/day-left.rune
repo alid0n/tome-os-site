@@ -1,0 +1,22 @@
+{
+  "tomeRune": 1,
+  "id": "day-left",
+  "name": "Day left",
+  "author": "Tome OS",
+  "version": "1.0",
+  "about": "A block on Home that counts down the hours left in the day.",
+  "blocks": [
+    {
+      "title": "Day left",
+      "everyMinutes": 1,
+      "script": [
+        "local left = (23 - tome.hour) * 60 + (60 - tome.minute)",
+        "local h, m = math.floor(left / 60), left % 60",
+        "return {",
+        "  text = h .. \" h \" .. m .. \" min left in \" .. tome.weekday,",
+        "  lines = { \"You're \" .. string.lower(tome.mood) .. \".\" }",
+        "}"
+      ]
+    }
+  ]
+}

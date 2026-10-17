@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Share a rune · Tome OS</title>
+<meta name="description" content="How to share a rune you made in the Tome OS rune gallery. Every rune is read by hand before it's listed.">
+<link rel="canonical" href="https://tome-os.com/runes/submit">
+<meta name="theme-color" content="#14102b">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+main.legal { max-width: 52em; }
+main.legal ol.steps { margin: 8px 0 0; }
+main.legal ol.steps p { margin: 0; font-size: 16px; }
+main.legal ol.steps code { overflow-wrap: anywhere; }
+main.legal ol.steps li > div { min-width: 0; }
+main.legal ol.steps pre code { overflow-wrap: normal; }
+main.legal ol.steps .kinds { margin-top: 10px; }
+pre { margin: 12px 0 0; padding: 14px; overflow: auto; background: var(--night); border: 1px solid var(--line); border-radius: 12px; font-size: 13px; line-height: 1.5; }
+pre code { font-size: 13px; color: var(--muted); }
+pre:focus-visible { outline: 3px solid var(--glow); outline-offset: 2px; }
+.checks { display: grid; gap: 12px; list-style: none; padding: 0 !important; margin: 8px 0 0; }
+.checks li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; margin: 0 !important; }
+.checks svg { margin-top: 4px; color: var(--accent); }
+.back { margin-top: 40px; }
+</style>
+</head>
+<body>
+<a class="skip" href="#top">Skip to content</a>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="/"><img src="/assets/mark.svg" alt="">TOME OS</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/telemancer/">Telemancer</a></li>
+        <li><a href="/">Tome OS</a></li>
+        <li><a href="/install/">Install</a></li>
+        <li><a href="/runes/">Runes</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="top" class="wrap legal">
+
+<p class="eyebrow">Runes</p>
+<h1>Share a rune</h1>
+<p class="lede">Made a rune you love? Put it in the gallery so other people can use it too.</p>
+
+<h2>How to send it in</h2>
+<p>The gallery lives on GitHub, in the <a href="https://github.com/alid0n/tome-os-site">tome-os-site</a> project. You share a rune by opening a pull request there. That's a request to add your files, which we read before saying yes.</p>
+<ol class="steps">
+  <li><div><h3>Write your rune</h3><p>A rune is a short text file that ends in <code>.rune</code>. The easiest start is a rune from the gallery: tap View code to see how it's written, then change what you like.</p></div></li>
+  <li><div><h3>Add it to runes/files</h3><p>Name the file after its id, like <code>runes/files/ocean-calm.rune</code>.</p></div></li>
+  <li><div><h3>Add it to the list</h3><p>Add an entry for it in <code>runes/index.json</code>, like the one below. The name, author and about should match the rune.</p><pre tabindex="0" aria-label="An example entry for index.json"><code>{
+  "id": "ocean-calm",
+  "name": "Ocean calm",
+  "author": "Tome OS",
+  "about": "Deep sea blues, softer corners and a slow fade between tabs.",
+  "file": "files/ocean-calm.rune",
+  "kinds": ["colors", "motion"]
+}</code></pre><p class="kinds">For <code>kinds</code>, use <code>colors</code> if it has a theme, <code>motion</code> if it has a transition and <code>blocks</code> if it adds blocks.</p></div></li>
+  <li><div><h3>Open the pull request</h3><p>Say in a sentence or two what your rune does. If you can, add a screenshot of your Home screen with it on. If you have Python, run <code>python3 runes/build.py</code> to add your card to the page. If not, we'll do it.</p></div></li>
+</ol>
+
+<h2>What we check</h2>
+<p>A person reads every rune before it's listed. We look for these things:</p>
+<ul class="checks">
+  <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12 L10 17 L19 7"/></svg><span><strong>No network.</strong> Runes can't go online anyway, and a rune shouldn't try.</span></li>
+  <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12 L10 17 L19 7"/></svg><span><strong>Nothing hidden in scripts.</strong> A block's script should be short and easy to read, and do what its title says.</span></li>
+  <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12 L10 17 L19 7"/></svg><span><strong>A clear name.</strong> The name and about say plainly what the rune changes. No names that copy someone else's.</span></li>
+  <li><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12 L10 17 L19 7"/></svg><span><strong>Easy to read.</strong> Text has enough contrast with the colors behind it.</span></li>
+</ul>
+<p>If something needs a change, we'll say so in the pull request. Once it looks good, we add it, and it shows up in the gallery a minute later.</p>
+
+<h2>No GitHub account?</h2>
+<p>That's fine. Email your <code>.rune</code> file to <a href="mailto:alid0ndev@gmail.com?subject=New%20rune">alid0ndev@gmail.com</a> and we'll add it for you, after the same checks.</p>
+
+<div class="actions back"><a class="btn" href="/runes/">Back to the gallery</a></div>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span>Tome OS · <a href="/runes/">Runes</a> · <a href="/telemancer/">Telemancer</a> · <a href="/contact">Contact</a></span>
+    <span>Not affiliated with Google. Android is a trademark of Google LLC.</span>
+  </div>
+</footer>
+</body>
+</html>

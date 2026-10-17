@@ -1,0 +1,18 @@
+{
+  "tomeRune": 1,
+  "id": "slide-tabs",
+  "name": "Sliding tabs",
+  "author": "Tome OS",
+  "version": "1.0",
+  "about": "Tabs slide in from the direction you moved on the rail.",
+  "transition": {
+    "style": "slide",
+    "ms": 260,
+    "easing": [
+      0.2,
+      0,
+      0,
+      1
+    ]
+  }
+}
