@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Save your original software · Tome OS</title>
+<meta name="description" content="Before installing Tome OS on a OnePlus phone, save the software it came with to a restore file on your computer, so you can go back later.">
+<link rel="canonical" href="https://tome-os.com/install/original/">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+[hidden] { display: none !important; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+main.orig { max-width: 46em; padding-top: 48px; padding-bottom: 64px; }
+main.orig h1 { font-size: clamp(32px, 6vw, 48px); }
+.go { background: linear-gradient(160deg, rgba(181,123,255,.12), transparent 60%), var(--page); border: 1px solid rgba(181,123,255,.3); border-radius: 18px; padding: 22px; margin: 0 0 20px; }
+.go.off { opacity: .55; }
+.go h2 { font-size: 22px; margin: 0 0 6px; display: flex; gap: 10px; align-items: baseline; }
+.go h2 .n { flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--raised); color: var(--glow); font-size: 15px; display: inline-flex; align-items: center; justify-content: center; font-family: var(--body); }
+.go > p, .go li { color: var(--muted); }
+.go strong, .go b { color: var(--text); }
+.go ol { margin: 0 0 16px; padding-left: 22px; display: grid; gap: 6px; }
+.status { margin: 16px 0 0; font-weight: 600; white-space: pre-line; }
+.status[data-s="bad"] { color: #ffd0dd; }
+.status[data-s="ok"] { color: #6fe3a4; }
+.callout { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; border: 2px solid var(--talk); background: rgba(92,200,255,.08); margin: 16px 0 0; }
+.callout b { display: block; }
+.unsupported { padding: 12px 16px; border-radius: 14px; background: #4a1730; color: #ffd0dd; margin: 0 0 20px; }
+.note { padding: 12px 16px; border-radius: 14px; background: var(--page); border: 1px solid var(--line); color: var(--muted); margin: 0 0 20px; }
+.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 16px; margin: 16px 0 0; }
+.facts dt { color: var(--faint); }
+.facts dd { margin: 0; font-family: var(--mono); font-size: 14px; overflow-wrap: anywhere; }
+.meter { height: 10px; border-radius: 5px; background: var(--raised); overflow: hidden; margin: 14px 0 6px; }
+.meter i { display: block; height: 100%; width: 0; background: var(--glow); transition: width .3s; }
+.meter-label { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 14px; }
+code { overflow-wrap: anywhere; }
+.help { margin-top: 28px; }
+.help summary { cursor: pointer; color: var(--muted); }
+.help p { color: var(--muted); font-size: 15px; margin: 8px 0 0; }
+.help strong { color: var(--text); }
+.log { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 10px; }
+.log summary { cursor: pointer; color: var(--faint); font-size: 14px; display: flex; gap: 8px; align-items: baseline; list-style: none; }
+.log summary::-webkit-details-marker { display: none; }
+.log summary::before { content: "›"; transition: transform .15s; }
+.log[open] summary::before { transform: rotate(90deg); }
+.log summary .last { font-family: var(--mono); font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+.log pre { margin: 8px 0; max-height: 220px; overflow: auto; background: #000; color: #d8d2e6; border-radius: 10px; padding: 10px 12px; font-family: var(--mono); font-size: 12px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.log .btn { min-height: 36px; padding: 0 14px; font-size: 14px; }
+</style>
+<script src="../vendor/bz2-1.0.1.js"></script>
+<script src="../vendor/xz-decompress-0.2.3.min.js"></script>
+<script src="../vendor/hash-wasm-4.12.0-sha256.umd.min.js"></script>
+<script src="../vendor/hash-wasm-4.12.0-crc32.umd.min.js"></script>
+</head>
+<body>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="/"><img src="/assets/mark.svg" alt="">TOME OS</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/telemancer/">Telemancer</a></li>
+        <li><a href="/">Tome OS</a></li>
+        <li><a href="/install/">Install</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main class="wrap orig">
+  <h1>Save your original software</h1>
+  <p class="lede">Before installing Tome OS on a OnePlus phone, save the software it came with, so you can go back to it later. This page reads your phone's exact version, tells you which official update file holds it, and makes a restore file from it on this computer. Nothing is uploaded.</p>
+
+  <p class="note"><strong>Got a Pixel?</strong> You don't need this. Google's <a href="https://flash.android.com">Android Flash Tool</a> puts the original software back on any Pixel.</p>
+  <p class="unsupported" id="no-usb" hidden>This needs a browser that can talk to phones over USB and save large files: open <code>tome-os.com/install/original</code> in <strong>Chrome</strong> or <strong>Edge</strong> on a computer.</p>
+
+  <section class="go" id="s1" aria-labelledby="s1-h">
+    <h2 id="s1-h"><span class="n">1</span>Connect your phone</h2>
+    <ol>
+      <li>On the phone, open <strong>Settings › About device</strong>, tap <strong>Version</strong>, then tap <strong>Build number</strong> 7 times.</li>
+      <li>Go to <strong>Settings › System › Developer options</strong> and turn on <strong>USB debugging</strong>.</li>
+      <li>Plug the phone into this computer and unlock its screen.</li>
+      <li>Press the button, pick the phone, then tap <strong>Allow</strong> on the phone.</li>
+    </ol>
+    <div class="actions"><button class="btn primary" id="connect">Connect and read the version</button></div>
+    <div class="callout" id="allow" role="alert" hidden><span aria-hidden="true" style="font-size:22px">👉</span><div><b>Look at your phone and tap Allow.</b>It asks "Allow USB debugging?". If nothing shows, unlock the phone's screen.</div></div>
+    <dl class="facts" id="facts" hidden></dl>
+    <p class="status" id="s1-status" aria-live="polite"></p>
+  </section>
+
+  <section class="go off" id="s2" aria-labelledby="s2-h">
+    <h2 id="s2-h"><span class="n">2</span>Download the matching full update</h2>
+    <p>Your original software is inside OnePlus's <strong>full update</strong> for exactly the version your phone runs. It's about 9 GB.</p>
+    <div id="s2-body" hidden>
+      <dl class="facts" id="want"></dl>
+      <div class="actions" style="margin-top:16px"><button class="btn" id="find">Find the download</button></div>
+      <p class="fine">This asks <a href="https://roms.danielspringer.at/api/ota.php?help=1&amp;format=html">roms.danielspringer.at</a>, a public list of OnePlus updates, for your version. It sends only the model.</p>
+      <div id="found" hidden></div>
+      <p class="status" id="s2-status" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <section class="go off" id="s3" aria-labelledby="s3-h">
+    <h2 id="s3-h"><span class="n">3</span>Make your restore file</h2>
+    <p>Choose the update you downloaded. This page checks it's the right one, takes out what's needed to go back, and saves it as one restore file. Have about <strong>12 GB</strong> free on this computer while it saves.</p>
+    <div id="s3-body" hidden>
+      <div class="actions"><label class="btn" for="ota" id="ota-label" tabindex="0">Choose the downloaded update</label><input type="file" id="ota" accept=".zip,application/zip" class="visually-hidden"></div>
+      <p class="status" id="s3-status" aria-live="polite"></p>
+      <div id="plan" hidden>
+        <p id="plan-text"></p>
+        <div class="actions"><button class="btn primary" id="save">Save the restore file</button></div>
+      </div>
+      <div id="progress" hidden>
+        <div class="meter"><i id="bar"></i></div>
+        <div class="meter-label"><span id="progress-text">Starting…</span><span id="progress-time"></span></div>
+        <p class="fine">Keep this tab open. It takes a while: every part of your phone's software is unpacked and checked.</p>
+      </div>
+      <div id="saved" hidden>
+        <p class="status" data-s="ok" id="saved-text"></p>
+        <dl class="facts" id="saved-facts"></dl>
+        <div class="actions" style="margin-top:16px"><button class="btn" id="sum">Save the checksum file again</button></div>
+        <p>Keep both files somewhere safe, like an external drive or cloud storage. You'll need them to go back to your original software.</p>
+        <p><a class="btn primary" href="/install/">Carry on to install Tome OS</a></p>
+      </div>
+    </div>
+  </section>
+
+  <details class="log" id="log"><summary><span>Details</span><span class="last" id="log-last"></span></summary><pre id="log-text"></pre><button class="btn" id="log-copy">Copy</button></details>
+
+  <details class="help"><summary>Stuck? Get help</summary>
+    <p><strong>Phone not in the browser's list?</strong> Check USB debugging is on and the phone's screen is unlocked. Unplug the cable and plug it back in. On Windows, install <a href="https://developer.android.com/studio/run/win-usb">Google's USB driver</a>.</p>
+    <p><strong>Says another program is using the phone?</strong> Close Android Studio, or run <code>adb kill-server</code>, then try again.</p>
+    <p><strong>Your version isn't in the list, or the link won't download?</strong> OnePlus only lets its own apps download updates. The free <strong>OS Updater</strong> app (once called Oxygen Updater) can download the full update for your exact version: in its settings, choose your phone and the <strong>Full</strong> update method. Then copy the zip from the phone to this computer.</p>
+    <p><strong>"That update is for a different version"?</strong> It must be the same version your phone runs now, not a newer one. If your phone has since updated, download the update for its new version.</p>
+    <p><strong>Already installed Tome OS?</strong> The original software can't be read from the phone any more. Use the restore file you saved before.</p>
+  </details>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span><a href="/">Tome OS</a> · <a href="/install/">Install</a> · <a href="/legal">Privacy and Legal</a></span>
+    <span>Not affiliated with Google or OnePlus. Android is a trademark of Google LLC.</span>
+  </div>
+</footer>
+
+<script type="module">
+import { checkUpdate, saveRestore } from "./original.mjs";
+const $ = (id) => document.getElementById(id);
+
+// ----- The live log, with a copy button -----
+const lines = [];
+function log(text, key) {
+  const stamp = new Date().toTimeString().slice(0, 8);
+  const last = lines[lines.length - 1];
+  if (key && last && last.key === key) { last.text = text; last.stamp = stamp; } else lines.push({ text, key, stamp });
+  $("log-text").textContent = lines.map((l) => `${l.stamp}  ${l.text}`).join("\n");
+  $("log-text").scrollTop = $("log-text").scrollHeight;
+  $("log-last").textContent = text;
+}
+$("log-copy").addEventListener("click", () => {
+  navigator.clipboard.writeText(`tome-os.com/install/original\n${navigator.userAgent}\n\n${$("log-text").textContent}`)
+    .then(() => { $("log-copy").textContent = "Copied"; setTimeout(() => { $("log-copy").textContent = "Copy"; }, 1500); });
+});
+function status(id, text, state = "") { $(id).textContent = text; $(id).dataset.s = state; if (text) log(text); }
+const step = (n) => { for (const k of [1, 2, 3]) $(`s${k}`).classList.toggle("off", k > n); $(`s${n}-body`)?.removeAttribute("hidden"); };
+const facts = (dl, rows) => { dl.innerHTML = ""; for (const [k, v] of rows) { const dt = document.createElement("dt"); dt.textContent = k; const dd = document.createElement("dd"); dd.textContent = v || "—"; dl.append(dt, dd); } dl.hidden = false; };
+const gb = (n) => (n / 1e9).toFixed(1) + " GB";
+
+const canUsb = "usb" in navigator;
+const canSave = "showSaveFilePicker" in window;
+if (!canUsb || !canSave) { $("no-usb").hidden = false; $("connect").disabled = true; log(`WebUSB ${canUsb ? "yes" : "no"}, saving files ${canSave ? "yes" : "no"}.`); }
+
+// ----- 1. Read the phone over USB debugging (Tango ADB, as the logs page) -----
+let lib = null;
+const loadLib = () => (lib ??= import("../vendor/adb-zip-tome.mjs").catch((e) => { lib = null; throw e; }));
+async function connect() {
+  const L = await loadLib();
+  const manager = L.AdbDaemonWebUsbDeviceManager.BROWSER;
+  if (!manager) throw new Error("This browser can't talk to phones. Open this page in Chrome or Edge.");
+  status("s1-status", "Choose the phone in the box your browser shows…");
+  const dev = await manager.requestDevice().catch(() => null);
+  if (!dev) throw new Error("No phone was chosen. Check USB debugging is on and the phone is unlocked, then press the button again.");
+  let connection;
+  try { connection = await dev.connect(); } catch (e) {
+    if (e instanceof L.AdbDaemonWebUsbDevice.DeviceBusyError) throw new Error("Another program is using the phone, like Android Studio or adb. Close it, or run adb kill-server, then try again.");
+    throw new Error(`The phone couldn't be opened (${e.message || e}). Unplug it, plug it back in, and try again.`);
+  }
+  $("allow").hidden = false;
+  status("s1-status", "Waiting for you to tap Allow on the phone…");
+  try {
+    const transport = await L.AdbDaemonTransport.authenticate({ serial: dev.serial, connection, credentialStore: new L.AdbWebCredentialStore("Tome OS") });
+    return new L.Adb(transport);
+  } finally { $("allow").hidden = true; }
+}
+
+let phone = null;
+$("connect").addEventListener("click", async () => {
+  $("connect").disabled = true;
+  try {
+    const adb = await connect();
+    const get = async (p) => (await adb.getProp(p).catch(() => "")).trim();
+    phone = {
+      manufacturer: await get("ro.product.manufacturer"), brand: await get("ro.product.brand"),
+      model: await get("ro.product.model"), device: await get("ro.product.device"),
+      display: await get("ro.build.display.id"), ota: await get("ro.build.version.ota"),
+      fingerprint: await get("ro.build.fingerprint"), android: await get("ro.build.version.release"),
+      patch: await get("ro.build.version.security_patch"), slot: await get("ro.boot.slot_suffix"),
+      region: (await get("ro.oplus.image.my_region.type")) || (await get("ro.vendor.oplus.regionmark")) || (await get("ro.oplus.pipeline_key")),
+      tome: await get("ro.tome.version"),
+    };
+    await adb.close().catch(() => {});
+    log(`Read: ${JSON.stringify(phone)}`);
+    facts($("facts"), [["Phone", `${phone.manufacturer} ${phone.model}`], ["Version", phone.display], ["Build", phone.ota], ["Region", phone.region], ["Android", `${phone.android} (security update ${phone.patch})`]]);
+    const maker = `${phone.manufacturer} ${phone.brand}`.toLowerCase();
+    if (phone.tome) throw new Error("This phone already runs Tome OS, so its original software can't be read from it any more. Use the restore file you saved before you installed Tome OS.");
+    if (maker.includes("google")) throw new Error("This is a Pixel: you don't need a restore file. Google's Android Flash Tool (flash.android.com) puts the original software back on any Pixel.");
+    if (!maker.includes("oneplus")) throw new Error(`Saving the original software works on OnePlus phones for now. This phone is a ${phone.manufacturer} ${phone.model}.`);
+    if (!phone.ota || !phone.fingerprint) throw new Error("This phone didn't report its exact build, which this page needs to find the right update.");
+    status("s1-status", "Your phone is read. Carry on below.", "ok");
+    facts($("want"), [["Version", phone.display], ["Build", phone.ota], ["Model", phone.model]]);
+    step(2);
+  } catch (e) {
+    status("s1-status", e.message || String(e), "bad");
+    $("connect").disabled = false;
+  }
+});
+
+// ----- 2. Find the matching full update in a public list -----
+$("find").addEventListener("click", async () => {
+  $("find").disabled = true;
+  status("s2-status", "Looking it up…");
+  try {
+    const r = await fetch(`https://roms.danielspringer.at/api/ota.php?model=${encodeURIComponent(phone.model)}`);
+    if (!r.ok) throw new Error(`The list didn't answer (${r.status}).`);
+    const list = (await r.json()).releases || [];
+    // The build string, with its timestamp, tells regions apart.
+    const match = list.find((x) => x.ota_version === phone.ota) || list.find((x) => x.version === phone.display && x.ota_version?.slice(0, -4) === phone.ota.slice(0, -4));
+    const box = $("found");
+    box.innerHTML = "";
+    box.hidden = false;
+    // The list is someone else's: its words go in as text, and only an https link is used.
+    const para = (...parts) => { const p = document.createElement("p"); for (const x of parts) p.append(typeof x === "string" ? document.createTextNode(x) : x); return p; };
+    const strong = (t) => { const s = document.createElement("strong"); s.textContent = t; return s; };
+    const link = match && /^https:\/\/[^\s"'<>]+$/.test(match.source_url || "") ? match.source_url : null;
+    if (match) {
+      box.append(para(strong("Found it: "), `${match.version} (${match.region}), build ${match.ota_version}.`,
+        match.ota_version === phone.ota ? "" : " Its build stamp differs slightly from your phone's: the check below tells you if it's the right one."));
+      if (link) {
+        const a = document.createElement("a");
+        a.className = "btn primary"; a.href = link; a.textContent = "Download the full update"; a.rel = "noreferrer";
+        box.append(a);
+      }
+      const tip = para("This is OnePlus's own download link. If it doesn't start, or says access denied, OnePlus only allows its apps: get the same version with the OS Updater app (see Stuck? below).");
+      tip.className = "fine";
+      box.append(tip);
+      status("s2-status", "When it's downloaded, carry on below.", "ok");
+    } else {
+      box.append(para("Your exact version isn't in the public list. Get the full update for ", strong(phone.display), ` (build ${phone.ota}) with the `, strong("OS Updater"), " app: see Stuck? below."));
+      status("s2-status", "Not in the list: download it with the OS Updater app, then carry on below.");
+    }
+  } catch (e) {
+    status("s2-status", `${e.message || e} Download the full update for your version with the OS Updater app instead, then carry on below.`, "bad");
+  }
+  $("find").disabled = false;
+  step(3);
+});
+
+// ----- 3. Check the update, then save the restore file -----
+let checked = null, otaFile = null, sumText = "", sumName = "";
+$("ota-label").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("ota").click(); } });
+$("ota").addEventListener("change", async () => {
+  otaFile = $("ota").files[0];
+  checked = null;
+  $("plan").hidden = true;
+  if (!otaFile) return;
+  status("s3-status", `Checking ${otaFile.name}…`);
+  try {
+    checked = await checkUpdate(otaFile, phone);
+    const size = checked.save.reduce((t, p) => t + p.size, 0);
+    log(`Saving ${checked.save.map((p) => p.name).join(", ")}; not ${checked.skipped.join(", ")}`);
+    status("s3-status", `That's the full update for your phone's version. ✓`, "ok");
+    $("plan-text").innerHTML = `It holds ${checked.payload.partitions.length} parts. The restore file gets the ${checked.save.length} needed to go back (<strong>${gb(size)}</strong> unpacked): the boot images and everything in the system partition. The firmware (${checked.skipped.length === 1 ? "1 part" : `${checked.skipped.length} parts`}, like the modem) is left out: installing Tome OS doesn't change it.`;
+    $("plan").hidden = false;
+  } catch (e) {
+    status("s3-status", e.message || String(e), "bad");
+  }
+});
+
+function download(name, textContent) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([textContent], { type: "text/plain" }));
+  a.download = name;
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+}
+$("sum").addEventListener("click", () => download(sumName, sumText));
+
+$("save").addEventListener("click", async () => {
+  const base = `tome-original-${phone.model}-${phone.display.replace(/^[^_]*_/, "").replace(/[()]/g, "").replace(/[^A-Za-z0-9.-]+/g, "-")}`;
+  let handle;
+  try {
+    handle = await window.showSaveFilePicker({ suggestedName: `${base}.zip`, types: [{ description: "Restore file", accept: { "application/zip": [".zip"] } }] });
+  } catch (e) { return; } // closed without choosing
+  $("save").disabled = true; $("ota").disabled = true;
+  $("plan").hidden = true; $("progress").hidden = false;
+  let lock = null;
+  try { lock = await navigator.wakeLock?.request("screen"); } catch (e) { /* not allowed: fine */ }
+  const guard = (e) => { e.preventDefault(); e.returnValue = ""; };
+  addEventListener("beforeunload", guard);
+  const started = Date.now();
+  try {
+    const sha = await saveRestore(otaFile, checked, phone, handle, ({ part, fraction }) => {
+      $("bar").style.width = `${Math.round(fraction * 100)}%`;
+      $("progress-text").textContent = part === "checksum" ? "Working out the checksum…" : `Unpacking ${part}… ${Math.round(fraction * 100)}%`;
+      const secs = (Date.now() - started) / 1000;
+      if (fraction > 0.02 && fraction < 1) $("progress-time").textContent = `about ${Math.max(1, Math.round(secs / fraction * (1 - fraction) / 60))} min left`;
+      log(`Unpacking ${part}`, "progress");
+    });
+    const fileName = (await handle.getFile()).name;
+    sumName = `${fileName}.sha256`;
+    sumText = `${sha}  ${fileName}\n`;
+    download(sumName, sumText);
+    $("progress").hidden = true; $("saved").hidden = false;
+    $("saved-text").textContent = "Your restore file is saved.";
+    facts($("saved-facts"), [["File", fileName], ["Phone", `${phone.manufacturer} ${phone.model}`], ["Version", phone.display], ["SHA-256", sha]]);
+    log(`Saved ${fileName}, SHA-256 ${sha}`);
+  } catch (e) {
+    $("progress").hidden = true; $("plan").hidden = false;
+    $("save").disabled = false; $("ota").disabled = false;
+    status("s3-status", `${e.message || e}`, "bad");
+  } finally {
+    removeEventListener("beforeunload", guard);
+    lock?.release?.().catch(() => {});
+  }
+});
+</script>
+</body>
+</html>

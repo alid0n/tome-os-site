@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Go back to original software · Tome OS</title>
+<meta name="description" content="Put a OnePlus phone's original software back from the restore file tome-os.com saved.">
+<!-- Not linked from the site yet: it hasn't been tried on a real phone. -->
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+[hidden] { display: none !important; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+main.orig { max-width: 46em; padding-top: 48px; padding-bottom: 64px; }
+main.orig h1 { font-size: clamp(32px, 6vw, 48px); }
+.go { background: linear-gradient(160deg, rgba(181,123,255,.12), transparent 60%), var(--page); border: 1px solid rgba(181,123,255,.3); border-radius: 18px; padding: 22px; margin: 0 0 20px; }
+.go.off { opacity: .55; }
+.go h2 { font-size: 22px; margin: 0 0 6px; display: flex; gap: 10px; align-items: baseline; }
+.go h2 .n { flex: none; width: 30px; height: 30px; border-radius: 50%; background: var(--raised); color: var(--glow); font-size: 15px; display: inline-flex; align-items: center; justify-content: center; font-family: var(--body); }
+.go > p, .go li, .go label { color: var(--muted); }
+.go strong, .go b { color: var(--text); }
+.go ol { margin: 0 0 16px; padding-left: 22px; display: grid; gap: 6px; }
+.checks { list-style: none; padding: 0; margin: 12px 0 16px; display: grid; gap: 8px; }
+.checks label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.checks input { margin-top: 5px; }
+.status { margin: 16px 0 0; font-weight: 600; white-space: pre-line; }
+.status[data-s="bad"] { color: #ffd0dd; }
+.status[data-s="ok"] { color: #6fe3a4; }
+.callout { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; border: 2px solid var(--talk); background: rgba(92,200,255,.08); margin: 16px 0 0; }
+.callout b { display: block; }
+.warn { padding: 14px 16px; border-radius: 14px; background: #3a2c14; color: #fbe2b0; margin: 0 0 20px; }
+.warn strong { color: #fff3d6; }
+.unsupported { padding: 12px 16px; border-radius: 14px; background: #4a1730; color: #ffd0dd; margin: 0 0 20px; }
+.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 16px; margin: 16px 0 0; }
+.facts dt { color: var(--faint); }
+.facts dd { margin: 0; font-family: var(--mono); font-size: 14px; overflow-wrap: anywhere; }
+.meter { height: 10px; border-radius: 5px; background: var(--raised); overflow: hidden; margin: 14px 0 6px; }
+.meter i { display: block; height: 100%; width: 0; background: var(--glow); transition: width .3s; }
+.meter-label { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 14px; }
+code { overflow-wrap: anywhere; }
+.log { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 10px; }
+.log summary { cursor: pointer; color: var(--faint); font-size: 14px; display: flex; gap: 8px; align-items: baseline; list-style: none; }
+.log summary::-webkit-details-marker { display: none; }
+.log summary::before { content: "›"; transition: transform .15s; }
+.log[open] summary::before { transform: rotate(90deg); }
+.log summary .last { font-family: var(--mono); font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+.log pre { margin: 8px 0; max-height: 220px; overflow: auto; background: #000; color: #d8d2e6; border-radius: 10px; padding: 10px 12px; font-family: var(--mono); font-size: 12px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.log .btn { min-height: 36px; padding: 0 14px; font-size: 14px; }
+</style>
+<script src="../../vendor/hash-wasm-4.12.0-sha256.umd.min.js"></script>
+</head>
+<body>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="/"><img src="/assets/mark.svg" alt="">TOME OS</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/telemancer/">Telemancer</a></li>
+        <li><a href="/">Tome OS</a></li>
+        <li><a href="/install/">Install</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main class="wrap orig">
+  <h1>Go back to original software</h1>
+  <p class="lede">This puts your OnePlus phone's original software back from the restore file this site saved before you installed Tome OS. It erases everything on the phone.</p>
+
+  <p class="warn"><strong>Not tried on a real phone yet.</strong> Until it has been, use it only if you're comfortable fixing a phone that doesn't start, and keep your restore file safe.</p>
+  <p class="unsupported" id="no-usb" hidden>This needs a browser that can talk to phones over USB: open this page in <strong>Chrome</strong> or <strong>Edge</strong> on a computer.</p>
+
+  <section class="go" id="s1" aria-labelledby="s1-h">
+    <h2 id="s1-h"><span class="n">1</span>Choose your restore file</h2>
+    <p>The zip this site saved, named like <code>tome-original-CPH2551-….zip</code>. Every part is checked against its checksum before anything is written.</p>
+    <div class="actions"><label class="btn" for="file" id="file-label" tabindex="0">Choose the restore file</label><input type="file" id="file" accept=".zip,application/zip" class="visually-hidden"></div>
+    <dl class="facts" id="note" hidden></dl>
+    <div id="checking" hidden>
+      <div class="meter"><i id="check-bar"></i></div>
+      <div class="meter-label"><span id="check-text">Checking…</span></div>
+    </div>
+    <p class="status" id="s1-status" aria-live="polite"></p>
+  </section>
+
+  <section class="go off" id="s2" aria-labelledby="s2-h">
+    <h2 id="s2-h"><span class="n">2</span>Connect the phone in fastboot mode</h2>
+    <ol>
+      <li>Turn the phone off. Then hold <strong>Volume Up + Volume Down + Power</strong> until the fastboot screen shows.</li>
+      <li>Plug it into this computer, straight in rather than through a hub.</li>
+      <li>Press the button and pick the phone. The page switches it to the second fastboot screen (fastbootd), where the system can be written, and asks you to pick it once more.</li>
+    </ol>
+    <div class="actions"><button class="btn primary" id="connect" disabled>Connect</button><button class="btn" id="reconnect" hidden>Pick the phone again</button></div>
+    <dl class="facts" id="phone" hidden></dl>
+    <ul class="checks" id="same-phone" hidden><li><label><input type="checkbox" id="same-ok"> <span id="same-text"></span></label></li></ul>
+    <p class="status" id="s2-status" aria-live="polite"></p>
+  </section>
+
+  <section class="go off" id="s3" aria-labelledby="s3-h">
+    <h2 id="s3-h"><span class="n">3</span>Put the original software back</h2>
+    <ul class="checks">
+      <li><label><input type="checkbox" class="ack"> I understand this <strong>erases everything</strong> on the phone, including Tome OS and my files.</label></li>
+      <li><label><input type="checkbox" class="ack"> The phone hasn't installed a OnePlus update since I saved this restore file. (Going back to older software can stop a phone starting.)</label></li>
+      <li><label><input type="checkbox" class="ack"> The phone is charged and will stay plugged in until it's done.</label></li>
+    </ul>
+    <div class="actions"><button class="btn primary" id="restore" disabled>Restore the original software</button></div>
+    <div id="writing" hidden>
+      <div class="meter"><i id="bar"></i></div>
+      <div class="meter-label"><span id="progress-text">Starting…</span></div>
+      <p class="fine"><strong>Don't unplug the phone</strong> or close this tab until it says it's done.</p>
+    </div>
+    <p class="status" id="s3-status" aria-live="polite"></p>
+  </section>
+
+  <section class="go off" id="s4" aria-labelledby="s4-h">
+    <h2 id="s4-h"><span class="n">4</span>Check it starts</h2>
+    <p>The phone restarts into its original software. The first start takes a few minutes. If it asks to format data or says it can't load Android, choose <strong>Format data</strong> or <strong>Factory reset</strong>.</p>
+    <div class="actions"><button class="btn primary" id="started">It started and shows the welcome screen</button><button class="btn" id="not-started">It didn't start</button></div>
+    <p class="status" id="s4-status" aria-live="polite"></p>
+  </section>
+
+  <section class="go off" id="s5" aria-labelledby="s5-h">
+    <h2 id="s5-h"><span class="n">5</span>Lock the bootloader (optional)</h2>
+    <p>Locking makes the phone as secure as new, and stops the warning at every start. A phone has two copies of its system, and <strong>both</strong> must hold OnePlus's own software first, or it won't start after locking.</p>
+    <ol>
+      <li>Set the phone up, connect to Wi-Fi, and install the update it offers in <strong>Settings › About device › Software update</strong>. If there's none, install the same full update you downloaded before, from that screen's menu (<strong>Local install</strong>). That writes OnePlus's software to the second copy.</li>
+      <li>Let it restart and check it starts normally.</li>
+    </ol>
+    <ul class="checks"><li><label><input type="checkbox" id="both-ok"> I installed an update or the full update from the phone, and it started normally afterwards.</label></li></ul>
+    <ol>
+      <li>Turn the phone off, hold <strong>Volume Up + Volume Down + Power</strong> for the fastboot screen, and plug it in.</li>
+      <li>Press the button, pick the phone, and on the phone choose <strong>Lock the bootloader</strong> with the volume keys and press Power. Locking erases the phone once more.</li>
+    </ol>
+    <div class="actions"><button class="btn" id="lock" disabled>Lock the bootloader</button></div>
+    <p class="status" id="s5-status" aria-live="polite"></p>
+  </section>
+
+  <details class="log" id="log" open><summary><span>Details</span><span class="last" id="log-last"></span></summary><pre id="log-text"></pre><button class="btn" id="log-copy">Copy</button></details>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span><a href="/">Tome OS</a> · <a href="/install/">Install</a> · <a href="/legal">Privacy and Legal</a></span>
+    <span>Not affiliated with Google or OnePlus. Android is a trademark of Google LLC.</span>
+  </div>
+</footer>
+
+<script type="module">
+import * as fastboot from "../../vendor/fastboot-1.1.3-tome.mjs";
+import { readRestore, imageSha256 } from "../original.mjs";
+const $ = (id) => document.getElementById(id);
+const lines = [];
+function log(text, key) {
+  const stamp = new Date().toTimeString().slice(0, 8);
+  const last = lines[lines.length - 1];
+  if (key && last && last.key === key) { last.text = text; last.stamp = stamp; } else lines.push({ text, key, stamp });
+  $("log-text").textContent = lines.map((l) => `${l.stamp}  ${l.text}`).join("\n");
+  $("log-text").scrollTop = $("log-text").scrollHeight;
+  $("log-last").textContent = text;
+}
+$("log-copy").addEventListener("click", () => navigator.clipboard.writeText(`tome-os.com/install/original/restore\n${navigator.userAgent}\n\n${$("log-text").textContent}`));
+function status(id, text, state = "") { $(id).textContent = text; $(id).dataset.s = state; if (text) log(text); }
+const step = (n) => { for (const k of [1, 2, 3, 4, 5]) $(`s${k}`).classList.toggle("off", k > n); };
+const facts = (dl, rows) => { dl.innerHTML = ""; for (const [k, v] of rows) { const dt = document.createElement("dt"); dt.textContent = k; const dd = document.createElement("dd"); dd.textContent = v || "—"; dl.append(dt, dd); } dl.hidden = false; };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+if (!("usb" in navigator)) { $("no-usb").hidden = false; }
+
+// ----- 1. The restore file, checked part by part -----
+let note = null;
+$("file-label").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); $("file").click(); } });
+$("file").addEventListener("change", async () => {
+  const file = $("file").files[0];
+  note = null; $("connect").disabled = true; step(1);
+  if (!file) return;
+  try {
+    status("s1-status", `Reading ${file.name}…`);
+    const n = await readRestore(file);
+    facts($("note"), [["Phone", `${n.phone.manufacturer || ""} ${n.phone.model} (${n.phone.device})`], ["Version", n.phone.version], ["Build", n.phone.otaVersion], ["Saved", n.saved.slice(0, 10)], ["Parts", n.images.map((i) => i.name).join(", ")]]);
+    $("checking").hidden = false;
+    const total = n.images.reduce((t, i) => t + i.blob.size, 0);
+    let done = 0;
+    for (const img of n.images) {
+      const sha = await imageSha256(img, (f) => {
+        $("check-bar").style.width = `${Math.round((done + f * img.blob.size) / total * 100)}%`;
+        $("check-text").textContent = `Checking ${img.name}…`;
+      });
+      if (sha !== img.sha256) throw new Error(`${img.file} doesn't match its checksum, so the restore file is damaged. Use your copy from somewhere else.`);
+      done += img.blob.size;
+      log(`${img.name}: checksum OK`);
+    }
+    $("checking").hidden = true;
+    note = n;
+    status("s1-status", "Every part checks out. ✓", "ok");
+    $("connect").disabled = !("usb" in navigator);
+    step(2);
+  } catch (e) {
+    $("checking").hidden = true;
+    status("s1-status", e.message || String(e), "bad");
+  }
+});
+
+// ----- 2. Fastboot, then fastbootd -----
+const device = new fastboot.FastbootDevice();
+let offerReconnect = () => {
+  $("reconnect").hidden = false;
+  status("s2-status", "Press Pick the phone again, and choose the phone.");
+  // During the restore it's step 3 the person is watching.
+  if (!$("writing").hidden) { status("s3-status", "The phone restarted. Press Pick the phone again in step 2 and choose it; then this carries on."); $("reconnect").scrollIntoView({ block: "center" }); }
+};
+$("reconnect").addEventListener("click", async () => { try { await device.connect(); $("reconnect").hidden = true; } catch (e) { log(`Not reconnected: ${e.message || e}`); } });
+async function waitForPhone(seconds = 120) {
+  for (let i = 0; i < seconds; i++) {
+    if (device.isConnected) { try { await device.getVariable("product"); return; } catch (e) { /* not ready */ } }
+    if (i === 15) offerReconnect();
+    await Promise.race([device.waitForConnect(offerReconnect).catch(() => {}), sleep(1000)]);
+  }
+  throw new Error("The phone didn't come back. Check it shows a fastboot screen, then press Connect again.");
+}
+$("connect").addEventListener("click", async () => {
+  $("connect").disabled = true;
+  try {
+    status("s2-status", "Pick the phone in the box your browser shows…");
+    await device.connect();
+    if ((await device.getVariable("is-userspace")) !== "yes") {
+      status("s2-status", "Switching to fastbootd. The phone restarts into its second fastboot screen…");
+      await device.reboot("fastboot", true, offerReconnect).catch(() => {});
+      await waitForPhone();
+    }
+    if ((await device.getVariable("is-userspace")) !== "yes") throw new Error("The phone didn't reach fastbootd. Restart it into fastboot mode and press Connect again.");
+    $("reconnect").hidden = true;
+    const product = (await device.getVariable("product")) || "";
+    const unlocked = (await device.getVariable("unlocked")) || "";
+    const slot = (await device.getVariable("current-slot")) || "";
+    log(`fastbootd: product ${product}, unlocked ${unlocked}, slot ${slot}`);
+    facts($("phone"), [["Phone says", product || "(nothing)"], ["Bootloader", unlocked === "yes" ? "unlocked" : unlocked || "unknown"], ["Running from", slot ? `slot ${slot}` : "—"]]);
+    if (unlocked && unlocked !== "yes") throw new Error("The bootloader is locked, so nothing can be written. A locked phone already runs its maker's software.");
+    const same = [note.phone.device, note.phone.model].filter(Boolean).some((x) => product.toLowerCase() === x.toLowerCase());
+    if (!same) {
+      // OnePlus doesn't always say its model in fastboot: ask instead.
+      $("same-text").textContent = `This is my ${note.phone.manufacturer || ""} ${note.phone.model}, the phone the restore file was saved from. (It says "${product || "nothing"}" here.)`;
+      $("same-phone").hidden = false;
+    }
+    status("s2-status", "Connected in fastbootd. ✓", "ok");
+    step(3);
+    syncRestore();
+  } catch (e) {
+    status("s2-status", e.message || String(e), "bad");
+    $("connect").disabled = false;
+  }
+});
+
+// ----- 3. Write it -----
+const acks = [...document.querySelectorAll(".ack")];
+function syncRestore() {
+  const sameOk = $("same-phone").hidden || $("same-ok").checked;
+  $("restore").disabled = !(note && device.isConnected && sameOk && acks.every((a) => a.checked));
+}
+[...acks, $("same-ok")].forEach((a) => a.addEventListener("change", syncRestore));
+
+$("restore").addEventListener("click", async () => {
+  $("restore").disabled = true; $("writing").hidden = false;
+  const guard = (e) => { e.preventDefault(); e.returnValue = ""; };
+  addEventListener("beforeunload", guard);
+  try {
+    const slot = (await device.getVariable("current-slot"))?.replace(/^_/, "") || "a";
+    // An update that was interrupted keeps "snapshot" copies that fill the
+    // system partition; clear them first, as fastboot does.
+    const snap = await device.getVariable("snapshot-update-status").catch(() => null);
+    if (snap && snap !== "none") { log(`Snapshot update status: ${snap}. Cancelling it.`); await device.runCommand("snapshot-update:cancel"); }
+    const logical = note.images.filter((i) => i.logical);
+    const boot = note.images.filter((i) => !i.logical);
+    for (const img of logical) for (const s of ["a", "b"]) {
+      await device.runCommand(`delete-logical-partition:${img.name}_${s}-cow`).then(() => log(`Removed ${img.name}_${s}-cow`), () => {});
+    }
+    const total = note.images.reduce((t, i) => t + i.size, 0);
+    let done = 0;
+    const write = async (img) => {
+      $("progress-text").textContent = `Writing ${img.name}…`;
+      if (img.logical && (await device.getVariable(`is-logical:${img.name}_${slot}`)) !== "yes") {
+        // Tome OS's own system may not have this partition: make it again.
+        log(`Creating ${img.name}_${slot}`);
+        await device.runCommand(`create-logical-partition:${img.name}_${slot}:0`);
+      }
+      await device.flashBlob(img.name, img.blob, (f) => { $("bar").style.width = `${Math.round((done + f * img.size) / total * 100)}%`; });
+      done += img.size;
+      log(`Wrote ${img.name}`);
+    };
+    // The system first, in fastbootd. Then the boot images and vbmeta (last)
+    // from the bootloader, as Tome OS's GSI guide (docs/gsi.md) puts
+    // verification back, so the phone never starts new boot images over an
+    // old system.
+    for (const img of logical) await write(img);
+    if (boot.length) {
+      $("progress-text").textContent = "Restarting into the bootloader…";
+      await device.reboot("bootloader", true, offerReconnect).catch(() => {});
+      await waitForPhone();
+      $("reconnect").hidden = true;
+      if ((await device.getVariable("is-userspace")) === "yes") throw new Error("The phone didn't leave fastbootd. Restart it into fastboot mode and press Restore again.");
+      for (const img of boot.filter((i) => !i.name.startsWith("vbmeta"))) await write(img);
+      for (const img of boot.filter((i) => i.name.startsWith("vbmeta"))) await write(img);
+    }
+    $("progress-text").textContent = "Erasing the phone's data…";
+    for (const p of ["userdata", "metadata"]) {
+      await device.runCommand(`erase:${p}`).then(() => log(`Erased ${p}`), (e) => log(`Couldn't erase ${p} here (${e.message || e}); the phone offers to format it as it starts.`));
+    }
+    $("bar").style.width = "100%";
+    $("progress-text").textContent = "Done. Restarting the phone…";
+    await device.reboot().catch(() => {});
+    status("s3-status", "The original software is written. The phone is restarting.", "ok");
+    step(4);
+  } catch (e) {
+    status("s3-status", `${e.message || e}\nNothing more was written. Press Restore again to try again: it starts over.`, "bad");
+    $("restore").disabled = false;
+  } finally {
+    removeEventListener("beforeunload", guard);
+  }
+});
+
+// ----- 4 and 5. Started? Then, and only then, locking -----
+$("started").addEventListener("click", () => { status("s4-status", "Your phone runs its original software again. ✓", "ok"); step(5); });
+$("not-started").addEventListener("click", () => status("s4-status", "Turn it off, hold Volume Up + Volume Down + Power for the fastboot screen, and run step 2 and 3 again. If it still won't start, copy the Details below and contact us. Don't lock the bootloader.", "bad"));
+$("both-ok").addEventListener("change", () => { $("lock").disabled = !$("both-ok").checked; });
+$("lock").addEventListener("click", async () => {
+  $("lock").disabled = true;
+  try {
+    if (!device.isConnected) await device.connect();
+    if ((await device.getVariable("is-userspace")) === "yes") {
+      status("s5-status", "Switching to the bootloader…");
+      await device.reboot("bootloader", true, offerReconnect).catch(() => {});
+      await waitForPhone();
+    }
+    status("s5-status", "Look at the phone: choose Lock the bootloader with the volume keys, then press Power.");
+    await device.runCommand("flashing lock");
+    await sleep(3000);
+    await waitForPhone(60).catch(() => {});
+    const unlocked = await device.getVariable("unlocked").catch(() => null);
+    if (unlocked === "no") status("s5-status", "Locked. ✓ The phone erases itself and starts as new.", "ok");
+    else status("s5-status", "The phone didn't lock. If you chose not to, that's fine. Otherwise press the button and try again.");
+  } catch (e) {
+    status("s5-status", e.message || String(e), "bad");
+  }
+  $("lock").disabled = !$("both-ok").checked;
+});
+</script>
+</body>
+</html>

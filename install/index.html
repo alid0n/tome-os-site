@@ -460,6 +460,7 @@ body[data-webusb="no"] .webusb-only, body:not([data-webusb="no"]) .no-webusb-onl
     <div class="words">
       <div class="count"></div>
       <h1 tabindex="-1">Back up your phone first</h1>
+      <div class="notice" id="bk-original" hidden style="margin:0 0 16px"><p><strong>Save your original software too.</strong> Only Pixels can be put back to their original software with one click. For this phone, <a href="original/">save it to a restore file first</a>, so you can go back later.</p></div>
       <p class="say webusb-only">Installing wipes the phone clean, like a factory reset. Choose what to keep, and this page saves it to this <span class="host-noun">computer</span> now and moves it back to the phone once Tome OS is installed.</p>
       <p class="say no-webusb-only">Installing wipes the phone clean, like a factory reset. Copy what you want to keep to this <span class="host-noun">computer</span> first, and copy it back once Tome OS is installed.</p>
 
@@ -1223,6 +1224,8 @@ function pickPhone(c) {
   $$(".tile[data-code]").forEach((t) => t.setAttribute("aria-pressed", t.dataset.code === c));
   $("picked").hidden = false;
   $("picked").textContent = `Installing on the ${phoneName(c)}.`;
+  // Only Pixels can be put back with Google's own tool; others save their original software first.
+  $("bk-original").hidden = p.brand === "Google";
   $$(".phone-name, .model-name").forEach((e) => { e.textContent = PHONES[c]; });
   $$(".code-name").forEach((e) => { e.textContent = c; });
   nextIn(steps[0]).disabled = false;
