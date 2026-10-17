@@ -1,7 +1,7 @@
 /*
  * fastboot.js 1.1.3 (npm "android-fastboot", https://github.com/kdrag0n/fastboot.js),
  * MIT licence (fastboot.js-LICENSE.txt), bundled with zip.js (BSD licence,
- * notices below). Vendored for Tome OS's web installer with six changes,
+ * notices below). Vendored for Tome OS's web installer with seven changes,
  * each marked "Tome OS:":
  *   - system_dlkm is flashed too (Pixel 8 and later have it; without it the
  *     phone would not start).
@@ -15,6 +15,10 @@
  *   - Wiping erases metadata as well as userdata, as "fastboot -w" does.
  *   - The slot written is made the one that starts, which also clears a
  *     failed-start count left by an earlier try.
+ *   - Only devices showing a fastboot interface are picked or reconnected
+ *     to, so a phone also allowed for USB debugging (the backup step), or
+ *     restarting into Android, isn't taken for one in fastboot. A connect
+ *     event for any other device no longer fails a pending waitForConnect().
  */
 var DebugLevel;
 (function (DebugLevel) {
@@ -8194,6 +8198,12 @@ async function flashZip(device, blob, wipe, onReconnect, onProgress = (_action, 
 const FASTBOOT_USB_CLASS = 0xff;
 const FASTBOOT_USB_SUBCLASS = 0x42;
 const FASTBOOT_USB_PROTOCOL = 0x03;
+// Tome OS: whether a USB device offers a fastboot interface.
+function isFastbootDevice(device) {
+    return device.configurations.some((c) => c.interfaces.some((i) => i.alternates.some((a) => a.interfaceClass === FASTBOOT_USB_CLASS &&
+        a.interfaceSubclass === FASTBOOT_USB_SUBCLASS &&
+        a.interfaceProtocol === FASTBOOT_USB_PROTOCOL)));
+}
 const BULK_TRANSFER_SIZE = 16384;
 const DEFAULT_DOWNLOAD_SIZE = 512 * 1024 * 1024; // 512 MiB
 // To conserve RAM and work around Chromium's ~2 GiB size limit, we limit the
@@ -8351,7 +8361,8 @@ class FastbootDevice {
      * @throws {UsbError}
      */
     async connect() {
-        let devices = await navigator.usb.getDevices();
+        // Tome OS: fastboot devices only
+        let devices = (await navigator.usb.getDevices()).filter(isFastbootDevice);
         logDebug("Found paired USB devices:", devices);
         if (devices.length === 1) {
             this.device = devices[0];
@@ -8384,6 +8395,10 @@ class FastbootDevice {
             });
             navigator.usb.addEventListener("connect", async (event) => {
                 logDebug("USB device connected");
+                // Tome OS: fastboot devices only
+                if (!isFastbootDevice(event.device)) {
+                    return;
+                }
                 this.device = event.device;
                 // Check whether waitForConnect() is pending and save it for later
                 let hasPromiseReject = this._connectReject !== null;

@@ -200,26 +200,35 @@ h1:focus { outline: none; }
 .toast.on { opacity: 1; }
 .ripple { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; background: rgba(255,255,255,.45); animation: ripple .5s ease-out forwards; pointer-events: none; }
 @keyframes ripple { from { transform: scale(.2); opacity: 1; } to { transform: scale(2); opacity: 0; } }
-/* The phone's own fastboot screen: the chosen option in green, a red
-   warning triangle, "Fastboot Mode" in red, then the phone's details. */
-.v-fb, .v-ask { background: #000; color: #fff; font-family: var(--mono); padding: 22px 10px 10px; gap: 4px; font-size: .9em; }
+/* The phone's own screens, drawn like the real ones: the Pixel bootloader
+   (fastboot and its unlock/lock question), the warnings it shows as it
+   starts, Tome OS's boot animation and welcome screen, Tome OS's recovery in
+   fastbootd, and the power menu. */
+.v-fb, .v-ask, .v-unl { background: #000; color: #fff; font-family: Roboto, "Segoe UI", system-ui, sans-serif; padding: 56% 8px 8px; gap: 2px; }
+.fb-pick { position: absolute; right: 4px; top: 13%; max-width: 70%; text-align: right; font-size: 1.45em; font-weight: 700; line-height: 1.1; display: flex; align-items: center; gap: 3px; justify-content: flex-end; }
+.fb-pick::after { content: ""; flex: none; border: .35em solid transparent; border-left-color: currentColor; margin-right: -.4em; }
+/* Current Pixel bootloaders show a red warning triangle, not an Android. */
 .tri { display: block; flex: none; width: 3.4em; height: 3.4em; }
-.v-fb .grn { color: #3ddc84; font-weight: 700; font-size: 1.5em; margin-bottom: 10px; }
-.v-fb .tri { color: #f44336; align-self: center; margin-bottom: 6px; }
-.v-fb .red { color: #f44336; font-weight: 700; margin-bottom: 6px; } .dim { color: #9a9a9a; }
-.fb-state.unlocked { color: #f44336; }
-.v-ask { gap: 6px; }
-.v-ask .opt { padding: 4px 6px; border-radius: 4px; }
-.v-ask .opt.hl { background: #fff; color: #000; font-weight: 700; }
-/* The warning a Pixel shows as it starts: orange while it's unlocked, yellow
-   once it's locked with Tome OS's key. */
+.v-fb .tri { color: #f44336; align-self: center; margin: 0 0 6px; }
+.fb-title { font-size: 1.35em; font-weight: 700; margin-bottom: 2px; }
+.fb-info { font-size: .82em; line-height: 1.45; color: #e8e8e8; }
+.grn { color: #3ddc84; } .red { color: #f44336; } .dim { color: #9a9a9a; }
+.v-ask .ask-q { font-size: 1.25em; font-weight: 700; margin-bottom: 4px; }
+.v-ask p { margin: 0 0 5px; font-size: .78em; line-height: 1.35; color: #ddd; }
+/* The orange warning while the bootloader is unlocked. */
+.v-unl { align-items: center; justify-content: center; text-align: center; padding: 10px; gap: 6px; }
+.v-unl .tri { color: #ff8f00; width: 3.2em; height: 3.2em; }
+.v-unl p { margin: 0; font-size: .85em; color: #ddd; }
+.v-unl .o { color: #ff8f00; font-weight: 700; }
+/* The yellow notice once it's locked with Tome OS's key. */
 .v-boot { background: #000; color: #fff; padding: 30% 12px 12px; gap: 8px; font-size: .82em; }
 .v-boot .tri { width: 3.2em; height: 3.2em; margin-bottom: 4px; }
-.v-boot.orange .tri { color: #ff8f00; }
 .v-boot.yellow .tri { color: #fdd835; }
 .v-boot p { margin: 0; }
 .v-boot small { margin-top: auto; color: #bdbdbd; font-size: .9em; letter-spacing: .5px; text-transform: uppercase; }
 .v-off { background: #000; }
+.v-tome { align-items: center; justify-content: center; background: radial-gradient(circle at 50% 46%, rgba(157,123,255,.28), transparent 50%), #000; }
+.v-tome img { width: 62%; filter: drop-shadow(0 0 10px rgba(157,123,255,.7)); }
 /* Tome OS starting: its own boot animation, on black. */
 .v-anim { background: #000; align-items: center; justify-content: center; }
 .v-anim .boot { width: 62%; }
@@ -236,13 +245,45 @@ h1:focus { outline: none; }
 .v-welcome .go { flex: 1; height: 3.9em; border-radius: 1.95em; background: #9d7bff; color: #1d0b4a; display: flex; align-items: center; justify-content: center; gap: .5em; font-size: 1em; }
 .v-welcome .go span { font-size: .9em; }
 .v-welcome svg { width: 1.3em; height: 1.3em; }
-.v-fbd { background: linear-gradient(#123a7a, #0a1f45); color: #fff; align-items: center; padding: 26px 12px 12px; gap: 6px; font-size: .85em; text-align: center; }
-.v-fbd img { width: 34px; margin-bottom: 4px; }
-.v-fbd .t { font-weight: 700; letter-spacing: 1px; }
-.v-fbd .menu { align-self: stretch; margin-top: 12px; display: flex; flex-direction: column; gap: 4px; text-align: left; color: #b9c9e8; }
-.v-fbd .menu div { padding: 4px 6px; border-radius: 4px; background: rgba(255,255,255,.06); }
+.v-pmenu { background: rgba(0,0,0,.82); align-items: center; justify-content: center; }
+.v-pmenu .pm { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 86%; }
+.v-pmenu .pm div { aspect-ratio: 1; border-radius: 14px; background: #2b2633; color: #efeaff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: .95em; }
+.v-pmenu .pm i { font-style: normal; font-size: 1.8em; line-height: 1; }
+.v-pmenu .pm i svg { display: block; width: 1em; height: 1em; }
+.v-pmenu .pm .hit { background: #b57bff; color: #14102b; box-shadow: 0 0 0 2px var(--talk); }
+.v-fbd { background: #14102b; color: #efeaff; align-items: center; padding: 22% 8px 8px; gap: 3px; text-align: center; font-family: Roboto, system-ui, sans-serif; }
+.v-fbd img { width: 46%; margin-bottom: 6px; }
+.v-fbd .h { color: #f2b84b; font-size: .9em; }
+.v-fbd .menu { align-self: stretch; margin-top: 10px; display: flex; flex-direction: column; text-align: left; background: #1f1842; }
+.v-fbd .menu div { padding: 4px 6px; }
+.v-fbd .menu .sel { background: #f2b84b; color: #14102b; }
 .handsoff { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: var(--card, rgba(255,255,255,.04)); border: 1px solid var(--line); margin: 0 0 16px; }
 .handsoff b { display: block; color: var(--text); }
+
+/* "Look at your phone": a big card with a picture of the phone and what to
+   press, kept in view. On small screens it goes above the list and the big
+   practice phone steps aside, so the card and its buttons fit the screen. */
+.look { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 20px; align-items: start; padding: 18px; border-radius: 18px; border: 2px solid var(--talk); background: linear-gradient(160deg, rgba(92,200,255,.14), rgba(24,19,31,.96) 60%); box-shadow: 0 0 0 4px rgba(92,200,255,.1); margin: 0 0 18px; scroll-margin: 12px; animation: look 1.8s ease-in-out infinite; }
+@keyframes look { 50% { box-shadow: 0 0 0 4px rgba(92,200,255,.18), 0 0 36px rgba(92,200,255,.35); } }
+.look-tag { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--talk); }
+.look-h { display: block; font-size: 22px; line-height: 1.25; margin: 4px 0 10px; color: var(--text); }
+.look-steps { margin: 0 0 12px; padding-left: 1.3em; display: flex; flex-direction: column; gap: 6px; color: var(--muted); }
+.look-steps b, .look-words p strong { color: var(--text); }
+.look-words p { margin: 0 0 12px; color: var(--muted); font-size: 15px; }
+.look-pic { display: flex; justify-content: center; padding-right: 10px; }
+.look .phone { width: 120px; height: 246px; margin: 0; border-radius: 22px; box-shadow: 0 0 30px rgba(92,200,255,.18); }
+.look .scr { inset: 5px; border-radius: 17px; font-size: 6.4px; }
+.look .finger { right: -32px; width: 24px; height: 14px; }
+.look .walk { margin-top: 10px; }
+@media (max-width: 760px) {
+  #i-run { display: flex; flex-direction: column; }
+  #i-run > .look { order: -1; }
+  .look { grid-template-columns: 96px minmax(0, 1fr); gap: 12px; padding: 14px; }
+  .look .phone { width: 96px; height: 197px; border-radius: 18px; }
+  .look .scr { inset: 4px; border-radius: 14px; font-size: 5.1px; }
+  .look-h { font-size: 19px; }
+  .step:has(.look:not([hidden])) .visual, .step:has(.look:not([hidden])) .say { display: none; }
+}
 
 .laptop { width: 260px; max-width: 100%; }
 .laptop .lid { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 10px 10px 0 0; border: 3px solid #3b3150; border-bottom: 0; background: #14111b; }
@@ -307,6 +348,40 @@ h1:focus { outline: none; }
 .shell select { padding: 8px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--raised); color: inherit; font: inherit; }
 /* Only one way to install shows at a time. */
 body[data-way="cli"] .usb-only, body:not([data-way="cli"]) .cli-only { display: none !important; }
+/* Saving files, moving them back and the helper app talk to the phone over
+   USB debugging, which needs WebUSB whichever way Tome OS is installed. */
+body[data-webusb="no"] .webusb-only, body:not([data-webusb="no"]) .no-webusb-only { display: none !important; }
+
+/* Saving files before the install, and moving them back after */
+.panel { border: 1px solid var(--line); border-radius: 16px; background: rgba(24,19,31,.6); padding: 16px; margin: 0 0 18px; }
+.panel h2 { margin: 0 0 4px; font-size: 18px; }
+.panel > p { margin: 0 0 12px; color: var(--muted); font-size: 15px; }
+.panel .checks, .panel .ticks { margin-bottom: 16px; }
+.kinds { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.kinds small b { color: var(--glow-hi); font-weight: 500; }
+.panel .row + .row { margin-top: 10px; }
+.cant { margin: 0 0 18px; padding: 0 0 0 18px; color: var(--muted); font-size: 15px; }
+.cant li + li { margin-top: 4px; }
+.cant strong { color: var(--text); }
+:is(.v-allow, .v-dialog) .ask-box { position: absolute; left: 8px; right: 8px; top: 30%; background: #2b2930; border-radius: 14px; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.6); display: flex; flex-direction: column; gap: 6px; }
+:is(.v-allow, .v-dialog) .ask-box b { font-size: 1.15em; font-weight: 500; }
+:is(.v-allow, .v-dialog) .ask-box .always { display: flex; gap: 6px; align-items: center; }
+:is(.v-allow, .v-dialog) .ask-box .always i { width: 10px; height: 10px; border-radius: 2px; background: #a68bff; flex: none; }
+:is(.v-allow, .v-dialog) .ask-box .btns { display: flex; justify-content: flex-end; gap: 12px; color: #c9b8ff; }
+:is(.v-allow, .v-dialog) .ask-box .go { padding: 2px 8px; border-radius: 8px; box-shadow: 0 0 0 1px var(--talk); animation: hit 1.2s ease-in-out infinite; }
+/* Add Google apps? */
+.choice { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 10px; }
+.choice .tile b { font-size: 16px; }
+
+/* The live log under each step, with a copy button */
+.log { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 10px; }
+.log summary { cursor: pointer; color: var(--faint); font-size: 14px; display: flex; gap: 8px; align-items: baseline; list-style: none; }
+.log summary::-webkit-details-marker { display: none; }
+.log summary::before { content: "›"; transition: transform .15s; }
+.log[open] summary::before { transform: rotate(90deg); }
+.log summary .last { font-family: var(--mono); font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+.log pre { margin: 8px 0; max-height: 220px; overflow: auto; background: #000; color: #d8d2e6; border-radius: 10px; padding: 10px 12px; font-family: var(--mono); font-size: 12px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.log .btn { min-height: 36px; padding: 0 14px; font-size: 14px; }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 </style>
@@ -347,10 +422,11 @@ body[data-way="cli"] .usb-only, body:not([data-way="cli"]) .cli-only { display: 
       <details class="help"><summary>Stuck? Get help with this step</summary><div>
         <p><strong>Can't find your phone?</strong> Search for its model name from <strong>Settings › About phone</strong>. If it isn't listed, Tome OS doesn't run on it yet. More phones are on the way.</p>
         <p><strong>Your phone says "Coming soon"?</strong> It's being built. Check back soon.</p>
+        <p><strong>Already installed Tome OS and saved your files with this page?</strong> <a href="#restore">Move your files back</a>.</p>
       </div></details>
     </div>
     <div class="visual" data-phone>
-      <div class="v v-tome on" data-v="tome"><img src="../assets/tome-os-mark.svg" alt="">TOME</div>
+      <div class="v v-tome on" data-v="tome"><img src="../assets/mark.svg" alt=""></div>
       <div class="v v-set" data-v="about"><div class="ttl">About phone</div><div class="it"><div>Device name<small>My phone</small></div></div><div class="it tap"><div>Model<small>Pixel 6</small></div></div><div class="it"><div>Android version<small>15</small></div></div></div>
     </div>
   </section>
@@ -384,18 +460,72 @@ body[data-way="cli"] .usb-only, body:not([data-way="cli"]) .cli-only { display: 
     <div class="words">
       <div class="count"></div>
       <h1 tabindex="-1">Back up your phone first</h1>
-      <p class="say">Installing wipes the phone clean, like a factory reset, and this page can't save anything for you. Do these yourself on the phone first, then tick each one off.</p>
+      <p class="say webusb-only">Installing wipes the phone clean, like a factory reset. Choose what to keep, and this page saves it to this <span class="host-noun">computer</span> now and moves it back to the phone once Tome OS is installed.</p>
+      <p class="say no-webusb-only">Installing wipes the phone clean, like a factory reset. Copy what you want to keep to this <span class="host-noun">computer</span> first, and copy it back once Tome OS is installed.</p>
+
+      <div class="panel no-webusb-only" id="bk-manual">
+        <h2>Copy your photos and files</h2>
+        <p>Saving them from this page needs <strong>Chrome</strong>, <strong>Edge</strong> or another Chromium browser, which can talk to the phone over USB. In this browser, copy them yourself:</p>
+        <ol class="ticks plain">
+          <li data-s="now">Plug the phone in and choose File transfer<small>Pull down from the top of the phone's screen, tap the USB notification and choose <strong>File transfer</strong>.</small></li>
+          <li data-s="todo">Copy the folders<small>Copy the DCIM, Pictures, Download, Documents and Music folders to this <span class="host-noun">computer</span>. On a Mac this needs an app such as OpenMTP.</small></li>
+        </ol>
+      </div>
+
+      <div class="panel webusb-only" id="bk">
+        <h2>What to keep</h2>
+        <p id="bk-say">Untick anything you don't need. The numbers show once the phone is connected.</p>
+        <ul class="checks kinds" id="bk-kinds"></ul>
+        <ol class="ticks plain" id="bk-steps">
+          <li data-s="now">Turn on USB debugging on the phone<small>Settings › About phone, tap <strong>Build number</strong> 7 times. Then Settings › System › Developer options, turn on <strong>USB debugging</strong>.</small></li>
+          <li data-s="todo"><span>Plug it in, connect, and tap <strong>Allow</strong> on the phone</span></li>
+          <li data-s="todo">Choose where to save it</li>
+        </ol>
+        <div class="look" id="bk-allow" role="alert" hidden>
+          <div class="look-pic" data-phone><div class="v v-set v-allow on" data-v="allow"></div></div>
+          <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Tap Allow</b><p>It asks <strong>"Allow USB debugging?"</strong>. Tick <strong>Always allow from this computer</strong>, then tap <strong>Allow</strong>. If nothing shows, unlock the phone's screen.</p></div>
+        </div>
+        <div class="look" id="bk-helper" role="alert" hidden>
+          <div class="look-pic" data-phone><div class="v v-set v-dialog v-perm on" data-v="perm"></div></div>
+          <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Tap Allow</b><p>A small helper app, <strong>Tome Transfer</strong>, saves your texts, contacts and calendar. If the phone asks about installing it, tap <strong>Install</strong>. If it asks to let it see your messages, contacts or calendar, tap <strong>Allow</strong>. It's removed again when it's done, and it can't use the internet.</p></div>
+        </div>
+        <div class="row" id="bk-connect-row"><button class="btn" id="bk-connect">Connect to the phone</button></div>
+        <div class="row" id="bk-save-row" hidden><button class="btn primary" id="bk-folder">Save to a folder</button><button class="btn" id="bk-zip">Save as a zip file</button><button class="link" id="bk-rescan">Look again</button></div>
+        <div id="bk-progress" hidden>
+          <div class="meter-label"><span id="bk-status" aria-live="polite">Starting…</span><span id="bk-count"></span></div>
+          <div class="meter" id="bk-meter"><i id="bk-bar"></i></div>
+          <p class="fine"><strong>Keep the phone plugged in</strong> until it says it's saved.</p>
+        </div>
+        <div class="notice ok" id="bk-done" hidden></div>
+        <div class="notice bad" id="bk-error" role="alert" hidden></div>
+      </div>
+
+      <p class="say" style="margin-bottom:10px"><strong>What this page doesn't copy.</strong> Do these on the phone yourself:</p>
+      <ul class="cant">
+        <li id="bk-cant-helper" hidden><strong>Messages, contacts and calendar</strong> aren't moved by this version of the installer. Contacts and calendars kept in an online account come back when you sign in to it. Otherwise export them to a file in the phone's Downloads folder, and that file is saved with your downloads.</li>
+        <li><strong>Chats in WhatsApp, Signal and others.</strong> Each has a backup option in its own settings.</li>
+        <li><strong>Apps and what's inside them,</strong> like game progress and logins. Reinstall them on Tome OS and sign in again.</li>
+        <li><strong>Sign-in codes</strong> in authenticator apps. Move them to another device first, or you could get locked out of your accounts.</li>
+      </ul>
       <ul class="checks" id="backup">
-        <li><label><input type="checkbox"><span>I've backed up my photos and videos<small>Use Google Photos or another cloud, or copy them to a computer.</small></span></label></li>
-        <li><label><input type="checkbox"><span>I've backed up my messages and chats<small>WhatsApp, Signal and others each have a backup option in their own settings.</small></span></label></li>
-        <li><label><input type="checkbox"><span>I've moved my sign-in codes<small>Move authenticator apps to another device first, or you could get locked out of your accounts.</small></span></label></li>
+        <li><label><input type="checkbox" id="bk-saved-ok"><span>My photos and files are saved<small id="bk-saved-note">With this page above, or another way: Google Photos, another cloud, or copied to a computer.</small></span></label></li>
+        <li><label><input type="checkbox"><span>I've backed up my chats and moved my sign-in codes<small>Using each app's own backup, as above.</small></span></label></li>
         <li><label><input type="checkbox"><span>I understand everything on this phone will be erased<small>It can't be undone.</small></span></label></li>
       </ul>
       <div class="row"><button class="btn primary" data-next disabled>I've backed everything up</button></div>
+      <details class="help"><summary>Stuck? Get help with this step</summary><div>
+        <p class="webusb-only"><strong>Phone not in the list?</strong> Check USB debugging is on and the phone is unlocked. Unplug it and plug it back in.</p>
+        <p class="webusb-only"><strong>Says the phone is in use?</strong> Another program has it, like Android Studio or <code>adb</code>. Close it, or run <code>adb kill-server</code>, then press Connect again.</p>
+        <p class="webusb-only"><strong>"Allow USB debugging?" never shows?</strong> Unlock the phone. If it still doesn't show, go to Developer options, tap <strong>Revoke USB debugging authorizations</strong>, then connect again.</p>
+        <p id="bk-help-helper" class="webusb-only"><strong>The helper app won't go on?</strong> Some phones block apps put on over USB. On Xiaomi phones, turn on <strong>Install via USB</strong> in Developer options. If Play Protect asks, choose <strong>Install anyway</strong>. Or untick Messages, Contacts and Calendar, and export them yourself to the Downloads folder: that file is saved with your downloads.</p>
+        <p><strong>Rather copy files yourself?</strong> Plug the phone in, pull down from the top of its screen, tap the USB notification and choose <strong>File transfer</strong>. Then copy the DCIM, Pictures, Download, Documents and Music folders to this <span class="host-noun">computer</span>.</p>
+      </div></details>
     </div>
     <div class="visual" data-phone>
-      <div class="v v-tome on" data-v="tome"><img src="../assets/tome-os-mark.svg" alt="">TOME</div>
+      <div class="v v-tome on" data-v="tome"></div>
       <div class="v v-off" data-v="off"></div>
+      <div class="v v-set" data-v="dbg"><div class="ttl">Developer options</div><div class="it"><div>Use developer options</div><span class="sw on"></span></div><div class="it"><div>Memory</div></div><div class="it tap"><div>USB debugging<small>Debug mode when USB is connected</small></div><span class="sw on"></span></div></div>
+      <div class="v v-set v-allow" data-v="allow"></div>
     </div>
   </section>
 
@@ -440,6 +570,17 @@ body[data-way="cli"] .usb-only, body:not([data-way="cli"]) .cli-only { display: 
         </div>
         <div class="notice bad" id="file-error" role="alert" hidden></div>
         <div class="row"><button class="btn primary" data-next disabled id="manual-next">Continue</button></div>
+      </div>
+
+      <div class="panel" id="gapps" style="margin-top:18px">
+        <h2>Add Google apps?</h2>
+        <p>Tome OS comes without Google. Most apps work fine, but some (banking, maps, ride and delivery apps, some games) need Google's services. <strong>microG</strong> is a free stand-in for them, and lets those apps work.</p>
+        <div class="tiles choice">
+          <button class="tile" data-gapps="no" aria-pressed="false"><b>No, keep it Google-free</b><small>You can add them later.</small></button>
+          <button class="tile" data-gapps="yes" aria-pressed="false"><b>Yes, add Google apps</b><small>microG is installed on the phone.</small></button>
+        </div>
+        <p class="fine" id="gapps-said" style="margin:0">Your answer is passed to the phone when you move your files back at the end. It's kept only in this browser and on the phone.</p>
+        <div class="notice" id="gapps-need" hidden style="margin:10px 0 0"><p>Choose an answer to carry on.</p></div>
       </div>
 
       <details class="help usb-only"><summary>Stuck? Get help with this step</summary><div>
@@ -492,7 +633,7 @@ body[data-way="cli"] .usb-only, body:not([data-way="cli"]) .cli-only { display: 
       <h1 tabindex="-1">Put the phone in install mode</h1>
       <p class="say">Watch the practice phone, then do the same on yours. It's two buttons held together.</p>
       <ol class="ticks plain" id="fb-list">
-        <li data-s="now">Turn the phone off</li>
+        <li data-s="now">Turn the phone off<small>Hold Power and Volume Up together, then tap Power off.</small></li>
         <li data-s="todo">Hold Volume Down, then also hold Power</li>
         <li data-s="todo">Let go when you see a red triangle and the words Fastboot Mode</li>
         <li data-s="todo">Plug it in with the USB cable</li>
@@ -505,9 +646,10 @@ body[data-way="cli"] .usb-only, body:not([data-way="cli"]) .cli-only { display: 
       </div></details>
     </div>
     <div class="visual" data-phone>
-      <div class="v v-tome on" data-v="tome"><img src="../assets/tome-os-mark.svg" alt="">TOME</div>
+      <div class="v v-tome on" data-v="tome"><img src="../assets/mark.svg" alt=""></div>
       <div class="v v-off" data-v="off"></div>
-      <div class="v v-fb" data-v="fb"><div class="grn">Start</div><i class="tri"></i><div class="red">Fastboot Mode</div><div class="dim">Product revision: <span class="code-name">oriole</span></div><div class="dim">Device state: <span class="fb-state">locked</span></div></div>
+      <div class="v v-pmenu" data-v="pmenu"></div>
+      <div class="v v-fb" data-v="fb"></div>
     </div>
   </section>
 
@@ -550,26 +692,57 @@ body[data-way="cli"] .usb-only, body:not([data-way="cli"]) .cli-only { display: 
           <li data-step="test" data-s="todo">Check Tome OS starts</li>
           <li data-step="lock" data-s="todo">Lock it again so it stays secure</li>
         </ol>
-        <div id="i-test" hidden>
-          <div class="callout" role="alert"><span aria-hidden="true" style="font-size:22px">👀</span><div><b>Watch the phone.</b>It's starting Tome OS for the first time, which takes up to 5 minutes. First it shows an orange warning, which is normal while it's unlocked. Wait for the Tome welcome screen, but don't set it up yet: locking erases it once more.</div></div>
-          <div class="row" style="margin-bottom:18px"><button class="btn primary" id="i-test-ok">I see the welcome screen</button><button class="link" id="i-test-bad">It's stuck on the Google logo, or keeps restarting</button></div>
+        <div class="look" id="i-test" role="alert" hidden>
+          <div class="look-pic" data-phone><div class="v v-unl on" data-v="unl"></div><div class="v v-anim" data-v="anim"></div><div class="v v-welcome" data-v="welcome"></div></div>
+          <div class="look-words">
+            <span class="look-tag">Watch your phone</span>
+            <b class="look-h">Wait for the Tome welcome screen</b>
+            <p>It's starting Tome OS for the first time, which takes up to 5 minutes. First it shows an orange warning, which is normal while it's unlocked. Don't set it up yet: locking erases it once more.</p>
+            <div class="row"><button class="btn primary" id="i-test-ok">I see the welcome screen</button><button class="link" id="i-test-bad">It's stuck on the Google logo, or keeps restarting</button></div>
+          </div>
         </div>
-        <div id="i-back" hidden>
-          <div class="callout" role="alert"><span aria-hidden="true" style="font-size:22px">👉</span><div><b>Now put it back in install mode.</b>Hold <strong>Power</strong> and <strong>Volume Down</strong> together until the fastboot screen shows, then let go. Keep it plugged in. This page carries on by itself.</div></div>
+        <div class="look" id="i-back" role="alert" hidden>
+          <div class="look-pic" data-phone><div class="v v-welcome on" data-v="welcome"></div><div class="v v-pmenu" data-v="pmenu"></div><div class="v v-off" data-v="off"></div><div class="v v-fb" data-v="fb"></div></div>
+          <div class="look-words">
+            <span class="look-tag">Your turn, on the phone</span>
+            <b class="look-h">Put it back in install mode</b>
+            <ol class="look-steps">
+              <li>Hold <b>Power</b> to turn the phone off first. When a menu shows, tap <b>Power off</b>.</li>
+              <li>Once the screen is dark, hold <b>Volume Down</b> and <b>Power</b> together.</li>
+              <li>Let go when the red triangle and <b>Fastboot Mode</b> show. Keep it plugged in.</li>
+            </ol>
+            <p>This page carries on by itself. <button class="link" id="i-back-stuck">It's on the fastboot screen, but this page hasn't moved on</button></p>
+          </div>
         </div>
         <div class="handsoff" id="i-handsoff" hidden><span aria-hidden="true" style="font-size:22px">✋</span><div><b>Hands off the phone.</b><span id="i-handsoff-text">It restarts a few times and switches between two install screens by itself. Its screen going dark is normal. Don't press anything on it unless this page asks.</span></div></div>
-        <div class="callout" id="i-prompt" role="alert" hidden><span aria-hidden="true" style="font-size:22px">👉</span><div><b>Your turn, on the phone.</b><span id="i-prompt-text"></span></div></div>
+        <div class="look" id="i-prompt" role="alert" hidden>
+          <div class="look-pic" data-phone><div class="v v-ask on" data-v="ask"></div></div>
+          <div class="look-words">
+            <span class="look-tag">Look at your phone</span>
+            <b class="look-h" id="i-prompt-h">Unlock the bootloader on the phone</b>
+            <ol class="look-steps">
+              <li>Press <b>Volume Down</b> until the top of the screen says <b class="ask-want">"Unlock the bootloader"</b>.</li>
+              <li>Press <b>Power</b>.</li>
+            </ol>
+            <p>Nothing to tap on the screen: it's the buttons on the side. This page carries on by itself.</p>
+          </div>
+        </div>
+        <div class="look" id="i-reconnect" hidden>
+          <div class="look-pic" data-phone><div class="v v-fb on" data-v="fb"></div></div>
+          <div class="look-words">
+            <span class="look-tag">Your turn, on this <span class="host-noun">computer</span></span>
+            <b class="look-h">Reconnect your phone</b>
+            <p>The phone restarted and came back as a new USB device, so the browser needs your permission to use it again. Press the button, pick the phone and press <strong>Connect</strong>. Don't unplug it: the install carries on where it was.</p>
+            <div class="row"><button class="btn primary" id="i-reconnect-btn">Reconnect your phone</button></div>
+            <div id="i-reconnect-win" hidden style="margin-top:14px">
+              <p><strong>Phone not in the list?</strong> Windows needs Google's USB driver to see it on this screen. Leave the phone as it is and follow these steps.</p>
+              <div class="walk" data-walk="during"></div>
+            </div>
+          </div>
+        </div>
         <div class="meter-label"><span id="i-status" aria-live="polite">Getting ready…</span><span id="i-pct"></span></div>
         <div class="meter" id="i-meter"><i id="i-bar"></i></div>
         <p class="fine" id="i-keep"><strong>Don't unplug the phone or close this page</strong> until it says it's finished, even if the phone's screen changes.</p>
-        <div class="notice" id="i-reconnect" hidden style="margin-top:16px">
-          <p><strong>Waiting for the phone to come back.</strong> If it shows a fastboot screen but nothing happens here, press <strong>Reconnect</strong> and pick the phone again. Don't unplug it.</p>
-          <div id="i-reconnect-win" hidden style="margin-top:10px">
-            <p style="margin-bottom:10px"><strong>Phone not in the list?</strong> Windows needs Google's USB driver to see it on this screen. Leave the phone as it is and follow these steps. The install carries on where it was.</p>
-            <div class="walk" data-walk="during"></div>
-          </div>
-          <p style="margin-top:10px"><button class="btn" id="i-reconnect-btn">Reconnect</button></p>
-        </div>
         <div class="notice bad" id="i-error" role="alert" hidden style="margin-top:16px"></div>
         <div class="row" id="i-retry-row" hidden><button class="btn primary" id="i-retry">Try again</button></div>
       </div>
@@ -587,15 +760,16 @@ body[data-way="cli"] .usb-only, body:not([data-way="cli"]) .cli-only { display: 
     <div class="visual" id="i-visual">
       <div class="laptop" id="i-laptop"><div class="lid"><div class="dialog"><div class="q">tome-os.com wants to connect</div><div class="d"><span class="phone-name">Pixel 6</span></div><div class="b"><span>Cancel</span><span class="go">Connect</span></div></div></div><div class="base"></div></div>
       <div data-phone hidden id="i-phone">
-        <div class="v v-fb on" data-v="fb"><div class="grn">Start</div><i class="tri"></i><div class="red">Fastboot Mode</div><div class="dim">Product revision: <span class="code-name">oriole</span></div><div class="dim">Device state: <span class="fb-state">locked</span></div></div>
-        <div class="v v-ask" data-v="ask"><div id="ask-q">Unlock the bootloader?</div><div class="dim">Volume keys move · Power selects</div><div class="opt hl" id="ask-no">Do not unlock the bootloader</div><div class="opt" id="ask-yes">Unlock the bootloader</div></div>
-        <div class="v v-tome" data-v="tome"><img src="../assets/tome-os-mark.svg" alt="">TOME</div>
-        <div class="v v-off" data-v="off"></div>
-        <div class="v v-fbd" data-v="fbd"><img src="../assets/tome-os-mark.svg" alt=""><div class="t">fastbootd</div><div class="dim">Tome OS install screen</div><div class="menu"><div>Reboot system now</div><div>Enter recovery</div><div>Power off</div></div></div>
-        <div class="v v-boot orange" data-v="orange"></div>
+        <div class="v v-fb on" data-v="fb"></div>
+        <div class="v v-ask" data-v="ask"></div>
+        <div class="v v-unl" data-v="unl"></div>
         <div class="v v-boot yellow" data-v="yellow"></div>
         <div class="v v-anim" data-v="anim"></div>
         <div class="v v-welcome" data-v="welcome"></div>
+        <div class="v v-pmenu" data-v="pmenu"></div>
+        <div class="v v-tome" data-v="tome"><img src="../assets/mark.svg" alt=""></div>
+        <div class="v v-off" data-v="off"></div>
+        <div class="v v-fbd" data-v="fbd"></div>
       </div>
       <p class="caption" id="i-caption">Pick <b class="phone-name">Pixel 6</b> in the box, then press <b>Connect</b>.</p>
     </div>
@@ -612,6 +786,8 @@ body[data-way="cli"] .usb-only, body:not([data-way="cli"]) .cli-only { display: 
         <li data-s="done">A yellow notice shows at every start<small>It says the phone runs a different operating system. That's the phone confirming it's genuine Tome OS. Nothing is wrong.</small></li>
         <li data-s="done">Updates arrive by themselves<small>No need to come back here.</small></li>
       </ul>
+      <div class="notice ok" id="done-restore" hidden><p id="done-restore-text"></p><p style="margin-top:10px"><button class="btn primary" id="done-restore-go">Move your files back</button></p></div>
+      <p class="fine" id="done-restore-link"><button class="link" id="done-restore-link-btn">Saved files with this page? Move them back</button></p>
       <p class="fine">To go back to stock Android any time, use Google's <a href="https://flash.android.com">Android Flash Tool</a> and choose <strong>Lock bootloader</strong> and <strong>Wipe device</strong>.</p>
     </div>
     <div class="visual" data-phone>
@@ -620,12 +796,72 @@ body[data-way="cli"] .usb-only, body:not([data-way="cli"]) .cli-only { display: 
       <div class="v v-welcome" data-v="welcome"></div>
     </div>
   </section>
+
+  <!-- 9. Move files back -->
+  <section class="step" data-step="restore" data-label="Move files back" hidden>
+    <div class="words">
+      <div class="count"></div>
+      <h1 tabindex="-1" id="rs-h">Move your files back</h1>
+      <p class="say webusb-only" id="rs-say">Once Tome OS is set up, this page copies what you saved back to where it was: photos back in the gallery, downloads back in Downloads, texts back in Messages.</p>
+      <div class="no-webusb-only">
+        <p class="say">Once Tome OS is set up, copy what you saved back to the phone. Doing it from this page needs <strong>Chrome</strong>, <strong>Edge</strong> or another Chromium browser, so in this browser it's done by hand.</p>
+        <ol class="ticks plain" id="rs-manual">
+          <li data-s="now">Set up Tome OS on the phone<small>Go through the welcome screens until you reach the home screen.</small></li>
+          <li data-s="todo">Copy your files back<small>Plug the phone in, pull down from the top of its screen, tap the USB notification and choose <strong>File transfer</strong>. Then copy the folders from your backup into the phone, each into the folder of the same name. On a Mac this needs an app such as OpenMTP.</small></li>
+          <li data-s="todo" id="rs-cli-gapps" hidden>Turn on Google apps<small>On the phone, turn on USB debugging: Settings › About phone, tap <strong>Build number</strong> 7 times, then Settings › System › Developer options, turn on <strong>USB debugging</strong>. Plug it in, then paste these into a terminal window and press <strong>Enter</strong>. Tap <strong>Allow</strong> on the phone when it asks. Tome OS then installs microG in the background.</small><div id="rs-cli-gapps-cmd" style="grid-column:2;margin-top:8px;font-weight:400"></div></li>
+        </ol>
+      </div>
+      <ol class="ticks plain webusb-only" id="rs-steps">
+        <li data-s="now">Set up Tome OS on the phone<small>Go through the welcome screens until you reach the home screen.</small></li>
+        <li data-s="todo">Turn on USB debugging<small>Like before: Settings › About phone, tap <strong>Build number</strong> 7 times. Then Settings › System › Developer options, turn on <strong>USB debugging</strong>.</small></li>
+        <li data-s="todo">Choose your backup<small id="rs-src-note">The folder or zip file this page saved. Skip this if you didn't save any.</small></li>
+        <li data-s="todo"><span>Plug it in, connect, and tap <strong>Allow</strong> on the phone</span></li>
+      </ol>
+      <div class="row webusb-only" id="rs-src-row" style="margin-bottom:18px"><button class="btn" id="rs-last" hidden></button><button class="btn" id="rs-folder">Choose the backup folder</button><button class="btn" id="rs-zip-btn">Choose a backup zip file</button><input type="file" id="rs-zip" class="visually-hidden" accept=".zip,application/zip" tabindex="-1"></div>
+      <div class="panel" id="rs-pick" hidden>
+        <h2>What to bring back</h2>
+        <p id="rs-from"></p>
+        <ul class="checks kinds" id="rs-kinds"></ul>
+      </div>
+      <p class="say webusb-only" id="rs-gapps" hidden></p>
+      <div class="look" id="rs-allow" role="alert" hidden>
+        <div class="look-pic" data-phone><div class="v v-set v-allow on" data-v="allow"></div></div>
+        <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Tap Allow</b><p>It asks <strong>"Allow USB debugging?"</strong>. Tap <strong>Allow</strong>. If nothing shows, unlock the phone's screen.</p></div>
+      </div>
+      <div class="look" id="rs-texting" role="alert" hidden>
+        <div class="look-pic" data-phone><div class="v v-set v-dialog v-sms on" data-v="sms"></div></div>
+        <div class="look-words"><span class="look-tag">Look at your phone</span><b class="look-h">Bringing in your texts, contacts and calendar</b><p>If it asks, make <strong>Telemancer</strong> your texting app: tap <strong>Telemancer</strong>, then <strong>Set as default</strong>. Tap <strong>Allow</strong> for anything else it asks. If nothing shows, unlock the phone's screen.</p></div>
+      </div>
+      <div class="row webusb-only" id="rs-go-row"><button class="btn primary" id="rs-go">Connect and move files back</button></div>
+      <div id="rs-progress" hidden>
+        <div class="meter-label"><span id="rs-status" aria-live="polite">Starting…</span><span id="rs-count"></span></div>
+        <div class="meter" id="rs-meter"><i id="rs-bar"></i></div>
+        <p class="fine"><strong>Keep the phone plugged in</strong> until it says it's finished.</p>
+      </div>
+      <div class="notice bad" id="rs-error" role="alert" hidden></div>
+      <div id="rs-after" hidden>
+        <div class="notice ok" id="rs-done"></div>
+        <ul class="ticks plain" id="rs-next"></ul>
+      </div>
+      <details class="help"><summary>Stuck? Get help with this step</summary><div>
+        <p><strong>Photos not in the gallery yet?</strong> Restart the phone. It finds new photos as it starts.</p>
+        <p class="webusb-only"><strong>Phone not in the list?</strong> Check USB debugging is on and the phone is unlocked. Unplug it and plug it back in.</p>
+        <p class="webusb-only"><strong>Texts didn't come in?</strong> Telemancer has to be the texting app to keep them. Open Settings › Apps › Default apps › SMS app, choose Telemancer, then press the button again. Nothing comes in twice.</p>
+        <p><strong>Rather copy them yourself?</strong> Plug the phone in, pull down from the top of its screen, tap the USB notification and choose <strong>File transfer</strong>. Then copy the folders from your backup into the phone, each into the folder of the same name. On a Mac this needs an app such as OpenMTP.</p>
+      </div></details>
+    </div>
+    <div class="visual" data-phone>
+      <div class="v v-tome on" data-v="tome"></div>
+      <div class="v v-set" data-v="dbg"><div class="ttl">Developer options</div><div class="it"><div>Use developer options</div><span class="sw on"></span></div><div class="it"><div>Memory</div></div><div class="it tap"><div>USB debugging<small>Debug mode when USB is connected</small></div><span class="sw on"></span></div></div>
+      <div class="v v-set v-allow" data-v="allow"></div>
+    </div>
+  </section>
 </main>
 <div class="confetti" id="confetti" aria-hidden="true"></div>
 
 <footer>
   <div class="wrap">
-    <span>Tome OS · <a href="/telemancer/">Telemancer</a></span>
+    <span>Tome OS · <a href="/telemancer/">Telemancer</a> · <a href="/legal">Privacy and Legal</a> · <a href="/logs/">Collect phone logs</a></span>
     <span>Not affiliated with Google. Android is a trademark of Google LLC.</span>
   </div>
 </footer>
@@ -680,6 +916,7 @@ const gb = (bytes) => bytes >= 1073741824 ? (bytes / 1073741824).toFixed(1) + " 
 
 const device = new fastboot.FastbootDevice();
 const steps = $$("section.step");
+const DONE = steps.findIndex((s) => s.dataset.step === "done");
 let at = 0, reached = 0;
 let code = null;          // the chosen phone's codename
 let build = null;         // { tag, version, files: [assets], sum: asset } for that phone
@@ -687,37 +924,113 @@ let pack = null;          // the factory zip, once it checks out
 let downloading = null;   // the running download, a promise for the joined file
 let running = false;
 
+// ----- The live log under each step -----
+// What the page is doing, line by line ("Waiting for fastboot", "Flashing
+// boot_a, 42 of 64 MB"), under each step, with a button that copies all of
+// it for a bug report. A line with a key replaces the last line if that had
+// the same key, so progress counts up in place.
+const logLines = [];
+const LOG_START = new Date();
+function log(text, key = null) {
+  const step = steps[at]?.dataset.step || "phone";
+  const stamp = new Date().toTimeString().slice(0, 8);
+  const last = logLines[logLines.length - 1];
+  if (key && last && last.key === key && last.step === step) Object.assign(last, { text, stamp });
+  else logLines.push({ text, key, step, stamp });
+  if (logLines.length > 5000) logLines.splice(0, 1000);
+  drawLog(step);
+}
+function drawLog(step) {
+  const box = steps.find((s) => s.dataset.step === step)?.querySelector(".log");
+  if (!box) return;
+  const mine = logLines.filter((l) => l.step === step);
+  const pre = box.querySelector("pre");
+  const atEnd = pre.scrollTop + pre.clientHeight >= pre.scrollHeight - 4;
+  pre.textContent = mine.map((l) => `${l.stamp}  ${l.text}`).join("\n");
+  if (atEnd) pre.scrollTop = pre.scrollHeight;
+  box.querySelector(".last").textContent = mine.length ? mine[mine.length - 1].text : "";
+}
+function logReport() {
+  const head = [`Tome OS installer log, started ${LOG_START.toISOString()}`, navigator.userAgent,
+    `Phone: ${code || "not chosen"}${pack ? `, Tome OS ${pack.version}` : build ? `, Tome OS ${build.version}` : ""}`, ""];
+  return head.concat(logLines.map((l) => `${l.stamp}  [${l.step}] ${l.text}`)).join("\n");
+}
+steps.forEach((s) => {
+  s.querySelector(".words").insertAdjacentHTML("beforeend", '<details class="log"><summary><span>Details</span><span class="last"></span></summary><pre></pre><div class="row"><button class="btn" data-copy-log>Copy the log</button></div></details>');
+});
+$$("[data-copy-log]").forEach((b) => b.addEventListener("click", () => {
+  navigator.clipboard.writeText(logReport()).then(() => { b.textContent = "Copied"; setTimeout(() => { b.textContent = "Copy the log"; }, 1500); }, () => {
+    const pre = b.closest(".log").querySelector("pre");
+    pre.textContent = logReport();
+    const r = document.createRange(); r.selectNodeContents(pre);
+    getSelection().removeAllRanges(); getSelection().addRange(r);
+  });
+}));
+
 // ----- Timers for the practice phone's animations, cleared on each step -----
 let timers = [];
 const later = (fn, ms) => timers.push(setTimeout(fn, ms));
 const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
 
 // ----- The practice phone -----
-// The warning triangle Pixels show on their fastboot and start-up screens,
-// colored by the screen it's on.
+// The screens a phone can show, drawn like the real ones. The Pixel
+// bootloader shows the choice the volume keys move through at the top right,
+// next to the power key, which selects it.
+// The warning triangle Pixels show on their fastboot and start-up screens
+// (current bootloaders have no Android robot), colored by the screen it's on:
+// red in Fastboot Mode, orange while unlocked, yellow once locked with Tome
+// OS's key.
 const TRIANGLE = '<svg class="tri" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>';
-// Screens used in more than one place, filled in where they're left empty.
 const SCREENS = {
-  orange: '<i class="tri"></i><p>The bootloader is unlocked and software integrity cannot be guaranteed. Any data stored on the device may be available to attackers. Do not store any sensitive data on the device.</p><p>Visit this link on another device:<br>g.co/ABH</p><small>Press power button to pause boot</small>',
-  yellow: '<i class="tri"></i><p>Your device is loading a different operating system.</p><p>Visit this link on another device:<br>g.co/ABH</p><p class="dim">ID: ········</p><small>Press power button to pause boot</small>',
+  fb: `<div class="fb-pick grn">Start</div>${TRIANGLE}<div class="fb-title red">Fastboot Mode</div><div class="fb-info">Product revision: <span class="code-name">oriole</span> MP1.0(ROW)<br>Bootloader version: slider-1.3-…<br>Baseband version: g5123b-…<br>Serial number: ••••••••••<br>Secure boot: PRODUCTION<br>NOS production: yes<br>DRAM: 8GB<br>UFS: 128GB<br>Device state: <span class="fb-state grn">locked</span><br>Boot slot: a</div>`,
+  ask: '<div class="fb-pick ask-pick grn">Do not unlock the bootloader</div><div class="ask-q">Unlock the bootloader?</div><p class="ask-p"></p><p>Press the Volume Up/Down buttons to select, then the Power button to continue.</p>',
+  unl: `${TRIANGLE}<p class="o">The bootloader is unlocked and software integrity cannot be guaranteed.</p><p>Any data stored on the device may be available to attackers. Do not store any sensitive data on the device.</p><p class="dim">Press the power button to pause boot.</p>`,
+  yellow: `${TRIANGLE}<p>Your device is loading a different operating system.</p><p>Visit this link on another device:<br>g.co/ABH</p><p class="dim">ID: ········</p><small>Press power button to pause boot</small>`,
   anim: '<div class="boot"></div>',
+  fbd: '<img src="../assets/mark.svg" alt=""><div class="h">fastbootd</div><div class="h">Product name - <span class="code-name">oriole</span></div><div class="dim">Tome OS</div><div class="menu"><div class="sel">Reboot system now</div><div>Enter recovery</div><div>Reboot to bootloader</div><div>Power off</div></div>',
+  tome: '<img src="../assets/mark.svg" alt="">',
   // LineageOS's welcome_activity.xml, with Tome OS's name and accent.
   welcome: '<div class="gap"></div><div class="lottie"></div><div class="gap small"></div><h2>Welcome to Tome OS</h2><div class="foot"><span class="a11y"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#e6e0e9" d="M12,2c1.1,0 2,0.9 2,2s-0.9,2 -2,2 -2,-0.9 -2,-2 0.9,-2 2,-2zM21,9h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/></svg></span><span class="go"><svg viewBox="0 0 960 960" aria-hidden="true"><path fill="currentColor" d="M647,520H160V440H647L423,216l57,-56L800,480L480,800l-57,-56L647,520Z"/></svg><span>Start</span></span></div>',
+  allow: '<div class="ttl">Developer options</div><div class="it"><div>USB debugging</div><span class="sw on"></span></div><div class="ask-box"><b>Allow USB debugging?</b><div class="dim">The computer\'s RSA key fingerprint is: 5C:1E:…</div><div class="always"><i></i>Always allow from this computer</div><div class="btns"><span>Cancel</span><span class="go">Allow</span></div></div>',
+  perm: '<div class="ttl">Tome Transfer</div><div class="ask-box"><b>Allow Tome Transfer to access your SMS messages?</b><div class="btns"><span>Don\'t allow</span><span class="go">Allow</span></div></div>',
+  sms: '<div class="ttl">Telemancer</div><div class="ask-box"><b>Set Telemancer as your default SMS app?</b><div class="btns"><span>Cancel</span><span class="go">Set as default</span></div></div>',
+  pmenu: '<div class="pm"><div class="hit"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13 3h-2v10h2V3zm4.83 2.17-1.42 1.42A6.92 6.92 0 0 1 19 12c0 3.87-3.13 7-7 7a7 7 0 0 1-4.42-12.42L6.17 5.17A8.93 8.93 0 0 0 3 12a9 9 0 0 0 18 0c0-2.74-1.23-5.18-3.17-6.83z"/></svg></i>Power off</div><div><i><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg></i>Restart</div></div>',
 };
+const ASK_SAYS = {
+  Unlock: "If you unlock the bootloader, you will be able to install custom operating system software on this phone. A custom OS is not subject to the same testing as the original OS. To prevent unauthorized access to your personal data, unlocking the bootloader will also delete all personal data on your phone.",
+  Lock: "If you lock the bootloader, you will not be able to install custom operating system software on this phone. To prevent unauthorized access to your personal data, locking the bootloader will also delete all personal data on your phone.",
+};
+// Each screen left empty in the page is filled from its template.
+$$(".v").forEach((v) => { if (!v.children.length && SCREENS[v.dataset.v]) v.innerHTML = SCREENS[v.dataset.v]; });
+$$(".ask-p").forEach((e) => { e.textContent = ASK_SAYS.Unlock; });
 // Every [data-phone] holds its screens; this wraps them in the phone's body,
 // keys, fingers and cable.
 $$("[data-phone]").forEach((holder) => {
-  $$(".v", holder).forEach((v) => { if (!v.innerHTML && SCREENS[v.dataset.v]) v.innerHTML = SCREENS[v.dataset.v]; });
-  const screens = holder.innerHTML.replaceAll('<i class="tri"></i>', TRIANGLE);
-  holder.innerHTML = `<div class="phone"><button class="key power" tabindex="-1" aria-hidden="true"></button><button class="key up" tabindex="-1" aria-hidden="true"></button><button class="key down" tabindex="-1" aria-hidden="true"></button><div class="finger f-power" style="top:23%"></div><div class="finger f-down" style="top:51%"></div><div class="scr">${screens}</div><div class="cable"><div></div><span></span></div></div>`;
-  if (!holder.id) holder.classList.add("visual-phone");
-  if (!holder.querySelector(".caption") && !holder.closest("#i-visual")) holder.insertAdjacentHTML("beforeend", '<p class="caption"></p>');
+  const screens = holder.innerHTML;
+  holder.innerHTML = `<div class="phone"><button class="key power" tabindex="-1" aria-hidden="true"></button><button class="key up" tabindex="-1" aria-hidden="true"></button><button class="key down" tabindex="-1" aria-hidden="true"></button><div class="finger f-power" style="top:23%"></div><div class="finger f-up" style="top:38%"></div><div class="finger f-down" style="top:51%"></div><div class="scr">${screens}</div><div class="cable"><div></div><span></span></div></div>`;
+  if (!holder.id && !holder.closest(".look")) holder.classList.add("visual-phone");
+  if (!holder.querySelector(".caption") && !holder.closest("#i-visual") && !holder.closest(".look")) holder.insertAdjacentHTML("beforeend", '<p class="caption"></p>');
 });
-const phoneIn = (section) => section.querySelector(".phone");
-function screen(section, name) {
-  $$(".v", section).forEach((v) => v.classList.toggle("on", v.dataset.v === name));
-  if (name === "anim") playBoot(section);
-  if (name === "welcome") playWelcome(section);
+// The big practice phone beside the words. The cards that ask the person to
+// look at their phone have small phones of their own.
+const phoneIn = (section) => section.querySelector(".visual .phone");
+function screen(section, name) { show($$(".visual .v", section), name); }
+// The same, for a card's small phone, or for every phone in a section.
+function screenIn(root, name) { show($$(".v", root), name); }
+function show(vs, name) {
+  vs.forEach((v) => {
+    v.classList.toggle("on", v.dataset.v === name);
+    if (v.dataset.v !== name) return;
+    if (name === "anim") playBoot(v);
+    if (name === "welcome") playWelcome(v);
+  });
+}
+function press(root, which, push) {
+  $$(".phone", root).forEach((p) => {
+    p.querySelector(".f-" + which).classList.toggle("on", push !== null);
+    p.querySelector(".f-" + which).classList.toggle("push", !!push);
+    p.querySelector(".key." + which).classList.toggle("press", !!push);
+  });
 }
 const stillOnly = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -725,13 +1038,13 @@ const stillOnly = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 // its start each time it shows. It's put in a shadow root so its styles stay
 // its own.
 let bootSvg = null;
-function playBoot(section) {
-  const box = section.querySelector(".v-anim .boot");
+function playBoot(v) {
+  const box = v.querySelector(".boot");
   if (!box) return;
   bootSvg ||= fetch("../assets/tome-boot.svg").then((r) => r.ok ? r.text() : null).catch(() => null);
   bootSvg.then((svg) => {
     const root = box.shadowRoot || box.attachShadow({ mode: "open" });
-    root.innerHTML = '<style>svg, img { display: block; width: 100%; height: auto; }</style>' + (svg || '<img src="../assets/tome-os-mark.svg" alt="">');
+    root.innerHTML = '<style>svg, img { display: block; width: 100%; height: auto; }</style>' + (svg || '<img src="../assets/mark.svg" alt="">');
   });
 }
 
@@ -745,13 +1058,13 @@ const loadLottie = () => lottieLoad ||= new Promise((resolve, reject) => {
   Object.assign(s, LOTTIE, { crossOrigin: "anonymous", onerror: reject, onload: () => window.lottie ? resolve(window.lottie) : reject() });
   document.head.append(s);
 });
-function playWelcome(section) {
-  const box = section.querySelector(".v-welcome .lottie");
+function playWelcome(v) {
+  const box = v.querySelector(".lottie");
   if (!box) return;
   if (box.anim) { box.anim.goToAndPlay(0, true); return; }
   if (box.dataset.started) return;
   box.dataset.started = "yes";
-  const still = () => { box.anim = null; box.innerHTML = '<img src="../assets/tome-os-mark.svg" alt="">'; };
+  const still = () => { box.anim = null; box.innerHTML = '<img src="../assets/mark.svg" alt="">'; };
   if (stillOnly()) return still();
   loadLottie().then((lottie) => {
     box.anim = lottie.loadAnimation({ container: box, renderer: "svg", loop: true, autoplay: true, path: "../assets/tome-welcome.json" });
@@ -761,18 +1074,17 @@ function playWelcome(section) {
 
 // What the phone shows as it starts: Google's warning (orange while it's
 // unlocked, yellow once it's locked with Tome OS's key), then Tome OS's boot
-// animation, then the welcome screen. say(name) captions each one.
-function startsUp(section, warning, say = () => {}) {
-  screen(section, warning); say(warning);
-  later(() => { screen(section, "anim"); say("anim"); }, 3500);
-  later(() => { screen(section, "welcome"); say("welcome"); }, 10000);
-}
-function fbState(section, unlocked) {
-  $$(".fb-state", section).forEach((e) => { e.textContent = unlocked ? "unlocked" : "locked"; e.classList.toggle("unlocked", unlocked); });
+// animation, then the welcome screen, on every phone in root. say(name)
+// captions each one.
+function startsUp(root, warning, say = () => {}) {
+  screenIn(root, warning); say(warning);
+  later(() => { screenIn(root, "anim"); say("anim"); }, 3500);
+  later(() => { screenIn(root, "welcome"); say("welcome"); }, 10000);
 }
 function caption(section, html) { const c = section.querySelector(".caption"); if (c) c.innerHTML = html; }
 function finger(section, which, push) {
   const p = phoneIn(section);
+  if (!p) return;
   p.querySelector(".f-" + which).classList.toggle("on", push !== null);
   p.querySelector(".f-" + which).classList.toggle("push", !!push);
   p.querySelector(".key." + which).classList.toggle("press", !!push);
@@ -795,7 +1107,7 @@ function drawTrail() {
   $("trail").innerHTML = steps.map((s, i) => {
     const state = i < at ? "done" : i === at ? "now" : "todo";
     // While installing, and once done, there's no going back.
-    const locked = i > reached || running || at === steps.length - 1;
+    const locked = i > reached || running || (at >= DONE && i < DONE);
     return `<button data-i="${i}" data-s="${state}"${locked ? " disabled" : ""}${i === at ? ' aria-current="step"' : ""}><i></i><span>${s.dataset.label}</span></button>`;
   }).join("");
   $$("#trail button").forEach((b) => b.addEventListener("click", () => go(+b.dataset.i)));
@@ -808,6 +1120,7 @@ function go(i) {
   const section = steps[i];
   section.querySelector(".count").textContent = `Step ${i + 1} of ${steps.length}`;
   drawTrail();
+  log(`Step ${i + 1}: ${section.dataset.label}`, "step");
   enter[section.dataset.step]?.(section);
   section.querySelector("h1").focus({ preventScroll: true });
   window.scrollTo({ top: 0 });
@@ -935,6 +1248,7 @@ const ua = navigator.userAgent;
 const hostOs = /Android/.test(ua) ? "Android" : /Windows/.test(ua) ? "Windows" : /CrOS/.test(ua) ? "ChromeOS" : /Mac/.test(ua) ? "Mac" : /Linux/.test(ua) ? "Linux" : "";
 const hostNoun = hostOs === "Android" ? "phone" : "computer";
 $("host-word").textContent = hostNoun;
+$$(".host-noun").forEach((e) => { e.textContent = hostNoun; });
 const canDownloadHere = () => !!DOWNLOAD_RELAY && !!navigator.storage?.getDirectory;
 
 function setCheck(id, state, title, note = "") {
@@ -961,6 +1275,16 @@ function setWay(w) {
   $("c-usb").hidden = !hasUsb;
 }
 setWay(way);
+// Without WebUSB (Firefox, Safari) the steps that use USB debugging, saving
+// files, moving them back and the helper app, explain how to do it by hand.
+document.body.dataset.webusb = hasUsb ? "yes" : "no";
+if (!hasUsb) {
+  $("bk-saved-note").textContent = "Copied as above, or another way: Google Photos or another cloud.";
+  $("bk-cant-helper").hidden = false;
+  $("bk-cant-helper").innerHTML = "<strong>Messages, contacts and calendar</strong> need Chrome or Edge to be moved by this page. Contacts and calendars kept in an online account come back when you sign in to it. Otherwise export them to a file in the phone's Downloads folder, and copy it with the Download folder.";
+  $("gapps-said").textContent = "If you say yes, the last step shows you one command that passes it to the phone. Your answer is kept only in this browser.";
+  $("done-restore-link-btn").textContent = "Saved files before installing? Move them back";
+}
 const pageUrl = location.origin + location.pathname;
 
 enter.computer = async (s) => {
@@ -1001,19 +1325,673 @@ enter.computer = async (s) => {
     setCheck("chk-space", "done", "There's room for the download", need ? `It needs ${gb(need)}.` : "");
   }
   $("chk-cable").dataset.s = "done";
+  log(`Browser ${hasUsb ? "has" : "has no"} WebUSB, installing ${way === "usb" ? "from this page" : "with commands"}. System: ${hostOs || "unknown"}. Free space: ${free === null ? "unknown" : gb(free)}, needs ${need ? gb(need) : "unknown"}.`);
   next.disabled = way === "cli" && noTerminal;
 };
 $("way-switch").addEventListener("click", () => { setWay(way === "cli" ? "usb" : "cli"); enter.computer(steps[1]); });
 
-// ----- 3. Back up -----
-const backups = $$("#backup input");
-backups.forEach((c) => c.addEventListener("change", () => { nextIn(steps[2]).disabled = !backups.every((b) => b.checked); }));
-enter.backup = (s) => {
-  caption(s, "Everything on the phone is replaced with Tome OS.");
-  let off = false;
-  const loop = () => later(() => { off = !off; screen(s, off ? "off" : "tome"); loop(); }, 1800);
-  loop();
+// ----- 3. Back up, and 9. Move files back -----
+// With USB debugging on, this page copies the phone's files over adb
+// (Tango ADB, vendor/adb-zip-tome.mjs, loaded only when it's used) into a
+// folder the person picks or a zip file, and after the install copies the
+// ones they choose back to where they were. tome-backup.json beside them
+// lists each file's place and date, so photos keep their order. Messages,
+// contacts and calendar go through Tome Transfer (below) as one more file,
+// tome-transfer.zip.
+const MANIFEST = "tome-backup.json";
+let lib = null;
+const loadLib = () => (lib ??= import("./vendor/adb-zip-tome.mjs").then((m) => { m.configureZip({ useWebWorkers: false }); return m; }, (e) => { lib = null; throw e; }));
+
+const KINDS = [
+  { id: "photos", name: "Photos", what: "Camera, screenshots and saved pictures", unit: "photo" },
+  { id: "videos", name: "Videos", what: "Camera videos and saved films", unit: "video" },
+  { id: "downloads", name: "Downloads", what: "Everything in the Downloads folder" },
+  { id: "documents", name: "Documents", what: "The Documents folder" },
+  { id: "music", name: "Music and recordings", what: "Music, voice recordings, audiobooks and ringtones" },
+  // Saved by Tome Transfer, not copied as files.
+  { id: "messages", name: "Messages", what: "Texts, picture messages and call history", helper: true },
+  { id: "contacts", name: "Contacts", what: "Everyone saved on the phone", helper: true },
+  { id: "calendar", name: "Calendar", what: "Events in the phone's calendars", helper: true },
+];
+const HELPER_KINDS = KINDS.filter((k) => k.helper).map((k) => k.id);
+// The phone's shared storage folders that are saved, and what's in each.
+const ROOTS = { DCIM: "photos", Pictures: "photos", Movies: "videos", Download: "downloads", Documents: "documents", Music: "music", Recordings: "music", Audiobooks: "music", Podcasts: "music", Ringtones: "music", Notifications: "music", Alarms: "music" };
+const VIDEO = /\.(mp4|m4v|mov|3gp|3g2|mkv|webm|avi)$/i;
+// What a file is, from its place in the phone's storage (like
+// "DCIM/Camera/PXL_1.jpg"), or null for anything not saved: other folders,
+// hidden files (the trash, thumbnails) and any path that tries to climb out.
+function kindOf(path) {
+  const parts = path.split("/");
+  if (parts.length < 2 || !(parts[0] in ROOTS) || parts.some((p) => !p || p.startsWith(".") || /[\\\0]/.test(p))) return null;
+  const root = ROOTS[parts[0]];
+  return root === "photos" || root === "videos" ? (VIDEO.test(parts[parts.length - 1]) ? "videos" : "photos") : root;
+}
+const num = (n) => n.toLocaleString("en");
+const size = (bytes) => bytes < 1048576 ? Math.max(1, Math.round(bytes / 1024)) + " KB" : gb(bytes);
+const count = (n, unit = "file") => `${num(n)} ${unit}${n === 1 ? "" : "s"}`;
+const today = () => new Date().toISOString().slice(0, 10);
+const sum = (files) => files.reduce((t, f) => t + f.size, 0);
+
+// The kinds as ticks. files: what was found, or null before the phone is
+// connected. A kind with nothing found can't be ticked.
+function drawKinds(list, files, { restore = false } = {}) {
+  const was = Object.fromEntries($$("input[data-kind]", list).map((i) => [i.dataset.kind, i.checked]));
+  const saved = files && files.find((f) => f.kind === "transfer");
+  list.innerHTML = KINDS.filter((k) => !restore || (k.helper ? saved && transferHas(saved, k.id) : files.some((f) => f.kind === k.id))).map((k) => {
+    if (k.helper) {
+      // Not files: what Tome Transfer saves, or saved.
+      const none = !restore && TRANSFER.ready === false;
+      const note = restore ? transferNote(saved, k.id) : none ? "Not ready in the installer yet. Export them yourself, as below." : files ? "Saved by a small helper app on the phone." : escAttr(k.what);
+      const on = !none && (was[k.id] ?? true);
+      return `<li><label><input type="checkbox" data-kind="${k.id}"${on ? " checked" : ""}${none ? " disabled" : ""}><span>${k.name}<small>${note}</small></span></label></li>`;
+    }
+    const mine = files ? files.filter((f) => f.kind === k.id) : null;
+    const none = mine && !mine.length;
+    const note = !mine ? escAttr(k.what) : none ? "None on the phone." : `<b>${count(mine.length, k.unit)} · ${size(sum(mine))}</b>`;
+    const on = !none && (was[k.id] ?? true);
+    return `<li><label><input type="checkbox" data-kind="${k.id}"${on ? " checked" : ""}${none ? " disabled" : ""}><span>${k.name}<small>${note}</small></span></label></li>`;
+  }).join("");
+}
+const pickedKinds = (list) => new Set($$("input[data-kind]", list).filter((i) => i.checked && !i.disabled).map((i) => i.dataset.kind));
+
+// Connects to the phone over USB debugging. The phone asks the person to
+// allow this computer, which a "look at your phone" card shows.
+async function connectAdb(section, allowCard) {
+  const L = await loadLib();
+  const manager = L.AdbDaemonWebUsbDeviceManager.BROWSER;
+  if (!manager) throw new Error("This browser can't talk to phones. Open this page in Chrome or Edge.");
+  log("Asking the browser for the phone (USB debugging)…");
+  const dev = await manager.requestDevice().catch(() => null);
+  if (!dev) throw new Error("No phone was chosen. Check USB debugging is on and the phone is unlocked, then press Connect again.");
+  log(`Chosen: ${usbName(dev.raw)}`);
+  let connection;
+  try {
+    connection = await dev.connect();
+  } catch (e) {
+    log(`Couldn't open it: ${e.message || e}`);
+    if (e instanceof L.AdbDaemonWebUsbDevice.DeviceBusyError) throw new Error("Another program is using the phone, like Android Studio or adb. Close it, or run adb kill-server, then press Connect again.");
+    throw new Error(`The phone couldn't be opened (${e.message || e}). Unplug it, plug it back in, and press Connect again.`);
+  }
+  allowCard.hidden = false;
+  showLook(allowCard);
+  screen(section, "allow");
+  caption(section, "Tap <b>Allow</b> on the phone.");
+  log("Waiting for Allow on the phone…");
+  try {
+    const transport = await L.AdbDaemonTransport.authenticate({ serial: dev.serial, connection, credentialStore: new L.AdbWebCredentialStore("Tome OS installer") });
+    const adb = new L.Adb(transport);
+    log(`Connected over USB debugging to ${(await adb.getProp("ro.product.device").catch(() => "")).trim() || "the phone"}`);
+    return adb;
+  } finally {
+    allowCard.hidden = true;
+  }
+}
+
+// Lists every file worth saving in the phone's shared storage.
+async function scanPhone(adb, onFound) {
+  const sync = await adb.sync();
+  const files = [];
+  const walk = async (dir) => {
+    let entries;
+    try { entries = await sync.readdir("/sdcard/" + dir); } catch (e) { return; }
+    for (const e of entries) {
+      if (e.name.startsWith(".")) continue;
+      const path = `${dir}/${e.name}`;
+      if (e.type === 4) await walk(path);
+      else if (e.type === 8) {
+        const kind = kindOf(path);
+        if (kind) { files.push({ path, size: Number(e.size), mtime: Number(e.mtime), kind }); onFound(files.length); }
+      }
+    }
+  };
+  try {
+    for (const root of Object.keys(ROOTS)) await walk(root);
+  } finally {
+    await sync.dispose().catch(() => {});
+  }
+  log(`Found ${count(files.length)}, ${size(sum(files))}: ${KINDS.map((k) => `${k.id} ${files.filter((f) => f.kind === k.id).length}`).join(", ")}`);
+  return files;
+}
+
+// Where the files go: a folder, or a zip file.
+async function fileIn(dir, path, create = false) {
+  const parts = path.split("/");
+  for (const p of parts.slice(0, -1)) dir = await dir.getDirectoryHandle(p, { create });
+  return dir.getFileHandle(parts[parts.length - 1], { create });
+}
+const folderSink = (dir) => ({
+  // A file already saved by an earlier try is kept, so saving again carries on.
+  async has(f) { try { return (await (await fileIn(dir, f.path)).getFile()).size === f.size; } catch (e) { return false; } },
+  async put(f, stream) { await stream.pipeTo(await (await fileIn(dir, f.path, true)).createWritable()); },
+  async finish(manifest) { const w = await (await dir.getFileHandle(MANIFEST, { create: true })).createWritable(); await w.write(manifest); await w.close(); },
+});
+async function zipSink(writable) {
+  const L = await loadLib();
+  // Stored, not compressed: photos and videos are compressed already.
+  const zip = new L.ZipWriter(writable, { zip64: true, level: 0, keepOrder: true, useWebWorkers: false });
+  return {
+    zip: true,
+    async has() { return false; },
+    async put(f, stream) { await zip.add(f.path, stream, { lastModDate: new Date(f.mtime * 1000) }); },
+    async finish(manifest) { await zip.add(MANIFEST, new L.BlobReader(new Blob([manifest]))); await zip.close(); },
+  };
+}
+
+// The last backup made here, so the step after the install can find it.
+const lastBackup = {
+  get() { try { return JSON.parse(localStorage.getItem("tome-backup")) || null; } catch (e) { return null; } },
+  set(v) { try { localStorage.setItem("tome-backup", JSON.stringify(v)); } catch (e) { /* private window */ } },
 };
+// The folder or zip file it went to, kept in IndexedDB (where the browser
+// lets a page keep them) so it can be opened again without searching.
+function handles(mode, fn) {
+  return new Promise((resolve, reject) => {
+    const open = indexedDB.open("tome-backup", 1);
+    open.onupgradeneeded = () => open.result.createObjectStore("handles");
+    open.onerror = () => reject(open.error);
+    open.onsuccess = () => {
+      const tx = open.result.transaction("handles", mode);
+      const req = fn(tx.objectStore("handles"));
+      tx.oncomplete = () => { open.result.close(); resolve(req.result); };
+      tx.onerror = () => reject(tx.error);
+    };
+  });
+}
+const keepHandle = (h) => handles("readwrite", (st) => st.put(h, "last")).catch(() => {});
+const keptHandle = () => handles("readonly", (st) => st.get("last")).catch(() => null);
+
+// Copies files from the phone into a folder or zip, reading each straight
+// into its place, so even a large library never sits in memory.
+async function copyOut(adb, files, sink, show, extra = {}) {
+  const sync = await adb.sync();
+  const total = sum(files);
+  let done = 0, inARow = 0;
+  const failed = [];
+  try {
+    for (const [n, f] of files.entries()) {
+      show(n + 1, files.length, done, total);
+      if (await sink.has(f)) { done += f.size; log(`Already saved: ${f.path}`, "copy"); continue; }
+      log(`Saving ${f.path} (${size(f.size)})`, "copy");
+      let got = 0;
+      const counted = new TransformStream({ transform(chunk, c) { got += chunk.length; show(n + 1, files.length, done + got, total); c.enqueue(chunk); } });
+      try {
+        await sink.put(f, sync.read("/sdcard/" + f.path).pipeThrough(counted));
+        inARow = 0;
+      } catch (e) {
+        log(`Couldn't save ${f.path}: ${e.message || e}`);
+        // A zip can't skip a file half written, and a phone that went away
+        // fails every file: both stop here.
+        if (sink.zip || ++inARow >= 3) throw e;
+        failed.push(f.path);
+      }
+      done += f.size;
+    }
+    await sink.finish(JSON.stringify({ tome: 1, made: new Date().toISOString(), phone: code, files: files.filter((f) => !failed.includes(f.path)), ...extra }));
+  } finally {
+    await sync.dispose().catch(() => {});
+  }
+  return failed;
+}
+
+// Runs a long copy with the screen kept awake and a warning on leaving.
+async function keepGoing(what, work) {
+  const keepAwake = await navigator.wakeLock?.request("screen").catch(() => null);
+  window.onbeforeunload = () => what;
+  try { return await work(); } finally { window.onbeforeunload = null; keepAwake?.release().catch(() => {}); }
+}
+
+// ----- Messages, contacts and calendar: Tome Transfer -----
+// A browser can't read texts, contacts or calendars, so before installing
+// this page puts a small helper app, Tome Transfer (apps/tome-transfer in the
+// Tome OS source), on the old phone over the same USB debugging connection.
+// It saves them to tome-transfer.zip in its own folder, this page copies that
+// into the backup, the helper deletes it, and the helper is removed. It runs
+// on Android 4.4 and newer and can't use the internet. After the install,
+// Telemancer (Tome OS's texting app) takes the file back over USB debugging
+// and brings everything in: texts into Messages, contacts into Contacts,
+// events into a calendar called "From your old phone".
+// The helper comes from the release TRANSFER.tag on this site's GitHub, with
+// a .sha256 beside it, through the download relay. Until it's published, the
+// three kinds can't be ticked and the page says to export them by hand.
+const TRANSFER = {
+  tag: "transfer-1",
+  apk: "tome-os-transfer-1.apk",
+  pkg: "com.tomeos.transfer",
+  folder: "/sdcard/Android/data/com.tomeos.transfer/files",
+  file: "tome-transfer.zip",
+  // Telemancer's side, on the Tome phone (TransferProvider, ImportActivity).
+  provider: "content://com.tomeos.telemancer.transfer",
+  importer: "com.tomeos.telemancer/.transfer.ImportActivity",
+  // Whether the helper is published: null until the page has looked.
+  ready: null,
+};
+const transferRelease = fetch(`https://api.github.com/repos/alid0n/tome-os-site/releases/tags/${TRANSFER.tag}`)
+  .then((r) => (r.ok ? r.json() : null)).catch(() => null)
+  .then((r) => {
+    TRANSFER.ready = !!r && (r.assets || []).some((a) => a.name === TRANSFER.apk) && (r.assets || []).some((a) => a.name === `${TRANSFER.apk}.sha256`);
+    log(`Tome Transfer ${TRANSFER.ready ? "is ready" : "isn't published yet"} (${TRANSFER.tag}).`);
+    $("bk-cant-helper").hidden = hasUsb && TRANSFER.ready;
+    $("bk-help-helper").hidden = !TRANSFER.ready;
+    drawKinds($("bk-kinds"), bkFiles);
+  });
+
+// A shell command on the phone, and what it printed. Android 4.4 has no
+// "exec" service, so it falls back to a plain shell there.
+async function sh(adb, command) {
+  try {
+    return await adb.subprocess.noneProtocol.spawnWaitText(command);
+  } catch (e) {
+    const p = await adb.subprocess.noneProtocol.pty(command);
+    const reader = p.output.getReader(), dec = new TextDecoder();
+    let text = "";
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      text += dec.decode(value, { stream: true });
+    }
+    return text + dec.decode();
+  }
+}
+async function readText(sync, path) {
+  return new Response(sync.read(path)).text();
+}
+
+let helperApk = null;
+async function getHelper() {
+  if (helperApk) return helperApk;
+  const res = await fetch(`${DOWNLOAD_RELAY}/${TRANSFER.tag}/${TRANSFER.apk}`);
+  if (!res.ok) throw new Error(`The helper app couldn't be downloaded (${res.status}). Check the internet connection, then save again.`);
+  const bytes = new Uint8Array(await res.arrayBuffer());
+  const want = (await (await fetch(`${DOWNLOAD_RELAY}/${TRANSFER.tag}/${TRANSFER.apk}.sha256`)).text()).trim().split(/\s+/)[0].toLowerCase();
+  const have = [...new Uint8Array(await crypto.subtle.digest("SHA-256", bytes))].map((b) => b.toString(16).padStart(2, "0")).join("");
+  if (want !== have) throw new Error("The helper app didn't download properly. Save again.");
+  log(`Tome Transfer downloaded: ${size(bytes.length)}, sha256 ${have}`);
+  return (helperApk = bytes);
+}
+
+// What a backup's tome-transfer.zip holds, from tome-backup.json's "transfer".
+function transferHas(file, kind) {
+  const c = file.counts;
+  if (!c) return true;
+  return kind === "messages" ? (c.sms || 0) + (c.mms || 0) + (c.calls || 0) > 0 : kind === "contacts" ? c.contacts > 0 : c.events > 0;
+}
+function transferNote(file, kind) {
+  const c = file?.counts;
+  if (!c) return "In the backup.";
+  if (kind === "messages") return `<b>${[c.sms || c.mms ? count((c.sms || 0) + (c.mms || 0), "text") : null, c.calls ? count(c.calls, "call") : null].filter(Boolean).join(" · ")}</b>`;
+  return `<b>${kind === "contacts" ? count(c.contacts, "contact") : count(c.events, "event")}</b>`;
+}
+// "1,234 texts, 300 calls, 210 contacts and 88 events".
+function transferWords(c) {
+  const parts = [
+    (c.sms || c.mms || c.texts) && count(c.texts ?? (c.sms || 0) + (c.mms || 0), "text"),
+    c.calls && count(c.calls, "call"),
+    c.contacts && count(c.contacts, "contact"),
+    c.events && count(c.events, "event"),
+  ].filter(Boolean);
+  return parts.length > 1 ? `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}` : parts[0] || "nothing";
+}
+
+// On the old phone: puts the helper on, saves, copies the file into the
+// backup with the sink, then has the helper delete it and removes the helper.
+async function saveTransfer(adb, kinds, sink, show) {
+  show("Getting the helper app…");
+  const apk = await getHelper();
+  const sdk = Number((await sh(adb, "getprop ro.build.version.sdk").catch(() => "")).trim()) || 0;
+  const sync = await adb.sync();
+  const tmp = "/data/local/tmp/tome-transfer.apk";
+  try {
+    show("Putting the helper app on the phone…");
+    await sync.write({ filename: tmp, file: new Blob([apk]).stream() });
+    await sh(adb, `pm uninstall ${TRANSFER.pkg}`).catch(() => {});
+    $("bk-helper").hidden = false;
+    showLook($("bk-helper"));
+    // -g grants its permissions (Android 6 and newer; older ones grant them at install).
+    const out = (await sh(adb, `pm install -r ${sdk >= 23 ? "-g " : ""}${tmp}`)).trim();
+    await sh(adb, `rm -f ${tmp}`).catch(() => {});
+    log(`pm install: ${out}`);
+    if (!/Success/.test(out)) throw new Error(`The phone wouldn't take the helper app (${out.split("\n").pop() || "no answer"}). See "The helper app won't go on?" below`);
+    const started = (await sh(adb, `am start -W -n ${TRANSFER.pkg}/.ExportActivity --es kinds ${kinds.join(",")}`)).trim();
+    log(`am start: ${started.replace(/\s+/g, " ")}`);
+    if (/Error|Exception/.test(started)) throw new Error("The helper app didn't open. Unlock the phone, then save again");
+    let status = null, last = "", changed = Date.now();
+    for (;;) {
+      await sleep(1000);
+      const text = await readText(sync, `${TRANSFER.folder}/status.json`).catch(() => "");
+      try { status = text ? JSON.parse(text) : null; } catch (e) { /* half written: read it again */ }
+      if (status?.state === "done" || status?.state === "failed") break;
+      if (text !== last) { last = text; changed = Date.now(); }
+      // Waiting for Allow is fine; nothing at all for several minutes isn't.
+      if (Date.now() - changed > 5 * 60 * 1000) throw new Error("The helper app stopped. Unlock the phone, then save again");
+      const step = { messages: "texts", calls: "call history", contacts: "contacts", calendar: "calendar" }[status?.step];
+      show(step ? `Saving your ${step}${status.of ? ` (${num(status.done)} of ${num(status.of)})` : ""}…` : "Waiting for the helper app. Tap Allow on the phone if it asks…");
+    }
+    $("bk-helper").hidden = true;
+    log(`Tome Transfer: ${JSON.stringify(status)}`);
+    if (status.state === "failed") throw new Error(`The helper app couldn't save them (${status.error})`);
+    show("Copying your texts, contacts and calendar…");
+    try {
+      await sink.put({ path: TRANSFER.file, size: status.bytes, mtime: Math.floor(Date.now() / 1000) }, sync.read(`${TRANSFER.folder}/${TRANSFER.file}`));
+    } catch (e) {
+      e.copying = true;
+      throw e;
+    }
+    return { counts: status.counts || {}, missing: status.missing || [], bytes: status.bytes || 0, kinds };
+  } finally {
+    $("bk-helper").hidden = true;
+    await sync.dispose().catch(() => {});
+    // The helper deletes its file; removing the helper deletes its folder too.
+    await sh(adb, `am start -n ${TRANSFER.pkg}/.ExportActivity --ez clear true`).catch(() => {});
+    await sleep(1500);
+    await sh(adb, `pm uninstall ${TRANSFER.pkg}`).then((t) => log(`pm uninstall: ${t.trim()}`)).catch(() => {});
+  }
+}
+
+// Telemancer's status row, as "content query" prints it.
+function statusRow(out) {
+  const row = out.match(/Row: \d+ (.*)/s);
+  if (!row) return null;
+  const s = {};
+  const body = row[1].trim();
+  const at = body.indexOf("error=");
+  for (const m of (at >= 0 ? body.slice(0, at) : body).matchAll(/(\w+)=([^,]*)(?:, |$)/g)) s[m[1]] = m[2] === "NULL" ? null : m[2];
+  if (at >= 0) s.error = body.slice(at + 6) === "NULL" ? null : body.slice(at + 6);
+  for (const k of ["done", "of", "texts", "calls", "contacts", "events"]) s[k] = Number(s[k]) || 0;
+  s.skipped = s.skipped ? s.skipped.split(/[\s,]+/).filter(Boolean) : [];
+  return s;
+}
+
+// On the Tome phone: hands the file to Telemancer and waits while it brings
+// everything in. Returns its status, or null when this Tome OS can't yet.
+async function bringIn(adb, file, kinds, show) {
+  const ask = () => sh(adb, `content query --uri ${TRANSFER.provider}/status`);
+  const first = await ask();
+  if (!statusRow(first)) { log(`No Telemancer transfer here: ${first.trim()}`); return null; }
+  const tmp = "/data/local/tmp/tome-transfer.zip";
+  const sync = await adb.sync();
+  try {
+    show("Handing your texts, contacts and calendar to the phone…");
+    await sync.write({ filename: tmp, file: file.open(), mtime: file.mtime });
+  } finally {
+    await sync.dispose().catch(() => {});
+  }
+  const wrote = (await sh(adb, `content write --uri ${TRANSFER.provider}/incoming < ${tmp}`)).trim();
+  await sh(adb, `rm -f ${tmp}`).catch(() => {});
+  if (wrote) log(`content write: ${wrote}`);
+  if (/Error|Exception/.test(wrote)) throw new Error("The phone didn't take your texts, contacts and calendar. Press the button again");
+  $("rs-texting").hidden = false;
+  showLook($("rs-texting"));
+  try {
+    const started = (await sh(adb, `am start -W -n ${TRANSFER.importer} --es kinds ${kinds.join(",")}`)).trim();
+    log(`am start: ${started.replace(/\s+/g, " ")}`);
+    if (/Error|Exception/.test(started)) throw new Error("Telemancer didn't open. Unlock the phone, then press the button again");
+    let status = null, last = "", changed = Date.now();
+    for (;;) {
+      await sleep(1000);
+      const out = await ask().catch(() => "");
+      status = statusRow(out) || status;
+      if (status && (status.state === "done" || status.state === "failed")) break;
+      if (out !== last) { last = out; changed = Date.now(); }
+      if (Date.now() - changed > 5 * 60 * 1000) throw new Error("Bringing them in stopped. Unlock the phone, then press the button again");
+      const step = { messages: "texts", calls: "call history", contacts: "contacts", calendar: "calendar" }[status?.step];
+      show(step ? `Bringing in your ${step}${status.of ? ` (${num(status.done)} of ${num(status.of)})` : ""}…` : "Waiting for the phone. If it asks, make Telemancer your texting app…");
+    }
+    log(`Telemancer: ${JSON.stringify(status)}`);
+    if (status.state === "failed") throw new Error(`The phone couldn't bring them in (${status.error})`);
+    return status;
+  } finally {
+    $("rs-texting").hidden = true;
+  }
+}
+
+const bkSection = steps[2];
+let bkAdb = null, bkFiles = null, bkBusy = false;
+const backups = $$("#backup input");
+backups.forEach((c) => c.addEventListener("change", () => { nextIn(bkSection).disabled = !backups.every((b) => b.checked); }));
+drawKinds($("bk-kinds"), null);
+$("bk-folder").hidden = !window.showDirectoryPicker;
+
+function bkSay() {
+  if (!bkFiles) return;
+  const picked = pickedKinds($("bk-kinds"));
+  const chosen = bkFiles.filter((f) => picked.has(f.kind));
+  const helper = KINDS.filter((k) => k.helper && picked.has(k.id)).map((k) => k.name.toLowerCase());
+  const also = helper.length ? `your ${helper.length > 1 ? `${helper.slice(0, -1).join(", ")} and ${helper[helper.length - 1]}` : helper[0]}` : "";
+  $("bk-say").textContent = chosen.length ? `Saving ${count(chosen.length)}, ${size(sum(chosen))} in all${also ? `, and ${also}` : ""}.` : also ? `Saving ${also}.` : "Nothing is ticked yet.";
+}
+$("bk-kinds").addEventListener("change", bkSay);
+function bkError(text) {
+  log(text);
+  $("bk-error").textContent = text;
+  $("bk-error").hidden = false;
+}
+function bkLost() {
+  bkAdb = null;
+  log("The phone's USB debugging connection closed.");
+  if (bkBusy) return;
+  $("bk-save-row").hidden = true;
+  $("bk-connect-row").hidden = false;
+  tick($("bk-steps"), 1);
+}
+
+async function bkScan() {
+  $("bk-progress").hidden = false;
+  $("bk-meter").classList.add("busy");
+  $("bk-count").textContent = "";
+  $("bk-status").textContent = "Looking at what's on the phone…";
+  log("Looking at what's on the phone…");
+  try {
+    bkFiles = await scanPhone(bkAdb, (n) => { $("bk-count").textContent = count(n); });
+  } finally {
+    $("bk-meter").classList.remove("busy");
+    $("bk-progress").hidden = true;
+  }
+  drawKinds($("bk-kinds"), bkFiles);
+  bkSay();
+}
+
+$("bk-connect").addEventListener("click", async () => {
+  if (bkBusy) return;
+  bkBusy = true;
+  $("bk-error").hidden = true;
+  $("bk-done").hidden = true;
+  tick($("bk-steps"), 1);
+  try {
+    bkAdb = await connectAdb(bkSection, $("bk-allow"));
+    const adb = bkAdb;
+    adb.disconnected.then(() => { if (bkAdb === adb) bkLost(); });
+    screen(bkSection, "tome");
+    const model = (await bkAdb.getProp("ro.product.device").catch(() => "")).trim();
+    caption(bkSection, `Connected to the <b>${escAttr(PHONES[model] || "phone")}</b>.`);
+    await bkScan();
+    tick($("bk-steps"), 2);
+    $("bk-connect-row").hidden = true;
+    $("bk-save-row").hidden = false;
+  } catch (e) {
+    screen(bkSection, "dbg");
+    bkError(e.message || String(e));
+    tick($("bk-steps"), 1);
+  } finally {
+    bkBusy = false;
+  }
+});
+$("bk-rescan").addEventListener("click", async () => {
+  if (bkBusy || !bkAdb) return;
+  bkBusy = true;
+  try { await bkScan(); } catch (e) { bkError(e.message || String(e)); } finally { bkBusy = false; }
+});
+
+async function bkSave(where) {
+  if (bkBusy || !bkAdb || !bkFiles) return;
+  const picked = pickedKinds($("bk-kinds"));
+  const chosen = bkFiles.filter((f) => picked.has(f.kind));
+  const helper = HELPER_KINDS.filter((k) => picked.has(k));
+  $("bk-error").hidden = true;
+  if (!chosen.length && !helper.length) return bkError("Nothing is ticked. Tick what to keep, then save.");
+  const name = `Phone backup ${today()}`;
+  let sink, kept = null, opfsName = null;
+  // Asking where to save has to come straight from the click.
+  try {
+    if (where === "folder") {
+      const parent = await window.showDirectoryPicker({ id: "tome-backup", mode: "readwrite", startIn: "documents" });
+      const dir = await parent.getDirectoryHandle(name, { create: true });
+      sink = folderSink(dir);
+      kept = dir;
+    } else if (window.showSaveFilePicker) {
+      const file = await window.showSaveFilePicker({ id: "tome-backup", suggestedName: `${name}.zip`, startIn: "documents", types: [{ description: "Zip file", accept: { "application/zip": [".zip"] } }] });
+      sink = await zipSink(await file.createWritable());
+      kept = file;
+    } else {
+      // No save box here (Chrome on Android): the zip is built in the
+      // browser's own storage, then downloaded.
+      const opfs = await navigator.storage.getDirectory();
+      const e = await navigator.storage.estimate().catch(() => null);
+      if (e && e.quota - e.usage < sum(chosen)) return bkError(`There isn't enough space here: the backup needs ${size(sum(chosen))} and there's ${size(e.quota - e.usage)} free. Untick something, or save from a computer.`);
+      opfsName = `phone-backup-${today()}.zip`;
+      sink = await zipSink(await (await opfs.getFileHandle(opfsName, { create: true })).createWritable());
+    }
+  } catch (e) {
+    if (e.name === "AbortError") return;
+    return bkError(`It couldn't be saved there (${e.message || e}). Choose another place.`);
+  }
+  log(`Saving ${count(chosen.length)}, ${size(sum(chosen))}, ${where === "folder" ? `to the folder "${name}"` : `as "${name}.zip"`}`);
+  bkBusy = true;
+  $("bk-save-row").hidden = true;
+  $("bk-progress").hidden = false;
+  tick($("bk-steps"), 3);
+  screen(bkSection, "tome");
+  caption(bkSection, "Copying your files. <b>Keep it plugged in.</b>");
+  try {
+    // Texts, contacts and calendar first, while the person is still at the phone to tap Allow.
+    let transfer = null, transferError = null;
+    if (helper.length) {
+      $("bk-meter").classList.add("busy");
+      try {
+        transfer = await keepGoing("Your texts, contacts and calendar are still being saved.", () => saveTransfer(bkAdb, helper, sink, (t) => {
+          $("bk-status").textContent = t;
+          $("bk-count").textContent = "";
+        }));
+      } catch (e) {
+        log(`Tome Transfer: ${e.message || e}`);
+        // A zip can't skip a file half written.
+        if (sink.zip && e.copying) throw e;
+        transferError = e.message || String(e);
+      } finally {
+        $("bk-meter").classList.remove("busy");
+      }
+    }
+    const failed = await keepGoing("Your files are still being saved.", () => copyOut(bkAdb, chosen, sink, (n, of, got, total) => {
+      $("bk-status").textContent = `Saving ${num(n)} of ${count(of)}…`;
+      $("bk-count").textContent = `${size(got)} of ${size(total)}`;
+      $("bk-bar").style.width = (total ? got / total * 100 : 100).toFixed(1) + "%";
+    }, { transfer: transfer && { counts: transfer.counts, missing: transfer.missing, kinds: transfer.kinds } }));
+    const saved = chosen.filter((f) => !failed.includes(f.path));
+    const kinds = {};
+    saved.forEach((f) => { kinds[f.kind] = (kinds[f.kind] || 0) + 1; });
+    lastBackup.set({ name, where: opfsName ? "opfs" : where, opfs: opfsName, files: saved.length, bytes: sum(saved), kinds, transfer: transfer ? transfer.counts : null, phone: code, at: today() });
+    if (kept) await keepHandle(kept);
+    log(`Saved ${count(saved.length)}, ${size(sum(saved))}.${transfer ? ` Tome Transfer: ${transferWords(transfer.counts)}.` : ""}${failed.length ? ` ${count(failed.length)} couldn't be read.` : ""}`);
+    $("bk-progress").hidden = true;
+    const missing = (transfer?.missing || []).map((m) => ({ messages: "texts", calls: "calls", contacts: "contacts", calendar: "calendar" })[m] || m);
+    $("bk-done").innerHTML = `<p><strong>Saved ${[saved.length ? `${count(saved.length)}, ${size(sum(saved))}` : null, transfer ? `your ${transferWords(transfer.counts)}` : null].filter(Boolean).join(", and ")},</strong> ${where === "folder" ? `in the folder “${escAttr(name)}”` : `as “${escAttr(name)}.zip”`}. Keep it until everything is back on the phone. The last step of the install moves it back.</p>`
+      + (transfer ? "<p>The helper app has deleted its copy and been removed from the phone.</p>" : "")
+      + (missing.length ? `<p>The phone didn't allow the helper app to read your ${escAttr(missing.join(" and "))}, so ${missing.length === 1 ? "it wasn't" : "they weren't"} saved. Save again and tap <strong>Allow</strong> to include ${missing.length === 1 ? "it" : "them"}.</p>` : "")
+      + (transferError ? `<p>Your texts, contacts and calendar weren't saved: ${escAttr(transferError)}. Save again to try once more${where === "folder" ? "; files already saved are kept" : ""}.</p>` : "")
+      + (failed.length ? `<p>${count(failed.length)} couldn't be read and weren't saved, like ${escAttr(failed[0])}. Copy ${failed.length === 1 ? "it" : "them"} another way if needed.</p>` : "")
+      + (opfsName ? '<p style="margin-top:10px"><button class="btn" id="bk-download">Download the zip file again</button></p>' : "");
+    $("bk-done").hidden = false;
+    if (opfsName) {
+      const download = async () => {
+        const file = await (await (await navigator.storage.getDirectory()).getFileHandle(opfsName)).getFile();
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(file);
+        a.download = `${name}.zip`;
+        document.body.append(a); a.click(); a.remove();
+      };
+      $("bk-download").addEventListener("click", download);
+      download();
+    }
+    $("bk-saved-ok").checked = true;
+    $("bk-saved-ok").dispatchEvent(new Event("change"));
+    $("bk-saved-note").textContent = `Saved by this page: ${[saved.length ? `${count(saved.length)}, ${size(sum(saved))}` : null, transfer ? transferWords(transfer.counts) : null].filter(Boolean).join("; ")}.`;
+    tick($("bk-steps"), 4);
+    caption(bkSection, "Saved. Everything on the phone is replaced with Tome OS.");
+    const adb = bkAdb;
+    bkAdb = null;
+    await adb.close().catch(() => {});
+  } catch (e) {
+    $("bk-progress").hidden = true;
+    $("bk-save-row").hidden = !bkAdb;
+    $("bk-connect-row").hidden = !!bkAdb;
+    bkError(`Saving stopped: ${e.message || e}. Check the phone is plugged in, then save again.${where === "folder" ? " Files already saved are kept." : ""}`);
+  } finally {
+    bkBusy = false;
+  }
+}
+$("bk-folder").addEventListener("click", () => bkSave("folder"));
+$("bk-zip").addEventListener("click", () => bkSave("zip"));
+
+enter.backup = (s) => {
+  if (bkBusy) return;
+  if (hasUsb && !bkFiles) {
+    screen(s, "dbg");
+    caption(s, "In <b>Developer options</b>, turn on <b>USB debugging</b>.");
+  } else {
+    screen(s, "tome");
+    caption(s, "Everything on the phone is replaced with Tome OS.");
+  }
+};
+
+// ----- Add Google apps? -----
+// Asked while Tome OS downloads. The answer is kept in this browser
+// (localStorage "tome-choices") until the phone can be told: nothing written
+// to the phone before it's locked survives the wipe that locking does, so it
+// goes over USB debugging in the last step ("Move files back"), as the
+// Android setting Settings.Global tome_google_apps = "1" (yes) or "0" (no).
+// Tome OS reads that setting and installs microG when it's "1". The setting
+// name and values are here, in one place.
+const HANDOFF = { setting: "tome_google_apps", yes: "1", no: "0" };
+const choices = {
+  get() { try { return JSON.parse(localStorage.getItem("tome-choices")) || {}; } catch (e) { return {}; } },
+  set(v) { try { localStorage.setItem("tome-choices", JSON.stringify(v)); } catch (e) { /* private window */ } },
+};
+const gappsAnswered = () => typeof choices.get().googleApps === "boolean";
+function drawGapps() {
+  const c = choices.get();
+  $$("[data-gapps]").forEach((t) => t.setAttribute("aria-pressed", gappsAnswered() && (t.dataset.gapps === "yes") === c.googleApps));
+  if (gappsAnswered()) $("gapps-need").hidden = true;
+}
+$$("[data-gapps]").forEach((t) => t.addEventListener("click", () => {
+  const yes = t.dataset.gapps === "yes";
+  choices.set({ ...choices.get(), googleApps: yes, answered: new Date().toISOString(), handedOver: null });
+  log(`Add Google apps? ${yes ? "Yes" : "No"}`);
+  drawGapps();
+}));
+drawGapps();
+// Carrying on past the download needs an answer.
+["manual-next", "dl-cli-next", null].forEach((id) => {
+  const b = id ? $(id) : $("dl-progress").querySelector("[data-next]");
+  b.addEventListener("click", (e) => {
+    if (gappsAnswered()) return;
+    e.stopImmediatePropagation();
+    $("gapps-need").hidden = false;
+    $("gapps").scrollIntoView({ block: "center", behavior: "smooth" });
+  }, true);
+});
+// Tells the phone, over USB debugging, and checks it took.
+async function handOver(adb) {
+  const c = choices.get();
+  if (!gappsAnswered()) return null;
+  const value = c.googleApps ? HANDOFF.yes : HANDOFF.no;
+  const sh = adb.subprocess.noneProtocol;
+  await sh.spawnWaitText(["settings", "put", "global", HANDOFF.setting, value]);
+  const back = (await sh.spawnWaitText(["settings", "get", "global", HANDOFF.setting])).trim();
+  log(`settings put global ${HANDOFF.setting} ${value}: the phone now says ${back}`);
+  if (back !== value) throw new Error(`The phone didn't take the Google apps answer (it says "${back}"). Press the button again.`);
+  choices.set({ ...c, handedOver: new Date().toISOString() });
+  return c.googleApps;
+}
+const handOverPending = () => gappsAnswered() && !choices.get().handedOver;
 
 // ----- 4. Download -----
 // Straight into the browser's own private storage (the origin private file
@@ -1111,9 +2089,11 @@ async function downloadBuild() {
   const keep = new Set(build.files.map((f) => f.name));
   for await (const name of dir.keys()) if (name.startsWith("tome-os-") && !keep.has(name)) await dir.removeEntry(name).catch(() => {});
   let got = 0;
+  log(`Downloading Tome OS ${build.version} for ${code}: ${build.files.map((f) => f.name).join(", ")}, ${gb(build.size)}`);
   const show = (n) => {
     got += n;
     const p = Math.min(1, got / build.size);
+    log(`Downloaded ${gb(got)} of ${gb(build.size)}`, "dl");
     $("dl-bar").style.width = $("dl-mini").style.width = (p * 100).toFixed(1) + "%";
     $("dl-count").textContent = `${gb(got)} of ${gb(build.size)}`;
     $("dl-mini-text").textContent = `${Math.round(p * 100)}%`;
@@ -1128,6 +2108,7 @@ async function downloadBuild() {
         files.push(await fetchInto(dir, asset, show));
         break;
       } catch (e) {
+        log(`Download of ${asset.name} stopped: ${e.message || e}. Try ${attempt + 2} of 5.`);
         if (attempt >= 4) throw e;
         got = before;
         $("dl-status").textContent = "Connection dropped. Trying again…";
@@ -1136,11 +2117,13 @@ async function downloadBuild() {
     }
   }
   $("dl-status").textContent = "Checking the download…";
+  log("Download finished. Checking its SHA-256…");
   $("dl-meter").classList.add("busy");
   const joined = files.length === 1 ? files[0] : joinParts(files);
   if (build.sum) {
     const want = (await (await fetch(`${DOWNLOAD_RELAY}/${build.tag}/${build.sum.name}`)).text()).trim().split(/\s+/)[0];
     const have = await sha256(joined, (p) => { $("dl-mini-text").textContent = `Checking ${Math.round(p * 100)}%`; });
+    log(`SHA-256 ${have}${want ? (have === want ? " matches" : ` doesn't match ${want}`) : ", nothing to check it against"}`);
     if (want && have !== want) {
       for (const f of build.files) await dir.removeEntry(f.name).catch(() => {});
       throw new Error("The download didn't arrive intact, so it was thrown away. Press Download to fetch it again.");
@@ -1171,6 +2154,7 @@ $("dl-start").addEventListener("click", () => {
     $("dl-start-row").hidden = false;
     $("dl-other-row").hidden = false;
     $("dl-start").textContent = "Carry on downloading";
+    log(`Download stopped: ${e.message || e}`);
     $("dl-error").textContent = `${e.message || e} If it keeps stopping, choose "I already have the file" to download it yourself.`;
     $("dl-error").hidden = false;
     if (at === 6) go(3);
@@ -1312,13 +2296,18 @@ $("file").addEventListener("change", async () => {
     if (code && p.codename !== code) throw new Error(`That file is for the ${phoneName(p.codename)}, but you picked the ${phoneName(code)}. Download the file for your phone.`);
     pack = p;
     downloading = null;
+    log(`Chosen file ${file.name}: Tome OS ${p.version} for ${p.codename}, ${gb(file.size)}${p.fastbootd ? ", installs through fastbootd" : ""}`);
     $("file-name").textContent = `Tome OS ${p.version} for the ${phoneName(p.codename)}. Ready.`;
     $("file-label").textContent = "Choose a different file";
     $("manual-next").disabled = false;
     tick($$("#dl-manual ol")[0], 2);
   } catch (e) {
     $("file-name").textContent = chosen.map((f) => f.name).join(", ");
-    $("file-error").textContent = e.message;
+    // One part on its own isn't a whole zip: say what to do, not "download it again".
+    const partsOnly = chosen.every((f) => /\.part\d+$/.test(f.name));
+    $("file-error").textContent = partsOnly && /isn't a zip file/.test(e.message)
+      ? "That's only part of the file. Choose every part together: the files ending in .part1, .part2 and so on."
+      : e.message;
     $("file-error").hidden = false;
   }
 });
@@ -1371,15 +2360,17 @@ enter.fastboot = (s) => {
   screen(s, "tome");
   finger(s, "power", null); finger(s, "down", null);
   cable.classList.remove("in");
-  caption(s, "Turn the phone <b>off</b>.");
-  later(() => finger(s, "power", true), 700);
-  later(() => { finger(s, "power", null); screen(s, "off"); }, 1600);
-  later(() => { tick(list, 1); caption(s, "Hold <b>Volume Down</b>…"); finger(s, "down", true); }, 2400);
-  later(() => { caption(s, "…and while holding it, hold <b>Power</b>."); finger(s, "power", true); }, 3300);
-  later(() => { tick(list, 2); screen(s, "fb"); caption(s, "When the red triangle and <b>Fastboot Mode</b> show, <b>let go</b>."); }, 5000);
-  later(() => { finger(s, "power", null); finger(s, "down", null); }, 5800);
-  later(() => { tick(list, 3); caption(s, `Plug the cable into this ${hostNoun}.`); cable.classList.add("in"); }, 6600);
-  later(() => { tick(list, 4); caption(s, "Ready. <b>Leave it on this screen.</b>"); nextIn(s).disabled = false; }, 7600);
+  finger(s, "up", null);
+  caption(s, "Turn the phone <b>off</b>: hold <b>Power</b> and <b>Volume Up</b>…");
+  later(() => { finger(s, "power", true); finger(s, "up", true); }, 700);
+  later(() => { finger(s, "power", null); finger(s, "up", null); screen(s, "pmenu"); caption(s, "…then tap <b>Power off</b>."); }, 1700);
+  later(() => screen(s, "off"), 2900);
+  later(() => { tick(list, 1); caption(s, "Hold <b>Volume Down</b>…"); finger(s, "down", true); }, 3700);
+  later(() => { caption(s, "…and while holding it, hold <b>Power</b>."); finger(s, "power", true); }, 4600);
+  later(() => { tick(list, 2); screen(s, "fb"); caption(s, "When the red triangle and <b>Fastboot Mode</b> show, <b>let go</b>."); }, 6300);
+  later(() => { finger(s, "power", null); finger(s, "down", null); }, 7100);
+  later(() => { tick(list, 3); caption(s, `Plug the cable into this ${hostNoun}.`); cable.classList.add("in"); }, 7900);
+  later(() => { tick(list, 4); caption(s, "Ready. <b>Leave it on this screen.</b>"); nextIn(s).disabled = false; }, 8900);
 };
 $("fb-replay").addEventListener("click", () => enter.fastboot(steps[5]));
 
@@ -1416,27 +2407,39 @@ function setStep(name, state = "now", note = "") {
   if (note) items[index].insertAdjacentHTML("beforeend", `<small>${note}</small>`);
 }
 function setStatus(text, progress = null) {
+  if ($("i-status").textContent !== text) log(text);
   $("i-status").textContent = text;
   $("i-meter").classList.toggle("busy", progress === null);
   $("i-pct").textContent = progress === null ? "" : `${Math.round(progress * 100)}%`;
   if (progress !== null) $("i-bar").style.width = progress * 100 + "%";
 }
 
-// The phone's own confirm screen, mirrored on the practice phone: the volume
-// key glows until the right choice would be highlighted, then Power does.
-function showPrompt(choice, verb) {
-  $("i-prompt-text").textContent = ` Press a volume button until "${choice}" is highlighted, then press Power.`;
-  $("i-prompt").hidden = false;
-  $("ask-q").textContent = `${verb} the bootloader?`;
-  $("ask-no").textContent = `Do not ${verb.toLowerCase()} the bootloader`;
-  $("ask-yes").textContent = choice;
+// The phone's own confirm screen, mirrored on the practice phone and on the
+// "look at your phone" card: the volume key glows until the right choice
+// shows at the top, then Power does.
+function showPrompt(choice, verb, card = true) {
+  const not = `Do not ${verb.toLowerCase()} the bootloader`;
+  $$(".ask-q").forEach((e) => { e.textContent = `${verb} the bootloader?`; });
+  $$(".ask-p").forEach((e) => { e.textContent = ASK_SAYS[verb]; });
+  $$(".ask-want").forEach((e) => { e.textContent = `"${choice}"`; });
+  $("i-prompt-h").textContent = `${verb} the bootloader on the phone`;
+  if (card) {
+    $("i-prompt").hidden = false;
+    screenIn($("i-prompt"), "ask");
+    showLook($("i-prompt"));
+  }
+  log(`Asking the person to choose "${choice}" on the phone.`);
   screen(iSection, "ask");
-  const p = phoneIn(iSection), down = p.querySelector(".key.down"), power = p.querySelector(".key.power");
+  const downs = $$(".key.down", iSection), powers = $$(".key.power", iSection), picks = $$(".ask-pick", iSection);
   const loop = () => {
-    $("ask-no").classList.add("hl"); $("ask-yes").classList.remove("hl");
-    down.classList.add("hint"); power.classList.remove("hint");
+    picks.forEach((e) => { e.textContent = not; e.className = "fb-pick ask-pick grn"; });
+    downs.forEach((k) => k.classList.add("hint")); powers.forEach((k) => k.classList.remove("hint"));
     $("i-caption").innerHTML = "Press <b>Volume Down</b>…";
-    later(() => { $("ask-no").classList.remove("hl"); $("ask-yes").classList.add("hl"); down.classList.remove("hint"); power.classList.add("hint"); $("i-caption").innerHTML = "…then press <b>Power</b>."; }, 1800);
+    later(() => {
+      picks.forEach((e) => { e.textContent = choice; e.className = "fb-pick ask-pick red"; });
+      downs.forEach((k) => k.classList.remove("hint")); powers.forEach((k) => k.classList.add("hint"));
+      $("i-caption").innerHTML = "…then press <b>Power</b>.";
+    }, 1800);
     later(loop, 3800);
   };
   loop();
@@ -1449,28 +2452,106 @@ function hidePrompt() {
   $("i-caption").innerHTML = "Keep the phone plugged in.";
 }
 
-// After a restart the phone usually reconnects by itself. Android, and
-// sometimes desktops, need the person to pick it again, which must start
-// from a click.
+// Tome OS's first start, on every phone in the install step: the orange
+// unlocked warning, Tome OS's boot animation, then the welcome screen.
+function playFirstStart() {
+  const loop = () => { startsUp(iSection, "unl", (v) => { $("i-caption").innerHTML = STARTS_SAY[v]; }); later(loop, 16000); };
+  loop();
+}
+// Back to install mode from Tome OS: hold Power to turn it off first, then
+// Volume Down and Power.
+function playBackToFastboot() {
+  const loop = () => {
+    screenIn(iSection, "welcome");
+    ["power", "up", "down"].forEach((k) => press(iSection, k, null));
+    $("i-caption").innerHTML = "Hold <b>Power</b>…";
+    later(() => press(iSection, "power", true), 600);
+    later(() => { screenIn(iSection, "pmenu"); $("i-caption").innerHTML = "…then tap <b>Power off</b>."; }, 1900);
+    later(() => press(iSection, "power", null), 2500);
+    later(() => { screenIn(iSection, "off"); $("i-caption").innerHTML = "Once it's dark, hold <b>Volume Down</b>…"; }, 3500);
+    later(() => press(iSection, "down", true), 4300);
+    later(() => { press(iSection, "power", true); $("i-caption").innerHTML = "…and <b>Power</b> together."; }, 5000);
+    later(() => { screenIn(iSection, "fb"); $("i-caption").innerHTML = "Let go when this screen shows."; }, 6600);
+    later(() => { press(iSection, "power", null); press(iSection, "down", null); }, 7400);
+    later(loop, 9600);
+  };
+  loop();
+}
+
+// After a restart the phone usually reconnects by itself. But it can come
+// back as a different USB device (after locking, or from the second install
+// screen), and a browser only talks to a device the person has allowed, so
+// it never even hears about the new one. So when the phone has been gone a
+// little while, the page says so plainly and offers a button that asks for
+// the new permission (which must start from a click). Whatever was waiting
+// for the phone then carries on where it was.
+const isFastboot = (d) => d.configurations.some((c) => c.interfaces.some((i) => i.alternates.some((a) => a.interfaceClass === 0xff && a.interfaceSubclass === 0x42 && a.interfaceProtocol === 0x03)));
+const usbName = (d) => `${d.productName || "USB device"} (${d.vendorId.toString(16).padStart(4, "0")}:${d.productId.toString(16).padStart(4, "0")}${isFastboot(d) ? ", fastboot" : ""})`;
+const RECONNECT_AFTER = 15000;
 let reconnectTimer = null;
-const offerReconnect = () => { $("i-reconnect").hidden = false; $("i-reconnect-win").hidden = hostOs !== "Windows"; };
-function waitingForPhone() { clearTimeout(reconnectTimer); reconnectTimer = setTimeout(offerReconnect, 30000); }
+function offerReconnect() {
+  if (device.isConnected) return;
+  if ($("i-reconnect").hidden) log("The phone hasn't come back by itself. Asking for it to be reconnected.");
+  $("i-reconnect").hidden = false;
+  $("i-reconnect-win").hidden = hostOs !== "Windows";
+  screenIn($("i-reconnect"), "fb");
+  showLook($("i-reconnect"));
+}
+// Brings a "look at the phone" card into view, above everything else on
+// small screens.
+function showLook(card) {
+  const small = matchMedia("(max-width: 760px)").matches;
+  requestAnimationFrame(() => card.scrollIntoView({ block: small ? "start" : "nearest", behavior: "smooth" }));
+}
+function waitingForPhone(ms = RECONNECT_AFTER) { clearTimeout(reconnectTimer); reconnectTimer = setTimeout(offerReconnect, ms); }
 function phoneBack() { clearTimeout(reconnectTimer); reconnectTimer = null; $("i-reconnect").hidden = true; }
-$("i-reconnect-btn").addEventListener("click", async () => {
-  try { await device.connect(); phoneBack(); } catch (e) { /* the list was closed; the button stays */ }
-});
+async function reconnect() {
+  log("Asking the browser for the phone again…");
+  try {
+    await device.connect();
+    log(`Reconnected: ${usbName(device.device)}`);
+    phoneBack();
+  } catch (e) {
+    // The list was closed, or nothing was picked: the button stays.
+    log(`Not reconnected: ${e.message || e}`);
+  }
+}
+$("i-reconnect-btn").addEventListener("click", reconnect);
+$("i-back-stuck").addEventListener("click", reconnect);
+if ("usb" in navigator) {
+  navigator.usb.addEventListener("connect", (e) => {
+    log(`USB: ${usbName(e.device)} plugged in`);
+    if (running && isFastboot(e.device)) phoneBack();
+  });
+  navigator.usb.addEventListener("disconnect", (e) => {
+    log(`USB: ${usbName(e.device)} gone`);
+    if (running && e.device === device.device) waitingForPhone();
+  });
+}
+// A phone that came back as a device this page is already allowed to use,
+// but whose connect event was missed or came too early to open it.
+async function pickUpPhone() {
+  if (device.isConnected || !("usb" in navigator)) return;
+  const here = (await navigator.usb.getDevices()).filter(isFastboot);
+  if (here.length !== 1) return;
+  try { await device.connect(); log(`Picked the phone up again: ${usbName(device.device)}`); } catch (e) { /* not ready yet */ }
+}
 
 // Waits until the phone is connected and answering, after it may have
 // dropped off USB (unlocking and locking can reset the connection).
-async function waitForPhone(seconds = 120) {
+async function waitForPhone(seconds = 120, offerAfter = RECONNECT_AFTER) {
   for (let attempt = 0; attempt < seconds; attempt++) {
     if (device.isConnected) {
-      try { await device.getVariable("product"); phoneBack(); return; } catch (e) { /* not ready yet */ }
+      try { await device.getVariable("product"); phoneBack(); log("The phone is back in fastboot.", "wait"); return; } catch (e) { /* not ready yet */ }
     }
-    if (attempt === 0) waitingForPhone();
-    await Promise.race([device.waitForConnect(offerReconnect), sleep(1000)]);
+    if (attempt === 0) waitingForPhone(offerAfter);
+    log(`Waiting for fastboot… ${attempt} s`, "wait");
+    await pickUpPhone();
+    // A device that showed up but couldn't be opened rejects this; the loop
+    // simply tries again.
+    await Promise.race([device.waitForConnect(offerReconnect).catch(() => {}), sleep(1000)]);
   }
-  throw new Error("The phone didn't come back. Check it shows the fastboot screen and is plugged in, then press Try again.");
+  throw new Error("The phone didn't come back. Check it shows the fastboot screen and is plugged in, then press Try again. The install carries on from where it stopped.");
 }
 
 // Runs "flashing unlock" or "flashing lock", which the phone asks the person
@@ -1487,15 +2568,19 @@ async function confirmOnPhone(command, choice, verb, wantUnlocked) {
       }
       throw new Error(`"${choice}" wasn't chosen on the phone, so nothing was changed. Press Try again.`);
     }
-    throw e;
+    if (e instanceof fastboot.FastbootError) throw e;
+    // The phone dropped off USB while it was confirming, which some do as
+    // they lock or unlock. Whether it did is checked once it's back.
+    log(`The phone left USB during "${command}" (${e.message || e}). Checking what it did once it's back.`);
   }
   hidePrompt();
-  setStatus("Waiting for the phone…");
+  setStatus("Waiting for the phone to come back…");
   await sleep(3000);
-  await waitForPhone();
+  await waitForPhone(900);
   const unlocked = await device.getVariable("unlocked");
+  log(`The phone says unlocked = ${unlocked}`);
+  setDeviceState(unlocked === "yes");
   if ((unlocked === "yes") !== wantUnlocked) throw new Error(`The phone didn't ${verb.toLowerCase()}. Press Try again.`);
-  fbState(iSection, wantUnlocked);
 }
 
 // The practice phone follows the real one: dark while it restarts, then the
@@ -1515,7 +2600,48 @@ function phoneRestarts(target) {
 }
 {
   const reboot = device.reboot.bind(device);
-  device.reboot = (target = "", ...rest) => { phoneRestarts(target); return reboot(target, ...rest); };
+  device.reboot = (target = "", ...rest) => { log(`Restarting the phone${target ? ` into ${target}` : ""}`); phoneRestarts(target); return reboot(target, ...rest); };
+}
+// Every fastboot command and answer goes in the log, and each partition's
+// progress counts up in megabytes.
+const vars = {};
+{
+  const run = device.runCommand.bind(device);
+  device.runCommand = async (command) => {
+    const quiet = /^(getvar|download):/.test(command);
+    if (!quiet) log(`> ${command}`);
+    try {
+      const r = await run(command);
+      if (!quiet) log(`< OKAY${r.text ? " " + r.text.trim().replace(/\s+/g, " ") : ""}`);
+      return r;
+    } catch (e) {
+      log(`< ${command}: ${e.message || e}`);
+      throw e;
+    }
+  };
+  const getvar = device.getVariable.bind(device);
+  device.getVariable = async (name) => {
+    const v = await getvar(name);
+    vars[name] = v;
+    log(`getvar ${name} = ${v ?? "(none)"}`);
+    if (name === "unlocked") setDeviceState(v === "yes");
+    return v;
+  };
+  const flashBlob = device.flashBlob.bind(device);
+  device.flashBlob = (partition, blob, onProgress = () => {}) => {
+    const mb = Math.max(1, Math.round(blob.size / 1048576));
+    let shown = -1;
+    return flashBlob(partition, blob, (progress) => {
+      const slot = vars[`has-slot:${partition}`] === "yes" && vars["current-slot"] ? "_" + vars["current-slot"].replace(/^_/, "") : "";
+      const now = Math.min(mb, Math.round(progress * mb));
+      if (now !== shown) { shown = now; log(`Flashing ${partition}${slot}, ${now} of ${mb} MB`, "flash:" + partition); }
+      onProgress(progress);
+    });
+  };
+}
+// The practice phone's fastboot screens say whether the bootloader is locked.
+function setDeviceState(unlocked) {
+  $$(".fb-state").forEach((e) => { e.textContent = unlocked ? "unlocked" : "locked"; e.classList.toggle("red", unlocked); e.classList.toggle("grn", !unlocked); });
 }
 
 function onFlashProgress(action, item, progress) {
@@ -1638,20 +2764,26 @@ async function testThenLock() {
   setStatus("Starting Tome OS for a check…");
   saved.set({ ...saved.get(), phase: "testing" });
   try { await device.reboot(); } catch (e) { /* it restarts anyway */ }
-  startsUp(iSection, "orange", (v) => { $("i-caption").innerHTML = STARTS_SAY[v]; });
   $("i-test").hidden = false;
+  showLook($("i-test"));
+  playFirstStart();
   const result = await ask();
+  clearTimers();
   $("i-test").hidden = true;
+  log(result === "ok" ? "The person sees the Tome welcome screen." : "The person says Tome OS didn't start.");
   if (result === "bad") {
     saved.set({ ...saved.get(), phase: "flashing" });
     throw new Error("Tome OS didn't start, so the phone was left unlocked. That keeps it safe to fix: hold Power and Volume Down for about 15 seconds until the fastboot screen shows, then press Try again to install once more.");
   }
+  // Tome OS was seen to start: from here on, trying again goes straight to
+  // locking.
+  saved.set({ ...saved.get(), phase: "tested" });
   await lock();
 }
 
 // The practice phone's captions as Tome OS starts for its check.
 const STARTS_SAY = {
-  orange: "First an <b>orange warning</b>. That's normal while the phone is unlocked.",
+  unl: "First an <b>orange warning</b>. That's normal while the phone is unlocked.",
   anim: "Then Tome OS starts. The first time takes up to 5 minutes.",
   welcome: "Then the <b>welcome screen</b>. Don't set it up yet.",
 };
@@ -1661,10 +2793,15 @@ async function lock() {
   setStep("test", "done");
   setStep("lock");
   $("i-back").hidden = false;
-  screen(iSection, "fb");
-  $("i-caption").innerHTML = "Hold <b>Power</b> and <b>Volume Down</b> until this screen shows.";
+  showLook($("i-back"));
+  playBackToFastboot();
   setStatus("Waiting for the fastboot screen…");
-  await waitForPhone(900);
+  // The person is turning the phone off and back on, so the reconnect
+  // button only comes up if that takes a while.
+  await waitForPhone(1800, 90000);
+  clearTimers();
+  ["power", "up", "down"].forEach((k) => press(iSection, k, null));
+  screenIn(iSection, "fb");
   $("i-back").hidden = true;
   await checkPhone(saved.get().code);
   if (await device.getVariable("unlocked") !== "yes") {
@@ -1685,7 +2822,7 @@ async function lock() {
   }).catch(() => {});
   running = false;
   await sleep(1200);
-  go(steps.length - 1);
+  go(DONE);
 }
 
 async function install(connecting) {
@@ -1706,9 +2843,7 @@ async function install(connecting) {
     setStatus("Checking the phone…");
     await checkPhone(pack.codename);
 
-    const unlocked = await device.getVariable("unlocked") === "yes";
-    fbState(iSection, unlocked);
-    if (unlocked) {
+    if (await device.getVariable("unlocked") === "yes") {
       setStep("unlock", "skip", "Already unlocked");
     } else {
       setStep("unlock");
@@ -1729,7 +2864,8 @@ async function install(connecting) {
   });
 }
 
-// Finishing an install whose phone was left unlocked after its test.
+// Finishing an install whose phone was left unlocked after its test, or
+// that stopped while locking.
 function startLock() {
   lockOnly = true;
   const connecting = device.isConnected ? Promise.resolve() : device.connect();
@@ -1739,7 +2875,13 @@ function startLock() {
     try { await connecting; } catch (e) { throw new Error("No phone was chosen. Check it shows the fastboot screen and is plugged in, then press Try again."); }
     showPhone();
     ["unlock", "install", "key"].forEach((n) => setStep(n, "done"));
-    await testThenLock();
+    if (saved.get().phase === "tested") {
+      log("Tome OS already started fine, so carrying on with locking.");
+      setStep("test", "done");
+      await lock();
+    } else {
+      await testThenLock();
+    }
   });
 }
 
@@ -1748,8 +2890,8 @@ function startLock() {
   const last = saved.get();
   if (last.phase) {
     $("unfinished").hidden = false;
-    if (last.phase === "testing") {
-      $("unfinished-text").textContent = "Tome OS is installed but the phone isn't locked yet. Put it in fastboot mode (hold Power and Volume Down), plug it in, and finish here.";
+    if (last.phase === "testing" || last.phase === "tested") {
+      $("unfinished-text").textContent = "Tome OS is installed but the phone isn't locked yet. Hold Power to turn the phone off first, then hold Volume Down and Power until the fastboot screen shows. Plug it in and finish here.";
       $("unfinished-go").textContent = "Finish: check and lock";
       $("unfinished-go").addEventListener("click", () => { $("unfinished").hidden = true; code = last.code; reached = 6; go(6); startLock(); });
     } else {
@@ -1841,16 +2983,26 @@ $("c-shell").addEventListener("change", () => { shell = $("c-shell").value; draw
 // The commands, for the person's shell. Both downloads are expected in the
 // Downloads folder; anything already unzipped there (Safari unzips by
 // itself) is used as it is.
+// Goes to the Downloads folder, unzips platform tools there if needed, and
+// puts them on the window's PATH.
+function toolsPrep() {
+  const tools = `platform-tools-latest-${shellOs()}.zip`;
+  if (shell === "ps") return ["cd $HOME\\Downloads", `if (!(Test-Path platform-tools)) { tar -xf ${tools} }`, '$env:Path = "$PWD\\platform-tools;$env:Path"'];
+  if (shell === "cmd") return ["cd /d %USERPROFILE%\\Downloads", `if not exist platform-tools tar -xf ${tools}`, 'set "PATH=%CD%\\platform-tools;%PATH%"'];
+  return ["cd ~/Downloads", `[ -d platform-tools ] || unzip -q ${tools}`, 'export PATH="$PWD/platform-tools:$PATH"'];
+}
+// A command to copy, with its Copy button.
+function cmdCard(lines) {
+  const text = [].concat(lines).join("\n");
+  return `<div class="cmd${text.includes("\n") ? " multi" : ""}"><code>${esc(text)}</code><button class="btn" data-copy>Copy</button></div>`;
+}
 function cliCommands() {
   const zip = build.files[0].name.replace(/\.part\d+$/, "");
   const dir = zip.replace(/-factory\.zip$/, "");
   const parts = build.files.length > 1 ? build.files.map((f) => f.name) : null;
-  const tools = `platform-tools-latest-${shellOs()}.zip`;
   if (shell === "ps") return {
     prep: [
-      "cd $HOME\\Downloads",
-      `if (!(Test-Path platform-tools)) { tar -xf ${tools} }`,
-      '$env:Path = "$PWD\\platform-tools;$env:Path"',
+      ...toolsPrep(),
       parts ? `if (!(Test-Path ${dir})) { cmd /c copy /b ${parts.join("+")} ${zip}; tar -xf ${zip} }` : `if (!(Test-Path ${dir})) { tar -xf ${zip} }`,
       `cd ${dir}`,
       "fastboot devices",
@@ -1859,9 +3011,7 @@ function cliCommands() {
   };
   if (shell === "cmd") return {
     prep: [
-      "cd /d %USERPROFILE%\\Downloads",
-      `if not exist platform-tools tar -xf ${tools}`,
-      'set "PATH=%CD%\\platform-tools;%PATH%"',
+      ...toolsPrep(),
       parts ? `if not exist ${dir} (copy /b ${parts.join("+")} ${zip} && tar -xf ${zip})` : `if not exist ${dir} tar -xf ${zip}`,
       `cd ${dir}`,
       "fastboot devices",
@@ -1870,9 +3020,7 @@ function cliCommands() {
   };
   return {
     prep: [
-      "cd ~/Downloads",
-      `[ -d platform-tools ] || unzip -q ${tools}`,
-      'export PATH="$PWD/platform-tools:$PATH"',
+      ...toolsPrep(),
       parts ? `[ -d ${dir} ] || { cat ${parts.join(" ")} > ${zip} && unzip -q ${zip}; }` : `[ -d ${dir} ] || unzip -q ${zip}`,
       `cd ${dir}`,
       "fastboot devices",
@@ -1887,10 +3035,7 @@ function cliCommands() {
 function cliCards() {
   const c = cliCommands();
   const s = iSection;
-  const cmd = (lines) => {
-    const text = [].concat(lines).join("\n");
-    return `<div class="cmd${text.includes("\n") ? " multi" : ""}"><code>${esc(text)}</code><button class="btn" data-copy>Copy</button></div>`;
-  };
+  const cmd = cmdCard;
   const say = (html) => { $("i-caption").innerHTML = html; };
   const onScreen = (name, html) => { screen(s, name); say(html); };
   const windows = SHELLS[shell] === "windows";
@@ -1905,23 +3050,23 @@ function cliCards() {
     title: "Install Google's USB driver",
     words: '<p>Windows can\'t see the phone in Fastboot Mode without it. It takes about two minutes.</p><div class="walk" data-walk="cli"></div>',
     next: "I've installed the driver",
-    phone: () => { fbState(s, false); onScreen("fb", "Leave the phone on this screen, plugged in."); },
+    phone: () => { setDeviceState(false); onScreen("fb", "Leave the phone on this screen, plugged in."); },
   });
   cards.push({
     title: "Get the tools ready",
     words: `<p>Open a terminal window. ${open} Then copy these, paste them in and press <strong>Enter</strong>.${windows ? " If it warns about pasting several lines, choose <strong>Paste anyway</strong>." : ""}</p>${cmd(c.prep)}<p>Unzipping Tome OS takes a minute or two. <strong>Keep this window open</strong> for the rest of the install.</p><p class="see">It ends with a line of letters and numbers, then the word <strong>fastboot</strong>. That's your phone.</p>`,
-    phone: () => { fbState(s, false); onScreen("fb", "Leave the phone on this screen, plugged in."); },
+    phone: () => { setDeviceState(false); onScreen("fb", "Leave the phone on this screen, plugged in."); },
   });
   cards.push({
     title: "Unlock the phone",
-    words: `<p>Run this in the same window. The phone then asks you to confirm.</p>${cmd("fastboot flashing unlock")}<p>On the phone, press a volume button until <strong>Unlock the bootloader</strong> is highlighted, then press <strong>Power</strong>. This erases the phone.</p><p class="see">The phone goes back to the Fastboot Mode screen, which now says <strong>unlocked</strong>. If the terminal says it's already unlocked, that's fine too.</p><p>If it says <strong>not allowed</strong>, OEM unlocking is off. Start the phone, switch it on (step 5), then come back here.</p>`,
-    phone: () => { fbState(s, false); showPrompt("Unlock the bootloader", "Unlock"); },
+    words: `<p>Run this in the same window. The phone then asks you to confirm.</p>${cmd("fastboot flashing unlock")}<p>On the phone, press <strong>Volume Down</strong> until the top of the screen says <strong>Unlock the bootloader</strong>, then press <strong>Power</strong>. This erases the phone.</p><p class="see">The phone goes back to the Fastboot Mode screen, which now says <strong>unlocked</strong>. If the terminal says it's already unlocked, that's fine too.</p><p>If it says <strong>not allowed</strong>, OEM unlocking is off. Start the phone, switch it on (step 5), then come back here.</p>`,
+    phone: () => { setDeviceState(false); showPrompt("Unlock the bootloader", "Unlock", false); },
   });
   cards.push({
     title: "Install Tome OS",
     words: `<p>Run Tome OS's install script. It checks the phone is a ${esc(PHONES[code])} first.</p>${cmd(c.flash)}<p>It takes several minutes. The phone restarts a few times by itself and its screen goes dark now and then. <strong>Don't touch the phone or unplug it</strong> while it runs.</p><p class="see">It ends with <strong>Installed</strong>. Don't lock the phone yet: first check Tome OS starts.</p>`,
     phone: () => {
-      fbState(s, true);
+      setDeviceState(true);
       let dark = false;
       const loop = () => later(() => { dark = !dark; screen(s, dark ? "off" : "fb"); loop(); }, dark ? 1500 : 3500);
       onScreen("fb", "It restarts a few times by itself. <b>Hands off the phone.</b>");
@@ -1932,20 +3077,24 @@ function cliCards() {
     title: "Check Tome OS starts",
     words: `<p>Start the phone:</p>${cmd("fastboot reboot")}<p>First an orange warning, which is normal while it's unlocked. Then Tome OS starts, which takes up to 5 minutes the first time. Wait for the welcome screen, but <strong>don't set it up yet</strong>: locking erases it once more.</p><p><button class="link" data-stuck>It's stuck on the Google logo, or keeps restarting</button></p><div class="notice bad" data-stuck-say hidden><p><strong>Don't lock it.</strong> Left unlocked, it's safe to fix. Hold <strong>Power</strong> and <strong>Volume Down</strong> for about 15 seconds until the Fastboot Mode screen shows, then go back a step and run the install script again.</p></div>`,
     next: "I see the welcome screen",
-    phone: () => { fbState(s, true); startsUp(s, "orange", (v) => say(STARTS_SAY[v])); },
+    phone: () => { setDeviceState(true); startsUp(s, "unl", (v) => say(STARTS_SAY[v])); },
   });
   cards.push({
     title: "Lock it again",
-    words: `<p>Hold <strong>Power</strong> and <strong>Volume Down</strong> until the Fastboot Mode screen shows, then let go and run:</p>${cmd("fastboot flashing lock")}<p>On the phone, press a volume button until <strong>Lock the bootloader</strong> is highlighted, then press <strong>Power</strong>. This erases the phone once more, and makes it as secure as the day it came out of the box.</p><p>When it's back on the Fastboot Mode screen, start it:</p>${cmd("fastboot reboot")}<p class="see">A yellow notice, then Tome OS starts and shows its welcome screen. Now you can set it up.</p>`,
+    words: `<p>Put the phone back in Fastboot Mode: hold <strong>Power</strong> and tap <strong>Power off</strong>. Once the screen is dark, hold <strong>Volume Down</strong> and <strong>Power</strong> together, and let go when the red triangle and <strong>Fastboot Mode</strong> show. Then run:</p>${cmd("fastboot flashing lock")}<p>On the phone, press <strong>Volume Down</strong> until the top of the screen says <strong>Lock the bootloader</strong>, then press <strong>Power</strong>. This erases the phone once more, and makes it as secure as the day it came out of the box.</p><p>When it's back on the Fastboot Mode screen, start it:</p>${cmd("fastboot reboot")}<p class="see">A yellow notice, then Tome OS starts and shows its welcome screen. Now you can set it up.</p>`,
     next: "It's finished",
     phone: () => {
-      fbState(s, true);
-      onScreen("welcome", "Hold <b>Power</b> and <b>Volume Down</b>…");
-      finger(s, "power", true); finger(s, "down", true);
-      later(() => screen(s, "off"), 900);
-      later(() => { screen(s, "fb"); say("…until the fastboot screen shows."); }, 2400);
-      later(() => { finger(s, "power", null); finger(s, "down", null); }, 3300);
-      later(() => showPrompt("Lock the bootloader", "Lock"), 4300);
+      setDeviceState(true);
+      onScreen("welcome", "Hold <b>Power</b>…");
+      later(() => finger(s, "power", true), 600);
+      later(() => { screen(s, "pmenu"); say("…then tap <b>Power off</b>."); }, 1900);
+      later(() => finger(s, "power", null), 2500);
+      later(() => { screen(s, "off"); say("Once it's dark, hold <b>Volume Down</b>…"); }, 3500);
+      later(() => finger(s, "down", true), 4300);
+      later(() => { finger(s, "power", true); say("…and <b>Power</b> together."); }, 5000);
+      later(() => { screen(s, "fb"); say("Let go when the red triangle and <b>Fastboot Mode</b> show."); }, 6600);
+      later(() => { finger(s, "power", null); finger(s, "down", null); }, 7400);
+      later(() => showPrompt("Lock the bootloader", "Lock", false), 8600);
     },
   });
   return cards;
@@ -1967,8 +3116,9 @@ function drawCli(move = 0) {
   $("c-card").querySelector("[data-card-fwd]").onclick = () => {
     if (cliAt < cards.length - 1) return drawCli(1);
     clearTimers();
-    fbState(iSection, false);
-    go(steps.length - 1);
+    setDeviceState(false);
+    log("Command-line install finished.");
+    go(DONE);
   };
   const stuck = $("c-card").querySelector("[data-stuck]");
   if (stuck) stuck.onclick = () => { $("c-card").querySelector("[data-stuck-say]").hidden = false; };
@@ -1981,7 +3131,8 @@ function drawCli(move = 0) {
   // The practice phone starts this card's part afresh.
   clearTimers();
   $$(".key", iSection).forEach((k) => k.classList.remove("hint"));
-  finger(iSection, "power", null); finger(iSection, "down", null);
+  ["power", "up", "down"].forEach((k) => finger(iSection, k, null));
+  log(`Command card ${cliAt + 1} of ${cards.length}: ${card.title} (${$("c-shell").selectedOptions[0].textContent})`, "card");
   card.phone();
   if (move) {
     $("c-card").querySelector("h3").focus({ preventScroll: true });
@@ -2007,6 +3158,16 @@ const DONE_SAY = {
   welcome: "The first time, its welcome screen. Set it up from there.",
 };
 enter.done = (s) => {
+  const last = lastBackup.get(), gapps = handOverPending() && choices.get().googleApps;
+  $("done-restore").hidden = !last && !gapps;
+  $("done-restore-link").hidden = !!last || gapps;
+  if (last || gapps) {
+    const what = last && [last.files ? `${count(last.files)}, ${size(last.bytes)}` : null, last.transfer ? `your ${transferWords(last.transfer)}` : null].filter(Boolean).join(", and ");
+    $("done-restore-text").innerHTML = (last ? `<strong>You saved ${what || "nothing"} before installing.</strong> ` : "")
+      + (gapps ? `<strong>You asked for Google apps.</strong> ` : "")
+      + `Set up Tome OS on the phone, then ${last ? "bring your files back" : "connect it once more"} ${last && gapps ? "and turn on Google apps " : gapps ? "to turn on Google apps " : ""}in the last step.`;
+    $("done-restore-go").textContent = last ? "Move your files back" : "Turn on Google apps";
+  }
   const loop = () => { startsUp(s, "yellow", (v) => caption(s, DONE_SAY[v])); later(loop, 15000); };
   loop();
   const box = $("confetti"), colors = ["#b57bff", "#c99bff", "#5cc8ff", "#f3eefc", "#6fe3a4"];
@@ -2020,7 +3181,256 @@ enter.done = (s) => {
   setTimeout(() => { box.innerHTML = ""; }, 3600);
 };
 
-go(0);
+// ----- 9. Move files back (and tell the phone about Google apps) -----
+const rsSection = steps.find((s) => s.dataset.step === "restore");
+let rsFiles = null, rsFrom = null, rsBusy = false;
+
+// The files in a backup folder this page made, with their saved dates.
+async function folderFiles(dir) {
+  let dates = new Map(), listed = null;
+  try {
+    listed = JSON.parse(await (await (await dir.getFileHandle(MANIFEST)).getFile()).text());
+    dates = new Map(listed.files.map((f) => [f.path, f.mtime]));
+  } catch (e) { /* no list: the files' own dates */ }
+  const files = [], inside = [];
+  const walk = async (d, prefix) => {
+    for await (const [name, h] of d.entries()) {
+      const path = prefix + name;
+      if (h.kind === "directory") {
+        if (prefix || name in ROOTS) await walk(h, path + "/");
+        else if (name.startsWith("Phone backup")) inside.push(h);
+      } else if (path === TRANSFER.file) {
+        const file = await h.getFile();
+        files.push({ path, size: file.size, mtime: Math.floor(file.lastModified / 1000), kind: "transfer", counts: listed?.transfer?.counts, open: () => file.stream() });
+      } else {
+        const kind = kindOf(path);
+        if (!kind) continue;
+        const file = await h.getFile();
+        files.push({ path, size: file.size, mtime: dates.get(path) ?? Math.floor(file.lastModified / 1000), kind, open: () => file.stream() });
+      }
+    }
+  };
+  await walk(dir, "");
+  // The folder the backup is in was chosen, not the backup itself: use the newest one in it.
+  if (!files.length && inside.length) return folderFiles(inside.sort((x, y) => (x.name < y.name ? 1 : -1))[0]);
+  return files;
+}
+// The files in a backup zip, read one at a time when they're copied.
+async function zipFiles(file) {
+  const L = await loadLib();
+  const entries = (await new L.ZipReader(new L.BlobReader(file)).getEntries()).filter((e) => !e.directory);
+  const read = (e) => { const t = new TransformStream(); e.getData(t.writable).catch(() => {}); return t.readable; };
+  // A zip of the backup folder, made by hand, has the folder's name in front.
+  const firsts = unique(entries.map((e) => e.filename.split("/")[0]));
+  const strip = firsts.length === 1 && !(firsts[0] in ROOTS) ? firsts[0].length + 1 : 0;
+  let dates = new Map(), listed = null;
+  const list = entries.find((e) => e.filename.slice(strip) === MANIFEST);
+  if (list) {
+    try {
+      listed = JSON.parse(await new Response(read(list)).text());
+      dates = new Map(listed.files.map((f) => [f.path, f.mtime]));
+    } catch (e) { /* the entries' own dates */ }
+  }
+  return entries.map((e) => {
+    const path = e.filename.slice(strip), kind = kindOf(path);
+    if (path === TRANSFER.file) return { path, size: e.uncompressedSize, mtime: Math.floor(e.lastModDate.getTime() / 1000), kind: "transfer", counts: listed?.transfer?.counts, open: () => read(e) };
+    return kind && { path, size: e.uncompressedSize, mtime: dates.get(path) ?? Math.floor(e.lastModDate.getTime() / 1000), kind, open: () => read(e) };
+  }).filter(Boolean);
+}
+
+async function rsUse(label, getFiles) {
+  $("rs-error").hidden = true;
+  $("rs-after").hidden = true;
+  $("rs-src-note").textContent = `Reading ${label}…`;
+  try {
+    const files = await getFiles();
+    if (!files.length) throw new Error(`There are no saved files in ${label}. Choose the “Phone backup” folder or zip file this page made.`);
+    rsFiles = files;
+    rsFrom = label;
+    const plain = files.filter((f) => f.kind !== "transfer"), saved = files.find((f) => f.kind === "transfer");
+    const what = [plain.length ? `${count(plain.length)}, ${size(sum(plain))}` : null, saved ? (saved.counts ? `your ${transferWords(saved.counts)}` : "your texts, contacts and calendar") : null].filter(Boolean).join(", and ");
+    log(`Backup chosen: ${label}, ${what}`);
+    $("rs-src-note").textContent = `Using ${label}.`;
+    $("rs-from").textContent = `From ${label}: ${what}.`;
+    drawKinds($("rs-kinds"), files, { restore: true });
+    $("rs-pick").hidden = false;
+    tick($("rs-steps"), 3);
+  } catch (e) {
+    $("rs-src-note").textContent = "The folder or zip file this page saved. Skip this if you didn't save any.";
+    $("rs-error").textContent = e.name === "NotAllowedError" ? "The browser wasn't allowed to open it. Choose it again." : (e.message || String(e));
+    $("rs-error").hidden = false;
+    log($("rs-error").textContent);
+  }
+}
+$("rs-folder").hidden = !window.showDirectoryPicker;
+$("rs-folder").addEventListener("click", async () => {
+  let dir;
+  try { dir = await window.showDirectoryPicker({ id: "tome-backup", mode: "read", startIn: "documents" }); } catch (e) { return; }
+  rsUse(`“${dir.name}”`, () => folderFiles(dir));
+});
+$("rs-zip-btn").addEventListener("click", () => $("rs-zip").click());
+$("rs-zip").addEventListener("change", () => {
+  const file = $("rs-zip").files[0];
+  if (file) rsUse(`“${file.name}”`, () => zipFiles(file));
+  $("rs-zip").value = "";
+});
+$("rs-last").addEventListener("click", async () => {
+  const last = lastBackup.get();
+  if (!last) return;
+  if (last.where === "opfs") return rsUse(`“${last.name}”`, async () => zipFiles(await (await (await navigator.storage.getDirectory()).getFileHandle(last.opfs)).getFile()));
+  const h = await keptHandle();
+  if (!h) return rsUse(`“${last.name}”`, async () => { throw new Error(`“${last.name}” can't be opened from here any more. Choose it below.`); });
+  try { if (await h.requestPermission({ mode: "read" }) !== "granted") throw new Error(); } catch (e) { return; }
+  rsUse(`“${h.name}”`, () => (h.kind === "directory" ? folderFiles(h) : h.getFile().then(zipFiles)));
+});
+
+$("rs-go").addEventListener("click", async () => {
+  if (rsBusy) return;
+  const kinds = pickedKinds($("rs-kinds"));
+  const chosen = (rsFiles || []).filter((f) => kinds.has(f.kind));
+  const saved = (rsFiles || []).find((f) => f.kind === "transfer");
+  const helper = saved ? HELPER_KINDS.filter((k) => kinds.has(k)) : [];
+  $("rs-error").hidden = true;
+  if (!chosen.length && !helper.length && !gappsAnswered()) {
+    $("rs-error").textContent = rsFiles ? "Nothing is ticked. Tick what to bring back." : "Choose your backup first.";
+    $("rs-error").hidden = false;
+    return;
+  }
+  rsBusy = true;
+  $("rs-go-row").hidden = true;
+  $("rs-src-row").hidden = true;
+  let adb = null;
+  try {
+    tick($("rs-steps"), 3);
+    adb = await connectAdb(rsSection, $("rs-allow"));
+    tick($("rs-steps"), 4);
+    screen(rsSection, "tome");
+    const gapps = await handOver(adb);
+    const failed = [];
+    if (chosen.length) {
+      caption(rsSection, "Copying your files back. <b>Keep it plugged in.</b>");
+      $("rs-progress").hidden = false;
+      const total = sum(chosen);
+      log(`Moving back ${count(chosen.length)}, ${size(total)}`);
+      await keepGoing("Your files are still being copied back.", async () => {
+        const sync = await adb.sync();
+        let done = 0, inARow = 0;
+        try {
+          for (const [n, f] of chosen.entries()) {
+            $("rs-status").textContent = `Copying ${num(n + 1)} of ${count(chosen.length)}…`;
+            log(`Copying ${f.path} (${size(f.size)})`, "copy");
+            let got = 0;
+            const counted = new TransformStream({ transform(chunk, c) {
+              got += chunk.length;
+              $("rs-count").textContent = `${size(done + got)} of ${size(total)}`;
+              $("rs-bar").style.width = (total ? (done + got) / total * 100 : 100).toFixed(1) + "%";
+              c.enqueue(chunk);
+            } });
+            try {
+              await sync.write({ filename: "/sdcard/" + f.path, file: f.open().pipeThrough(counted), mtime: f.mtime });
+              inARow = 0;
+            } catch (e) {
+              log(`Couldn't copy ${f.path}: ${e.message || e}`);
+              if (++inARow >= 3) throw e;
+              failed.push(f.path);
+            }
+            done += f.size;
+          }
+        } finally {
+          await sync.dispose().catch(() => {});
+        }
+        // Tells the gallery about the new photos. Older phones find them on
+        // the next restart instead, which the page says.
+        $("rs-status").textContent = "Telling the gallery about your photos…";
+        await adb.subprocess.noneProtocol.spawnWaitText(["content", "call", "--uri", "content://media", "--method", "scan_volume", "--arg", "external_primary"]).catch(() => {});
+      });
+      $("rs-progress").hidden = true;
+      $("rs-pick").hidden = true;
+    }
+    // Texts, contacts and calendar: Telemancer brings them in.
+    let brought = null, notYet = false;
+    if (helper.length) {
+      caption(rsSection, "Bringing in your texts, contacts and calendar. <b>Keep it plugged in.</b>");
+      $("rs-progress").hidden = false;
+      $("rs-meter").classList.add("busy");
+      $("rs-count").textContent = "";
+      try {
+        brought = await keepGoing("Your texts, contacts and calendar are still being brought in.", () => bringIn(adb, saved, helper, (t) => { $("rs-status").textContent = t; }));
+        notYet = brought === null;
+      } finally {
+        $("rs-meter").classList.remove("busy");
+        $("rs-progress").hidden = true;
+      }
+      $("rs-pick").hidden = true;
+    }
+    const skipped = (brought?.skipped || []).map((m) => ({ messages: "texts", calls: "calls", contacts: "contacts", calendar: "calendar" })[m] || m);
+    const back = chosen.length - failed.length;
+    log(`Finished: ${count(back)} moved back${failed.length ? `, ${failed.length} failed` : ""}.`);
+    $("rs-done").innerHTML = (chosen.length ? `<p><strong>Moved back ${count(back)}, ${size(sum(chosen.filter((f) => !failed.includes(f.path))))}.</strong> They're where they were on your old phone.</p>` : "")
+      + (brought ? `<p><strong>Brought in ${transferWords(brought)}.</strong> Texts are in Messages and contacts in Contacts${brought.events ? ", and events are in the calendar “From your old phone”" : ""}.</p>` : "")
+      + (skipped.length ? `<p>Your ${escAttr(skipped.join(" and "))} ${skipped.length === 1 ? "wasn't" : "weren't"} brought in${skipped.includes("texts") ? ", because Telemancer isn't the texting app" : ""}. See “Texts didn't come in?” below, then press the button again. Nothing comes in twice.</p>` : "")
+      + (notYet ? "<p><strong>This version of Tome OS can't take texts, contacts and calendar yet.</strong> Update the phone in Settings › System › System updates, then come back to this step. They're kept in your backup.</p>" : "")
+      + (gapps === true ? "<p><strong>Google apps are on their way.</strong> Tome OS installs microG in the background; it shows a notification when it's done.</p>" : gapps === false ? "<p>The phone knows you chose to keep it Google-free.</p>" : "")
+      + (failed.length ? `<p>${count(failed.length)} couldn't be copied, like ${escAttr(failed[0])}. Copy ${failed.length === 1 ? "it" : "them"} by hand, as below.</p>` : "")
+      + "<p>You can unplug the phone now.</p>";
+    $("rs-next").innerHTML = [
+      ...(chosen.some((f) => f.kind === "photos" || f.kind === "videos") ? ["<b>Photos not in the gallery yet?</b> Restart the phone and they show up."] : []),
+      "<b>Turn USB debugging off again.</b> Settings › System › Developer options › USB debugging.",
+    ].map((t) => `<li data-s="now">${t}</li>`).join("");
+    $("rs-after").hidden = false;
+    caption(rsSection, brought ? "Everything is back." : chosen.length ? "Your files are back." : "All done.");
+    if (!failed.length && !notYet && !skipped.length && lastBackup.get()?.where === "opfs" && rsFrom === `“${lastBackup.get().name}”`) {
+      // The copy kept in this browser's storage isn't needed any more; the downloaded zip is the person's.
+      navigator.storage.getDirectory().then((d) => d.removeEntry(lastBackup.get().opfs)).catch(() => {});
+    }
+  } catch (e) {
+    $("rs-progress").hidden = true;
+    $("rs-go-row").hidden = false;
+    screen(rsSection, "dbg");
+    $("rs-error").textContent = /^No phone|^Another program|^The phone|^This browser/.test(e.message) ? e.message : `Copying stopped: ${e.message || e}. Check the phone is plugged in, then press the button again. Files already copied are simply copied again.`;
+    $("rs-error").hidden = false;
+    log($("rs-error").textContent);
+  } finally {
+    $("rs-src-row").hidden = false;
+    rsBusy = false;
+    await adb?.close().catch(() => {});
+  }
+});
+
+enter.restore = (s) => {
+  if (rsBusy) return;
+  if (!hasUsb) {
+    // By hand, and Google apps with one adb command from platform tools.
+    const yes = gappsAnswered() && choices.get().googleApps;
+    $("rs-h").textContent = "Move your files back";
+    $("rs-cli-gapps").hidden = !yes;
+    $("rs-cli-gapps-cmd").innerHTML = yes ? cmdCard(toolsPrep().concat("adb wait-for-device", `adb shell settings put global ${HANDOFF.setting} ${HANDOFF.yes}`)) : "";
+    tick($("rs-manual"), 0);
+    screen(s, "tome");
+    caption(s, "Set it up, then copy your files back with <b>File transfer</b>.");
+    return;
+  }
+  const last = lastBackup.get(), gapps = gappsAnswered() && choices.get().googleApps;
+  $("rs-last").hidden = !last;
+  if (last) $("rs-last").textContent = `Use “${last.name}”`;
+  // With nothing saved, this step is only for turning Google apps on.
+  const onlyGapps = !last && !rsFiles && gapps;
+  $("rs-h").textContent = onlyGapps ? "Turn on Google apps" : "Move your files back";
+  $("rs-go").textContent = onlyGapps ? "Connect and turn on Google apps" : "Connect and move files back";
+  $("rs-gapps").hidden = !gappsAnswered();
+  $("rs-gapps").innerHTML = gapps ? "<strong>You asked for Google apps.</strong> Connecting tells the phone, and it installs microG." : "You chose to keep the phone Google-free. Connecting tells the phone.";
+  if (!rsFiles) tick($("rs-steps"), 0);
+  screen(s, "dbg");
+  caption(s, "Once it's set up, turn on <b>USB debugging</b> again.");
+};
+
+// tome-os.com/install#restore goes straight to moving files back.
+const RESTORE = steps.indexOf(rsSection);
+const openRestore = () => { reached = Math.max(reached, RESTORE); go(RESTORE); };
+$("done-restore-go").addEventListener("click", openRestore);
+$("done-restore-link-btn").addEventListener("click", openRestore);
+addEventListener("hashchange", () => { if (location.hash === "#restore" && !running) openRestore(); });
+if (location.hash === "#restore") openRestore(); else go(0);
 </script>
 </body>
 </html>

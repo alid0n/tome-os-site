@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collect phone logs · Tome OS</title>
+<meta name="description" content="Save your phone's logs to a file with one click, over a USB cable, to report a problem with Tome OS.">
+<link rel="canonical" href="https://tome-os.com/logs/">
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+[hidden] { display: none !important; }
+main.logs { max-width: 46em; padding-top: 48px; padding-bottom: 64px; }
+main.logs h1 { font-size: clamp(32px, 6vw, 48px); }
+main.logs ol.steps { margin: 0 0 28px; }
+ol.steps small { display: block; color: var(--faint); font-size: 14px; margin-top: 4px; }
+ol.steps strong { color: var(--text); }
+.go { background: linear-gradient(160deg, rgba(181,123,255,.12), transparent 60%), var(--page); border: 1px solid rgba(181,123,255,.3); border-radius: 18px; padding: 22px; }
+.go h2 { font-size: 22px; margin: 0 0 6px; }
+.go > p { color: var(--muted); margin: 0 0 16px; }
+.status { margin: 16px 0 0; font-weight: 600; }
+.status[data-s="bad"] { color: #ffd0dd; }
+.status[data-s="ok"] { color: #6fe3a4; }
+.callout { display: flex; gap: 14px; align-items: flex-start; padding: 14px 16px; border-radius: 14px; border: 2px solid var(--talk); background: rgba(92,200,255,.08); margin: 16px 0 0; }
+.callout b { display: block; }
+.unsupported { padding: 12px 16px; border-radius: 14px; background: #4a1730; color: #ffd0dd; margin: 0 0 20px; }
+.help { margin-top: 28px; }
+.help summary { cursor: pointer; color: var(--muted); }
+.help p { color: var(--muted); font-size: 15px; margin: 8px 0 0; }
+.help strong { color: var(--text); }
+/* The live log, as on the install page */
+.log { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 10px; }
+.log summary { cursor: pointer; color: var(--faint); font-size: 14px; display: flex; gap: 8px; align-items: baseline; list-style: none; }
+.log summary::-webkit-details-marker { display: none; }
+.log summary::before { content: "›"; transition: transform .15s; }
+.log[open] summary::before { transform: rotate(90deg); }
+.log summary .last { font-family: var(--mono); font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1; }
+.log pre { margin: 8px 0; max-height: 220px; overflow: auto; background: #000; color: #d8d2e6; border-radius: 10px; padding: 10px 12px; font-family: var(--mono); font-size: 12px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
+.log .btn { min-height: 36px; padding: 0 14px; font-size: 14px; }
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap bar">
+    <a class="brand" href="/"><img src="/assets/mark.svg" alt="">TOME OS</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="/telemancer/">Telemancer</a></li>
+        <li><a href="/">Tome OS</a></li>
+        <li><a href="/install/">Install</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main class="wrap logs">
+  <h1>Collect phone logs</h1>
+  <p class="lede">Something not working right? Phone logs show what went wrong. This page saves them to a file on this computer with one click, over a USB cable. Nothing is uploaded: you choose whether to send the file to us.</p>
+
+  <p class="unsupported" id="no-usb" hidden>This browser can't talk to phones over USB. Open <code>tome-os.com/logs</code> in <strong>Chrome</strong> or <strong>Edge</strong> on a computer.</p>
+
+  <ol class="steps">
+    <li><div><h3>Turn on Developer options</h3><p>On the phone, open <strong>Settings › About phone</strong> and tap <strong>Build number</strong> 7 times. Enter your screen lock if it asks. It says "You are now a developer".<small>Already done before? Skip this.</small></p></div></li>
+    <li><div><h3>Turn on USB debugging</h3><p>Go back to <strong>Settings › System › Developer options</strong> and turn on <strong>USB debugging</strong>. Press OK.</p></div></li>
+    <li><div><h3>Plug the phone into this computer</h3><p>With a USB cable, straight into the computer rather than a hub. Unlock the phone's screen.</p></div></li>
+    <li><div><h3>Press the button below, then tap Allow on the phone</h3><p>Pick the phone in the box your browser shows and press <strong>Connect</strong>. The phone asks <strong>"Allow USB debugging?"</strong>: tick <strong>Always allow from this computer</strong> and tap <strong>Allow</strong>.</p></div></li>
+  </ol>
+
+  <section class="go" aria-labelledby="go-h">
+    <h2 id="go-h">Save the logs</h2>
+    <p>The file holds the phone's recent log and basic details: the model, the Tome OS version and the battery and storage state. It doesn't include your messages, photos, contacts or accounts, though app names and some settings can appear in it.</p>
+    <div class="actions">
+      <button class="btn primary" id="save">Connect and save logs</button>
+      <button class="btn" id="again" hidden>Download the file again</button>
+    </div>
+    <div class="callout" id="allow" role="alert" hidden><span aria-hidden="true" style="font-size:22px">👉</span><div><b>Look at your phone and tap Allow.</b>It asks "Allow USB debugging?". If nothing shows, unlock the phone's screen.</div></div>
+    <p class="status" id="status" aria-live="polite"></p>
+    <details class="log" id="log"><summary><span>Details</span><span class="last" id="log-last"></span></summary><pre id="log-text"></pre><button class="btn" id="log-copy">Copy</button></details>
+  </section>
+
+  <details class="help"><summary>Stuck? Get help</summary>
+    <p><strong>Phone not in the browser's list?</strong> Check USB debugging is on and the phone's screen is unlocked. Unplug the cable and plug it back in. On Windows, install <a href="https://developer.android.com/studio/run/win-usb">Google's USB driver</a>.</p>
+    <p><strong>Says another program is using the phone?</strong> Close Android Studio, or run <code>adb kill-server</code>, then try again.</p>
+    <p><strong>"Allow USB debugging?" never shows?</strong> Unlock the phone. If it still doesn't show, go to Developer options, tap <strong>Revoke USB debugging authorizations</strong>, then try again.</p>
+    <p><strong>Done?</strong> You can turn USB debugging off again in Developer options.</p>
+  </details>
+</main>
+<footer class="site">
+  <div class="wrap">
+    <span><a href="/">Tome OS</a> · <a href="/install/">Install</a> · <a href="/legal">Privacy and Legal</a></span>
+    <span>Not affiliated with Google. Android is a trademark of Google LLC.</span>
+  </div>
+</footer>
+
+<script type="module">
+// Saves "logcat -d" and some basic details from a phone over USB debugging
+// (adb), with Tango ADB, which the install page also uses
+// (../install/vendor/adb-zip-tome.mjs). The file is made in the browser and
+// saved on this computer; nothing leaves it.
+const $ = (id) => document.getElementById(id);
+
+// ----- The live log, with a copy button -----
+const lines = [];
+function log(text, key) {
+  const stamp = new Date().toTimeString().slice(0, 8);
+  const last = lines[lines.length - 1];
+  if (key && last && last.key === key) { last.text = text; last.stamp = stamp; } else lines.push({ text, key, stamp });
+  $("log-text").textContent = lines.map((l) => `${l.stamp}  ${l.text}`).join("\n");
+  $("log-text").scrollTop = $("log-text").scrollHeight;
+  $("log-last").textContent = text;
+}
+$("log-copy").addEventListener("click", () => {
+  const text = `tome-os.com/logs\n${navigator.userAgent}\n\n${$("log-text").textContent}`;
+  navigator.clipboard.writeText(text).then(() => { $("log-copy").textContent = "Copied"; setTimeout(() => { $("log-copy").textContent = "Copy"; }, 1500); }, () => {
+    const r = document.createRange(); r.selectNodeContents($("log-text"));
+    getSelection().removeAllRanges(); getSelection().addRange(r);
+  });
+});
+function status(text, state = "") {
+  $("status").textContent = text;
+  $("status").dataset.s = state;
+  log(text);
+}
+
+if (!("usb" in navigator)) {
+  $("no-usb").hidden = false;
+  $("save").disabled = true;
+  log("This browser has no WebUSB.");
+}
+
+let lib = null;
+const loadLib = () => (lib ??= import("../install/vendor/adb-zip-tome.mjs").catch((e) => { lib = null; throw e; }));
+
+// Connects over USB debugging. The phone asks the person to allow this
+// computer the first time.
+async function connect() {
+  const L = await loadLib();
+  const manager = L.AdbDaemonWebUsbDeviceManager.BROWSER;
+  if (!manager) throw new Error("This browser can't talk to phones. Open this page in Chrome or Edge.");
+  status("Choose the phone in the box your browser shows…");
+  const dev = await manager.requestDevice().catch(() => null);
+  if (!dev) throw new Error("No phone was chosen. Check USB debugging is on and the phone is unlocked, then press the button again.");
+  log(`Chosen: ${dev.name || "phone"} (${dev.raw?.vendorId?.toString(16)}:${dev.raw?.productId?.toString(16)})`);
+  let connection;
+  try {
+    connection = await dev.connect();
+  } catch (e) {
+    if (e instanceof L.AdbDaemonWebUsbDevice.DeviceBusyError) throw new Error("Another program is using the phone, like Android Studio or adb. Close it, or run adb kill-server, then try again.");
+    throw new Error(`The phone couldn't be opened (${e.message || e}). Unplug it, plug it back in, and try again.`);
+  }
+  $("allow").hidden = false;
+  status("Waiting for you to tap Allow on the phone…");
+  try {
+    const transport = await L.AdbDaemonTransport.authenticate({ serial: dev.serial, connection, credentialStore: new L.AdbWebCredentialStore("Tome OS") });
+    log("USB debugging allowed. Connected.");
+    return new L.Adb(transport);
+  } finally {
+    $("allow").hidden = true;
+  }
+}
+
+// The details at the top of the file. Each is asked for separately, so one
+// a phone doesn't have doesn't stop the rest.
+const PROPS = ["ro.product.manufacturer", "ro.product.model", "ro.product.device", "ro.tome.version", "ro.build.display.id", "ro.lineage.version", "ro.build.version.release", "ro.build.version.security_patch", "ro.build.fingerprint", "ro.build.type", "ro.boot.slot_suffix", "ro.boot.verifiedbootstate", "ro.boot.flash.locked", "ro.bootloader", "gsm.version.baseband"];
+async function collect(adb) {
+  const shell = (cmd) => adb.subprocess.noneProtocol.spawnWaitText(cmd).catch((e) => `(couldn't run ${cmd}: ${e.message || e})\n`);
+  const out = [];
+  out.push("Tome OS phone logs", `Collected ${new Date().toISOString()} with tome-os.com/logs`, "");
+  status("Reading the phone's details…");
+  out.push("== Phone");
+  for (const p of PROPS) out.push(`${p}: ${(await adb.getProp(p).catch(() => "")).trim()}`);
+  out.push("", "== Uptime", (await shell("uptime")).trim());
+  out.push("", "== Storage", (await shell("df -h /data")).trim());
+  out.push("", "== Battery", (await shell("dumpsys battery")).trim());
+  out.push("", "== Google apps choice (from the installer)", (await shell("settings get global tome_google_apps")).trim());
+  status("Reading the log. This takes a few seconds…");
+  const t0 = performance.now();
+  const logcat = await shell("logcat -d -b all -v threadtime");
+  log(`Log read: ${logcat.split("\n").length.toLocaleString("en")} lines, ${Math.round(logcat.length / 1024).toLocaleString("en")} KB in ${((performance.now() - t0) / 1000).toFixed(1)} s`);
+  out.push("", "== logcat -d -b all -v threadtime", logcat);
+  const device = (await adb.getProp("ro.product.device").catch(() => "")).trim() || "phone";
+  return { text: out.join("\n"), device };
+}
+
+let lastFile = null;
+function download(file) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(file.blob);
+  a.download = file.name;
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+}
+
+let busy = false;
+$("save").addEventListener("click", async () => {
+  if (busy) return;
+  busy = true;
+  $("save").disabled = true;
+  let adb = null;
+  try {
+    adb = await connect();
+    const { text, device } = await collect(adb);
+    const when = new Date().toISOString().slice(0, 16).replace(/[-:]/g, "").replace("T", "-");
+    lastFile = { blob: new Blob([text], { type: "text/plain" }), name: `tome-logs-${device}-${when}.txt` };
+    download(lastFile);
+    status(`Saved ${lastFile.name} to your Downloads folder. Send it to us with a few words about what went wrong.`, "ok");
+    $("again").hidden = false;
+  } catch (e) {
+    status(e.message || String(e), "bad");
+    $("log").open = true;
+  } finally {
+    await adb?.close().catch(() => {});
+    $("save").disabled = false;
+    $("save").textContent = "Connect and save new logs";
+    busy = false;
+  }
+});
+$("again").addEventListener("click", () => { if (lastFile) download(lastFile); });
+log("Ready. Waiting for the button.");
+</script>
+</body>
+</html>
